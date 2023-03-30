@@ -1,0 +1,90 @@
+/** flex layout*/
+.flex {
+  display: -webkit-box; /**ios6 safari***/
+  display: -moz-box; /**FF19***/
+  display: -ms-flexbox; /***IE10**/
+  display: -webkit-flex; /***chrome**/
+  display: flex; /**Opera FF 20+***/
+}
+/**伸缩流方向*/
+.flex-direction-column {
+  -webkit-box-orient: vertical;
+  -ms-flex-direction: column;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+}
+.flex-direction-row-reverse {
+    -ms-flex-direction: row-reverse;
+    -webkit-flex-direction: row-reverse;
+    flex-direction: row-reverse;
+  }
+/*主轴对齐*/
+.justify-start {
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+  -webkit-justify-content: start;
+  justify-content: start;
+}
+.justify-center {
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+}
+.justify-end {
+  -webkit-box-pack: end;
+  -ms-flex-pack: end;
+  -webkit-justify-content: flex-end;
+  justify-content: flex-end;
+}
+.justify-between {
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+}
+.justify-around {
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  -webkit-justify-content: space-around;
+  justify-content: space-around;
+}
+/*侧轴对齐*/
+.align-start {
+  -webkit-box-align: start;
+  -ms-flex-align: start;
+  -webkit-align-items: flex-start;
+  align-items: flex-start;
+}
+.align-end {
+  -webkit-box-align: end;
+  -ms-flex-align: end;
+  -webkit-align-items: flex-end;
+  align-items: flex-end;
+}
+.align-center {
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+.align-baseline {
+  -webkit-box-align: baseline;
+  -ms-flex-align: baseline;
+  -webkit-align-items: baseline;
+  align-items: baseline;
+}
+/*伸缩性*/
+.flex-auto {
+  -webkit-box-flex: 1;
+  -ms-flex: auto;
+  -webkit-flex: auto;
+  flex: auto;
+}
+.flex-1 {
+  width: 0;
+  -webkit-box-flex: 1;
+  -ms-flex: 1;
+  -webkit-flex: 1;
+  flex: 1;
+}

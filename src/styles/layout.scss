@@ -1,0 +1,116 @@
+// 布局样式
+
+$breakpoints: (
+    'xs': 'only screen and ( max-width: 767px)',
+    'sm': 'only screen and ( min-width: 768px)',
+    'md': 'only screen and ( min-width: 992px)',
+    'lg': 'only screen and ( min-width: 1200px)'
+) !default;
+
+@mixin respond-to($breakpoint) {
+    $query: map-get($breakpoints, $breakpoint);
+    // 这里是scss error提示估计大部分人（包括我）都没怎么使用过
+    @if not $query {
+        @error 'No value found for `#{$breakpoint}`. Please make sure it is defined in `$breakpoints` map.';
+    }
+    // 具体断点解释在这里，作者比较严谨，校验了$query合法性
+    @media #{if(type-of($query) == 'string', unquote($query), inspect($query))} {
+        @content;
+    }
+}
+
+#app {
+    // 页面主要宽度
+    .page-max-width {
+        margin: 0 auto;
+    }
+
+    @include respond-to(xs) {
+        .page-max-width {
+            width: 700px;
+        }
+        // 页头导航
+        .head-bar-container {
+            width: 716px;
+
+            .header-top-search {
+                display: none;
+            }
+            .meddile-search {
+                display: none;
+            }
+        }
+        .header-bar-org-container {
+            display: none;
+        }
+    }
+    @include respond-to(sm) {
+        .page-max-width {
+            width: 768px;
+        }
+        .head-bar-container {
+            padding: 10px 10px;
+            width: 100%;
+        }
+    }
+    @include respond-to(md) {
+        .page-max-width {
+            width: 992px;
+        }
+        .head-bar-container {
+            .header-logo {
+                width: 100px;
+            }
+            .header-top-search {
+                display: inline-flex;
+            }
+            .meddile-search {
+                display: block;
+                width: 400px;
+                .ant-input {
+                    line-height: 2;
+                }
+                .ant-input-search-button {
+                    height: 38px;
+                }
+            }
+        }
+        .nav-box-list {
+            margin: 50px auto 30px;
+        }
+
+        .header-bar-org-container {
+            padding: 10px 20px;
+            width: 1190px;
+            height: 120px;
+            .org-box{
+                width: 292px;
+            }
+            .add-org-box{
+                padding-top: 35px;
+                padding-bottom: 35px;
+            }
+        }
+    }
+
+    @include respond-to(lg) {
+        .page-max-width {
+            width: 1230px;
+        }
+        .head-bar-container {
+            .head-bar-container-main {
+                max-width: 1380px;
+            }
+            .meddile-search {
+                width: 500px;
+            }
+        }
+
+        .header-bar-org-container {
+            width: 1380px;
+        }
+        .idm-component-package-box{
+            padding: 15px;
+        }
+    }
+}
