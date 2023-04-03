@@ -34,9 +34,32 @@
                             <template #tab>
                                 {{ item.text }} <span class="tab-number" :style="{ color: pageData.activeKey === item.key ? '' : '#ccc' }">{{ item.num }}</span>
                             </template>
-                            <template v-if="pageData.activeKey === 'org'">
-                                <IOrgBox2 v-for="(items, index) in pageData.listData" :key="index" :componentProps="items"></IOrgBox2>
-                            </template>
+                            <a-spin :spinning="pageData.loading">
+                                <template v-if="pageData.listData && pageData.listData.length">
+                                    <div v-if="pageData.activeKey === 'org'">
+                                        <IOrgBox2
+                                            v-for="(orgItem, index) in pageData.listData"
+                                            :key="index"
+                                            :componentProps="orgItem"
+                                            style-type="2"
+                                            show-invite
+                                            show-manage
+                                            :show-join="false"
+                                            @handleOrgInvite="handleOrgInvite(orgItem)"
+                                        />
+                                    </div>
+                                    <div v-if="item.pagination" style="text-align: center;margin: 20px 0;">
+                                        <a-pagination
+                                            v-model:current="pageData.pageNo"
+                                            v-model:page-size="pageData.pageSize"
+                                            show-quick-jumper
+                                            :total="pageData.total"
+                                            @change="handlePageChange"
+                                        />
+                                    </div>
+                                </template>
+                                <a-empty v-else />
+                            </a-spin>
                         </ATabPane>
                     </ATabs>
                 </div>
@@ -46,9 +69,11 @@
             </ACol>
         </ARow>
     </div>
+    <OrgInviteModal v-model:visible="pageData.orgInviteModalVisible" :itemData="pageData.orgItemData" />
 </template>
 
 <script lang="ts" setup>
+import { message } from 'ant-design-vue'
 import { defaultSettings } from '@/settings/defaultSetting'
 import { useUserStore } from '@/store/modules/user'
 import { DownOutlined } from '@ant-design/icons-vue'
@@ -65,7 +90,8 @@ const pageData = reactive({
         {
             text: '组织',
             key: 'org',
-            num: 12
+            num: userStore.userInfo ? userStore.userInfo.orgTotal : '',
+            pagination: true
         },
         {
             text: '收藏',
@@ -77,21 +103,56 @@ const pageData = reactive({
             text: '关注'
         }
     ],
-    listData: []
+    listData: [],
+    total: 0,
+    pageNo: 1,
+    pageSize: 10,
+    loading: false,
+    orgInviteModalVisible: false,
+    orgItemData: {}
 })
-const tabsChange = (tabKey: any) => {
-    switch (tabKey) {
+const resetPagination = () => {
+    pageData.listData = []
+    pageData.total = 0
+    pageData.pageNo = 1
+    pageData.pageSize = 10
+}
+const tabsChange = () => {
+    resetPagination()
+    getListData()
+}
+const getListData = () => {
+    switch (pageData.activeKey) {
         case 'org':
             handleGetOrgList()
             break
     }
 }
 const handleGetOrgList = () => {
-    useHomeCoreApi.requestCoreMyOrgList().then((res) => {
+    pageData.loading = true
+    const params = {
+        pageNo: pageData.pageNo,
+        pageSize: pageData.pageSize
+    }
+    useHomeCoreApi.requestCoreMyOrgList(params).then((res) => {
         if (res.success) {
-            // pageData.listData = res.result
+            pageData.listData = res.result.records
+            pageData.total = res.result.total
+        } else {
+            message.error(res.message || '获取列表失败！')
         }
+        pageData.loading = false
+    }).catch(() => {
+        message.error('请求失败！')
+        pageData.loading = false
     })
+}
+const handlePageChange = () => {
+    getListData()
+}
+const handleOrgInvite = (itemData: any) => {
+    pageData.orgItemData = itemData
+    pageData.orgInviteModalVisible = true
 }
 </script>
 
@@ -144,7 +205,7 @@ const handleGetOrgList = () => {
     }
 }
 .index-page-tab-container {
-    margin: 16px 0 0 0;
+    // margin: 16px 0 0 0;
 
     ::v-deep(.ant-tabs-tab-btn:hover) {
         .tab-number {

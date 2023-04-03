@@ -86,7 +86,7 @@ const routes: Array<RouteRecordRaw> = [
             {
                 path: 'org',
                 meta: {
-                    title: '云圈列表'
+                    title: '组织'
                 },
                 name: 'index-org',
                 component: () => import('@/views/org/List.vue')

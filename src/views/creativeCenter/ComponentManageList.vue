@@ -56,6 +56,7 @@
 
 <script lang="ts" setup>
 import { createVNode } from 'vue'
+import { copyToBoard } from '@/utils/copy'
 import { useHomePageApi, componentPublishApi } from '@/apis'
 import { message, Modal } from 'ant-design-vue'
 import { ExclamationCircleOutlined } from '@ant-design/icons-vue'
@@ -126,14 +127,8 @@ const handleEditClick = (data: any) => {
     window.open(`/componentPublish?componentIds=${data.id}`)
 }
 const handleCopyClick = (data: any) => {
-    console.log('copy', data)
     const url = `/componentMarketDetail?componentId=${data.id}&version=${data.codepackageVersion}`
-    const el = document.createElement('input')
-    el.setAttribute('value', url)
-    document.body.appendChild(el)
-    el.select()
-    document.execCommand('copy')
-    document.body.removeChild(el)
+    copyToBoard(url)
     message.success('复制成功！')
 }
 const handleViewClick = (data: any) => {
