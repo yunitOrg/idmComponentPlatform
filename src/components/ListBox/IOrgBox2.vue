@@ -35,7 +35,7 @@
             </div>
             <div class="flex">
                 <div v-if="showHome" class="apply-btn flex align-center" @click="emits('handleOrgHome', componentProps)">
-                    <AImage :width="14" :preview="false" :src="orgApply"></AImage>
+                    <AImage :width="14" :preview="false" :src="orgHome"></AImage>
                     <a>主页</a>
                 </div>
                 <div v-if="showJoin && componentProps.joinStatus != '1'" class="apply-btn flex align-center" @click="emits('handleApplyOrg', componentProps)">
@@ -43,15 +43,15 @@
                     <a>申请加入</a>
                 </div>
                 <div v-if="showManage && isAdmin" class="apply-btn flex align-center" @click="emits('handleOrgManage', componentProps)">
-                    <AImage :width="14" :preview="false" :src="orgApply"></AImage>
+                    <AImage :width="14" :preview="false" :src="orgManage"></AImage>
                     <a>组织管理</a>
                 </div>
                 <div v-if="showManage && isAdmin" class="apply-btn flex align-center" @click="emits('handleMemberManage', componentProps)">
-                    <AImage :width="14" :preview="false" :src="orgApply"></AImage>
+                    <AImage :width="14" :preview="false" :src="orgMember"></AImage>
                     <a>成员管理</a>
                 </div>
                 <div v-if="showInvite && allowInvite" class="apply-btn flex align-center" @click="emits('handleOrgInvite', componentProps)">
-                    <AImage :width="14" :preview="false" :src="orgApply"></AImage>
+                    <AImage :width="14" :preview="false" :src="orgInvite"></AImage>
                     <a>邀请加入</a>
                 </div>
                 <slot name="footer"></slot>
@@ -63,7 +63,7 @@
 import { IOrgData } from './mock/mockData'
 import { useUserStore } from '@/store/modules/user'
 import { getImagePath } from '@/utils'
-import { orgIcon, orgUser, orgApply } from '@/assets/images'
+import { orgIcon, orgUser, orgApply, orgHome, orgManage, orgMember, orgInvite } from '@/assets/images'
 const userStore = useUserStore()
 const props = defineProps({
     componentProps: {
