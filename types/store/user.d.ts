@@ -37,6 +37,7 @@ interface YunitUser {
     componentTotal: number
     fansTotal: number
     likeTotal:  number
-    level: number,
     orgTotal: number
+    level: number
+    messageCount: number
 }

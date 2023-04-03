@@ -48,10 +48,9 @@
 <script lang="ts" setup>
 import QRCode from 'qrcode'
 import { copyToBoard } from '@/utils/copy'
-import { AesEncryption } from '@/utils/cipher'
+import { shareCodeAes } from '@/utils/cipher'
 import { message } from 'ant-design-vue'
 import { useHomeCoreApi } from '@/apis'
-const aesEncryption = new AesEncryption()
 const props = defineProps({
     visible: {
         type: Boolean,
@@ -70,7 +69,7 @@ const state = reactive<{ [x: string]: any }>({
 const emits = defineEmits(['update:visible'])
 
 onUpdated(() => {
-    state.url = `${window.location.protocol}//${window.location.host}/share?shareCode=${aesEncryption.encryptByAES(props.itemData.orgUserId)}`
+    state.url = `${window.location.protocol}//${window.location.host}/share?shareCode=${encodeURIComponent(shareCodeAes.encryptByAES(props.itemData.orgUserId))}`
     const canvas: any = document.getElementById('org_invite_qrcode_canvas')
     QRCode.toCanvas(canvas, state.url, {
         width: 150,

@@ -33,7 +33,7 @@ export interface SmsData {
 
 export interface LoginData {
     username: string
-    password: string
+    password?: string
     captcha: string
     checkKey?: string
 }
