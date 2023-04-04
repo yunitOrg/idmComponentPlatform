@@ -27,7 +27,10 @@
                 </AInput>
                 <div v-if="userStore.isUserLogined" class="login-status-box flex justify-center align-center">
                     <a-popover placement="bottom" overlayClassName="navbar-avatar-popover">
-                        <a-avatar :size="24" class="cursor-pointer header-avatar" :src="getImagePath(userStore.userInfo && userStore.userInfo.userphoto) || defaultSettings.userphoto" />
+                        <a-avatar
+                            :size="24"
+                            class="cursor-pointer header-avatar"
+                            :src="getImagePath(userStore.userInfo && userStore.userInfo.userphoto) || defaultSettings.userphoto" />
 
                         <AButton style="font-size: 16px" type="link" @click="router.push({ name: 'my-indexPage' })">我的主页</AButton>
                         <template #content>
@@ -77,7 +80,7 @@
                             </div>
                         </template>
                     </a-popover>
-                    <a-badge :count="Number(userStore.userInfo && userStore.userInfo.messageCount)" style="margin: 0 10px">
+                    <a-badge :count="messageCount" style="margin: 0 10px">
                         <span class="message-btn cursor-pointer">消息</span>
                     </a-badge>
                     <a-popover placement="bottomRight">
@@ -110,11 +113,11 @@
                         </AButton>
                     </a-popover>
                 </div>
-                <div v-else class="login-status-box flex justify-center align-center">
+                <div v-else class="login-status-box flex justify-center align-center" @click="userStore.setLoginModal(true)">
                     <div class="login-reg-box flex justify-between align-center cursor-pointer">
-                        <div @click="userStore.setLoginModal(true)">登录</div>
+                        <div>登录</div>
                         <div class="line">|</div>
-                        <div @click="userStore.setLoginModal(true)">注册</div>
+                        <div>注册</div>
                     </div>
                 </div>
             </div>
@@ -184,6 +187,12 @@ const propData = defineProps({
         type: Array<MenuItem>,
         default: () => []
     }
+})
+const messageCount = computed(() => {
+    if (userStore?.userInfo?.messageCount) {
+        return Number(userStore.userInfo.messageCount)
+    }
+    return 0
 })
 const sendListMap = [
     {
@@ -489,11 +498,11 @@ const handleClickActionBtn = (action: string) => {
     }
     .login-status-box {
         margin-left: 50px;
-        .message-btn{
+        .message-btn {
             margin: 0 10px;
             font-size: 16px;
         }
-        .header-avatar{
+        .header-avatar {
             margin: 0 0 2px 0;
         }
     }
