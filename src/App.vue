@@ -1,5 +1,5 @@
 <template>
-    <SuspenseBox v-if="!appStore.isAppMounted"></SuspenseBox>
+    <!-- <SuspenseBox v-if="!appStore.isAppMounted"></SuspenseBox> -->
     <AConfigProvider :locale="zhCN">
         <RouterView v-if="isAlive"></RouterView>
     </AConfigProvider>
@@ -9,9 +9,9 @@
 import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
 import dayjs from 'dayjs'
 import 'dayjs/locale/zh-cn'
-import { useAppStore } from '@/store/modules/app'
+// import { useAppStore } from '@/store/modules/app'
 dayjs.locale('zh-cn')
-const appStore = useAppStore()
+// const appStore = useAppStore()
 const isAlive = ref(true)
 function reload() {
     isAlive.value = false

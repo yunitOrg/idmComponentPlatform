@@ -48,10 +48,9 @@
 <script lang="ts" setup>
 import QRCode from 'qrcode'
 import { copyToBoard } from '@/utils/copy'
-import { AesEncryption } from '@/utils/cipher'
+import { shareCodeAes } from '@/utils/cipher'
 import { message } from 'ant-design-vue'
 import { useHomeCoreApi } from '@/apis'
-const aesEncryption = new AesEncryption()
 const props = defineProps({
     visible: {
         type: Boolean,
@@ -165,7 +164,7 @@ const toFormateStr = (ctx: any, str: string, drawWidth: number, startX: number, 
     return keyStrArr
 }
 
-const fillText = (ctx, arr: any) => {
+const fillText = (ctx:any, arr: any) => {
     arr.forEach((item: any) => {
         ctx.fillText(item.str, (item.drawWidth - item.strWidth) / 2 + item.startX, item.startpoint)
     })
@@ -174,7 +173,7 @@ const fillText = (ctx, arr: any) => {
 watch(() => props.visible, () => {
     if (props.visible) {
         state.userIds = []
-        state.url = `${window.location.protocol}//${window.location.host}/share?shareCode=${aesEncryption.encryptByAES(props.itemData.orgUserId)}`
+        state.url = `${window.location.protocol}//${window.location.host}/share?shareCode=${encodeURIComponent(shareCodeAes.encryptByAES(props.itemData.orgUserId))}`
         nextTick(() => handleQrcode())
     }
 }, { immediate: true, deep: true })

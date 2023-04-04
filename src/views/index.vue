@@ -14,11 +14,6 @@
 <script lang="ts" setup>
 import configObject from '@/settings/indexPageConfig'
 import { useUserStore } from '@/store/modules/user'
-import { useAppStore } from '@/store/modules/app'
-const appStore = useAppStore()
 const userStore = useUserStore()
 const pageConfig = reactive(configObject)
-onMounted(() => {
-    appStore.setAppMounted(true)
-})
 </script>

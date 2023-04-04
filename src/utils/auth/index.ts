@@ -1,7 +1,7 @@
 import { TOKEN_KEY } from '@/enums/cacheEnum'
 import { createLocalStorage } from '@/utils/cache/index'
 
-const ls = createLocalStorage()
+const ls = createLocalStorage({ hasEncrypt: true })
 /**
  * 获取token
  */

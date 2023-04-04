@@ -1,11 +1,8 @@
 <template>
     <div v-if="!isIndexPage && pageData.isShowMenuLine" class="head-bar-container" style="margin: 36px 0 20px 0"></div>
-    <div
-        :style="{ top: pageData.isShowMenuLine ? '0' : '-55px'}"
-        class="head-bar-container head-bar-container-fix"
-        :class="[pageData.isShadow && 'head-bar-container-shadow']">
+    <div :style="{ top: pageData.isShowMenuLine ? '0' : '-55px' }" class="head-bar-container head-bar-container-fix" :class="[pageData.isShadow && 'head-bar-container-shadow']">
         <div class="flex justify-between align-center head-bar-container-main">
-            <div class="flex align-center flex-1" :class="{'justify-between': !hiddenMenu}">
+            <div class="flex align-center flex-1" :class="{ 'justify-between': !hiddenMenu }">
                 <img alt="logo" title="logo" class="cursor-pointer header-logo" :src="yunitLogo" @click="handleJump({ routeName: 'index', title: 'logo' })" />
                 <template v-if="hiddenMenu">
                     <div v-for="item in selectedItems" :key="item.routeName" class="nav-title">{{ item.title }}</div>
@@ -30,9 +27,12 @@
                 </AInput>
                 <div v-if="userStore.isUserLogined" class="login-status-box flex justify-center align-center">
                     <a-popover placement="bottom" overlayClassName="navbar-avatar-popover">
-                        <a-avatar :size="24" class="cursor-pointer" :src="getImagePath(userStore.userInfo && userStore.userInfo.userphoto) || defaultSettings.userphoto" />
+                        <a-avatar
+                            :size="24"
+                            class="cursor-pointer header-avatar"
+                            :src="getImagePath(userStore.userInfo && userStore.userInfo.userphoto) || defaultSettings.userphoto" />
 
-                        <AButton type="link" @click="router.push({ name: 'my-indexPage' })">我的主页</AButton>
+                        <AButton style="font-size: 16px" type="link" @click="router.push({ name: 'my-indexPage' })">我的主页</AButton>
                         <template #content>
                             <div class="navbar-avatar-popover-top">
                                 <div class="flex align-end">
@@ -80,7 +80,9 @@
                             </div>
                         </template>
                     </a-popover>
-                    <AButton type="link">消息</AButton>
+                    <a-badge :count="messageCount" style="margin: 0 10px">
+                        <span class="message-btn cursor-pointer">消息</span>
+                    </a-badge>
                     <a-popover placement="bottomRight">
                         <template #content>
                             <div class="want-send-top flex justify-between align-center">
@@ -111,11 +113,11 @@
                         </AButton>
                     </a-popover>
                 </div>
-                <div v-else class="login-status-box flex justify-center align-center">
+                <div v-else class="login-status-box flex justify-center align-center" @click="userStore.setLoginModal(true)">
                     <div class="login-reg-box flex justify-between align-center cursor-pointer">
-                        <div @click="userStore.setLoginModal(true)">登录</div>
+                        <div>登录</div>
                         <div class="line">|</div>
-                        <div @click="userStore.setLoginModal(true)">注册</div>
+                        <div>注册</div>
                     </div>
                 </div>
             </div>
@@ -185,6 +187,12 @@ const propData = defineProps({
         type: Array<MenuItem>,
         default: () => []
     }
+})
+const messageCount = computed(() => {
+    if (userStore?.userInfo?.messageCount) {
+        return Number(userStore.userInfo.messageCount)
+    }
+    return 0
 })
 const sendListMap = [
     {
@@ -305,13 +313,13 @@ const yunitOrg = reactive({
 })
 const selectedItems: any = computed(() => {
     const arr: any = []
-    selectedKeys.value.forEach(key => {
-        const item = propData.navList.find(item => item.routeName === key)
+    selectedKeys.value.forEach((key) => {
+        const item = propData.navList.find((item) => item.routeName === key)
         item && arr.push(item)
     })
     return arr
 })
-const menuNavList: any = computed(() => propData.navList.filter(item => !item.hiddenInMenu))
+const menuNavList: any = computed(() => propData.navList.filter((item) => !item.hiddenInMenu))
 const hiddenMenu: any = computed(() => {
     const hiddenMenuList = propData.navList.filter(item => item.hiddenInMenu)
     const hiddenKeys = hiddenMenuList ? hiddenMenuList.map((item: any) => item.routeName) : []
@@ -491,6 +499,13 @@ const handleClickActionBtn = (action: string) => {
     }
     .login-status-box {
         margin-left: 50px;
+        .message-btn {
+            margin: 0 10px;
+            font-size: 16px;
+        }
+        .header-avatar {
+            margin: 0 0 2px 0;
+        }
     }
     .login-reg-box {
         background: rgba(30, 128, 255, 0.05);

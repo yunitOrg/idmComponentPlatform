@@ -144,6 +144,14 @@ const routes: Array<RouteRecordRaw> = [
                 ]
             }
         ]
+    },
+    {
+        path: '/share',
+        name: 'share',
+        meta: {
+            title: '组织邀请'
+        },
+        component: () => import('@/views/share/index.vue')
     }
 ]
 
