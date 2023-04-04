@@ -142,6 +142,17 @@ const routes: Array<RouteRecordRaw> = [
                         component: () => import('@/views/creativeCenter/ComponentManageList.vue')
                     }
                 ]
+            },
+            {
+                path: '/message',
+                component: () => import('@/views/message/index.vue'),
+                children: [
+                    {
+                        path: 'list',
+                        name: 'message-list',
+                        component: () => import('@/views/message/list/index.vue')
+                    }
+                ]
             }
         ]
     },

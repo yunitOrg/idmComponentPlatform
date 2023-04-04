@@ -22,7 +22,7 @@
                     style="width: 260px"
                     @keyup.enter="handleSearch">
                     <template #suffix>
-                        <search-outlined style="color: rgba(0, 0, 0, 0.45)" @click="handleSearch" />
+                        <search-outlined style="color: rgba(0, 0, 0, 0.45); font-size: 20px" @click="handleSearch" />
                     </template>
                 </AInput>
                 <div v-if="userStore.isUserLogined" class="login-status-box flex justify-center align-center">
@@ -81,7 +81,7 @@
                         </template>
                     </a-popover>
                     <a-badge :count="messageCount" style="margin: 0 10px">
-                        <span class="message-btn cursor-pointer">消息</span>
+                        <span class="message-btn cursor-pointer" @click="router.push({ name: 'message-list' })">消息</span>
                     </a-badge>
                     <a-popover placement="bottomRight">
                         <template #content>
@@ -390,11 +390,9 @@ nextTick(() => {
 })
 
 const handleCreateOrg = () => {
-    if (userStore.isUserLogined) {
-        pageData.createOrgVisible = true
-    } else {
-        userStore.setLoginModal(true)
-    }
+    router.push({
+        name: 'index-org'
+    })
 }
 const handleJump = (menuItem?: MenuItem) => {
     if (isUrl(menuItem?.routeName)) {
