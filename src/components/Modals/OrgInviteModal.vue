@@ -35,8 +35,8 @@
         <div class="block">
             <div class="sub-title">方式三：分享二维码</div>
             <canvas id="org_invite_qrcode_canvas"></canvas>
-            <div style="width: 150px;" class="text-center">
-                <AButton type="link" size="small" @click.stop="handleDownloadQrcode">直接下载</AButton>
+            <div style="width: 200px;" class="text-center">
+                <AButton type="link" size="small" @click.stop="handleDownloadQrcode">下载二维码</AButton>
             </div>
         </div>
         <div class="text-center">
@@ -69,16 +69,6 @@ const state = reactive<{ [x: string]: any }>({
 })
 const emits = defineEmits(['update:visible'])
 
-onUpdated(() => {
-    state.url = `${window.location.protocol}//${window.location.host}/share?shareCode=${aesEncryption.encryptByAES(props.itemData.orgUserId)}`
-    const canvas: any = document.getElementById('org_invite_qrcode_canvas')
-    QRCode.toCanvas(canvas, state.url, {
-        width: 150,
-        height: 150,
-        margin: 1
-    })
-})
-
 const handleClose = () => {
     emits('update:visible', false)
 }
@@ -102,12 +92,92 @@ const handleDownloadQrcode = () => {
     const imgurl = canvas.toDataURL('image/jpeg')
     const a = document.createElement('a')
     a.href = imgurl
-    a.download = '二维码' // 图片名称
+    a.download = `${props.itemData.orgname}邀请二维码` // 图片名称
     a.click()
 }
 const getUserList = async (text: string) => {
     return await useHomeCoreApi.requestSearchUser({ searchTxt: text })
 }
+
+const setFont = (ctx: any) => {
+    ctx.font = 'normal 15px Arial'
+    ctx.textBaseline = 'top' // 设置绘制文本时的文本基线。
+    ctx.textAlign = 'left'
+    ctx.fillStyle = '#333'
+}
+
+const handleQrcode = () => {
+    const qrCodeWidth = 160
+    const qrCodeHeight = 160
+    const width = 200
+    const padding = 10
+    const steps = 20
+    const canvas: any = document.getElementById('org_invite_qrcode_canvas')
+    QRCode.toDataURL(state.url, {
+        width: qrCodeWidth,
+        height: qrCodeHeight,
+        margin: 1
+    }).then((url: string) => {
+        // 画二维码里的logo// 在canvas里进行拼接
+        const ctx = canvas.getContext('2d')
+        const image = new Image()
+        image.src = url
+        new Promise<HTMLImageElement>((resolve) => {
+            image.onload = () => {
+                resolve(image)
+            }
+        }).then((img: HTMLImageElement) => {
+            const text = `${props.itemData.orgname}`
+            setFont(ctx)
+            const keyStrArr = toFormateStr(ctx, text, width - padding * 2, padding, qrCodeHeight + padding * 2, steps)
+            const height = qrCodeHeight + padding * 3 + steps * keyStrArr.length
+            canvas.width = width
+            canvas.height = height
+            ctx.rect(0, 0, width, height)
+            ctx.fillStyle = '#fff'
+            ctx.fill()
+            ctx.drawImage(img, (width - qrCodeWidth) / 2, padding, qrCodeWidth, qrCodeHeight)
+            setFont(ctx)
+            fillText(ctx, keyStrArr)
+        })
+    }).catch((err: Error) => {
+        console.error(err)
+    })
+}
+
+const toFormateStr = (ctx: any, str: string, drawWidth: number, startX: number, startY: number, steps: number) => {
+    let start = 0
+    let keyStr = ''
+    let startpoint = startY
+    const keyStrArr = []
+    for (let i = 0; i < str.length; i++) {
+        keyStr = str.slice(start, i + 1)
+        if (ctx.measureText(keyStr).width > drawWidth) {
+            keyStr = str.slice(start, i)
+            keyStrArr.push({ str: keyStr, strWidth: ctx.measureText(keyStr).width, drawWidth, startX, startpoint })
+            // ctx.fillText(keyStr, (drawWidth - ctx.measureText(keyStr).width) / 2 + startX, startpoint)
+            start = i
+            startpoint = startpoint + steps
+        } else if (i === str.length - 1) {
+            keyStrArr.push({ str: keyStr, strWidth: ctx.measureText(keyStr).width, drawWidth, startX, startpoint })
+        }
+    }
+    return keyStrArr
+}
+
+const fillText = (ctx, arr: any) => {
+    arr.forEach((item: any) => {
+        ctx.fillText(item.str, (item.drawWidth - item.strWidth) / 2 + item.startX, item.startpoint)
+    })
+}
+
+watch(() => props.visible, () => {
+    if (props.visible) {
+        state.userIds = []
+        state.url = `${window.location.protocol}//${window.location.host}/share?shareCode=${aesEncryption.encryptByAES(props.itemData.orgUserId)}`
+        nextTick(() => handleQrcode())
+    }
+}, { immediate: true, deep: true })
 </script>
 <style lang="scss" scoped>
 .box-title {

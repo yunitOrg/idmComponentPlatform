@@ -205,7 +205,7 @@ const handleOrgInvite = (itemData: any) => {
     }
 }
 .index-page-tab-container {
-    // margin: 16px 0 0 0;
+    margin: 16px 0 0 0;
 
     ::v-deep(.ant-tabs-tab-btn:hover) {
         .tab-number {

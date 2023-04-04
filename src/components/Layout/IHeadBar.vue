@@ -313,8 +313,9 @@ const selectedItems: any = computed(() => {
 })
 const menuNavList: any = computed(() => propData.navList.filter(item => !item.hiddenInMenu))
 const hiddenMenu: any = computed(() => {
-    const menuNavKeys = menuNavList.value.map((item: any) => item.routeName)
-    return selectedKeys.value.some((key: string) => menuNavKeys.indexOf(key) === -1)
+    const hiddenMenuList = propData.navList.filter(item => item.hiddenInMenu)
+    const hiddenKeys = hiddenMenuList ? hiddenMenuList.map((item: any) => item.routeName) : []
+    return selectedKeys.value.some((key: string) => hiddenKeys.indexOf(key) !== -1)
 })
 
 const handleScroll = () => {
@@ -425,7 +426,7 @@ const handleCreativeCenterClick = () => {
 }
 useHomeCoreApi.requestCoreMyOrgList().then((res) => {
     if (res.success) {
-        pageData.orgList = res.result
+        pageData.orgList = res.result.records
     }
 })
 
