@@ -37,7 +37,7 @@
                 @click="handleClickBtn('requestApproveJoinOrgAdmin', { checkStatus: 0 })">
                 拒绝加入
             </a-button>
-            <span v-if="messageData.readStatus == 1">已处理</span>
+            <span v-if="messageData.readStatus == 1" style="color: #999">已处理</span>
         </div>
     </div>
 </template>

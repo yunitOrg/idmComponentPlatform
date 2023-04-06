@@ -111,7 +111,7 @@
                                 <!-- 通知 -->
                                 <div v-if="pageData.currentMessageActive === 2">
                                     <div class="tab-content common-scrollbar_style">
-                                        <AllMessage showLocation="navbar" @updateMessage="updateMessage" size="mini" :messageList="pageData.messageList"></AllMessage>
+                                        <AllMessage showLocation="navbar" size="mini" :messageList="pageData.messageList" @updateMessage="updateMessage"></AllMessage>
                                     </div>
                                     <div class="flex justify-between align-center tab-bottom">
                                         <div class="cursor-pointer"><svg-icon iconClass="settings"></svg-icon> 设置</div>
