@@ -7,7 +7,7 @@
                 邀请你加入
             </div>
             <div class="org-line flex flex-direction-column align-center">
-                <a-image :width="100" :preview="false" style="object-fit: cover" :height="100" alt="图标加载失败" :src="getImagePath(pageData.inviteInfo.org.orgphoto)" />
+                <a-image :width="100" :preview="false" style="object-fit: cover" :height="100" alt="logo加载失败" :src="getImagePath(pageData.inviteInfo.org.orgphoto)" />
                 <div class="text-center org-name">{{ pageData.inviteInfo.org.orgname }}</div>
                 <div v-if="pageData.inviteInfo.org.introduce" class="flex-1 org-introduce">{{ pageData.inviteInfo.org.introduce }}</div>
                 <div v-else class="flex-1 org-introduce">正在使用云it进行组件分享，请尽快加入</div>

@@ -132,7 +132,8 @@ const handleGetOrgList = () => {
     pageData.loading = true
     const params = {
         pageNo: pageData.pageNo,
-        pageSize: pageData.pageSize
+        pageSize: pageData.pageSize,
+        joinStatus: 1
     }
     useHomeCoreApi.requestCoreMyOrgList(params).then((res) => {
         if (res.success) {

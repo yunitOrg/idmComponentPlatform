@@ -80,9 +80,47 @@
                             </div>
                         </template>
                     </a-popover>
-                    <a-badge :count="messageCount" style="margin: 0 10px">
-                        <span class="message-btn cursor-pointer" @click="router.push({ name: 'message-list' })">消息</span>
-                    </a-badge>
+                    <a-popover placement="bottomRight" overlayClassName="message-popover">
+                        <a-badge :count="messageCount" style="margin: 0 10px">
+                            <span class="message-btn cursor-pointer">消息</span>
+                        </a-badge>
+                        <template #content>
+                            <div class="top-message-list-container">
+                                <div class="flex justify-between title-tab">
+                                    <div
+                                        class="flex-1 text-center cursor-pointer"
+                                        :class="[pageData.currentMessageActive === 1 && 'tab-active']"
+                                        @click="handleMessageTabChange(1)">
+                                        我的私信
+                                    </div>
+                                    <div
+                                        class="flex-1 text-center cursor-pointer"
+                                        :class="[pageData.currentMessageActive === 2 && 'tab-active']"
+                                        @click="handleMessageTabChange(2)">
+                                        通知消息
+                                    </div>
+                                </div>
+                                <!-- 私信 -->
+                                <div v-if="pageData.currentMessageActive === 1">
+                                    <div class="tab-content common-scrollbar_style">123</div>
+                                    <div class="flex justify-between align-center tab-bottom">
+                                        <div class="cursor-pointer"><svg-icon iconClass="edit"></svg-icon> 写信私信</div>
+                                        <div class="cursor-pointer">查看全部私信</div>
+                                    </div>
+                                </div>
+                                <!-- 通知 -->
+                                <div v-if="pageData.currentMessageActive === 2">
+                                    <div class="tab-content common-scrollbar_style">
+                                        <AllMessage showLocation="navbar" @updateMessage="updateMessage" size="mini" :messageList="pageData.messageList"></AllMessage>
+                                    </div>
+                                    <div class="flex justify-between align-center tab-bottom">
+                                        <div class="cursor-pointer"><svg-icon iconClass="settings"></svg-icon> 设置</div>
+                                        <div class="cursor-pointer" @click="router.push({ name: 'message-list' })">查看全部通知</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </a-popover>
                     <a-popover placement="bottomRight">
                         <template #content>
                             <div class="want-send-top flex justify-between align-center">
@@ -156,31 +194,18 @@
 </template>
 
 <script lang="ts" setup>
-import {
-    yunitLogo,
-    codeImage,
-    componentImage,
-    schoolImage,
-    yunQuanImage,
-    idmImage2,
-    orgImage,
-    logo1,
-    personImage,
-    orgIcon2,
-    logoutImage,
-    settingImage,
-    createEntranceImage
-} from '@/assets/images'
+import { yunitLogo, logo1, createEntranceImage } from '@/assets/images'
 import { defaultSettings } from '@/settings/defaultSetting'
 import type { MenuProps } from 'ant-design-vue'
 import IOrgBox from '@/components/ListBox/IOrgBox.vue'
 import { SearchOutlined, RightOutlined } from '@ant-design/icons-vue'
 import { useUserStore } from '@/store/modules/user'
 import { isUrl } from '@/utils/is'
-import { settings } from '@/settings/idmSettings'
-import { useHomeCoreApi } from '@/apis'
+import { useHomeCoreApi, useUserApi } from '@/apis'
 import { getImagePath } from '@/utils'
 import emitter from '@/utils/bus'
+import AllMessage from '@/views/message/list/AllMessage.vue'
+import { sendListMap, navBoxList, myActionList } from '@/settings/navbarSettings'
 const userStore = useUserStore()
 const propData = defineProps({
     navList: {
@@ -194,101 +219,13 @@ const messageCount = computed(() => {
     }
     return 0
 })
-const sendListMap = [
-    {
-        text: '发组件',
-        icon: 'lifang',
-        iconSize: 16,
-        type: 'window',
-        url: '/componentPublish'
-    },
-    {
-        text: '发圈子',
-        icon: 'quan',
-        iconSize: 16,
-        url: ''
-    },
-    {
-        text: '组件包',
-        icon: 'upload',
-        iconSize: 22,
-        type: 'window',
-        url: '/componentPackagePublish'
-    },
-    {
-        text: '发教程',
-        icon: 'tushu',
-        iconSize: 16,
-        url: ''
-    },
-    {
-        text: '建组织',
-        icon: 'jianzhu',
-        iconSize: 14,
-        url: 'index-org'
-    }
-]
+
 const activityList = [
     {
-        title: '哈哈哈哈哈'
+        title: '活动一二三四'
     },
     {
-        title: '呼呼呼呼'
-    }
-]
-const navBoxList: Array<MenuItem> = [
-    {
-        title: '组件包',
-        image: codeImage,
-        routeName: 'index-componentPackage'
-    },
-    {
-        title: '组件市场',
-        image: componentImage,
-        routeName: 'index-componentMarket'
-    },
-    {
-        title: 'i学院',
-        image: schoolImage,
-        routeName: 'index-iSchool'
-    },
-    {
-        title: '云圈',
-        image: yunQuanImage,
-        routeName: 'index-yunquan'
-    },
-    {
-        title: '组织',
-        image: orgImage,
-        routeName: 'index-org'
-    },
-    {
-        title: 'IDM',
-        image: idmImage2,
-        routeName: settings.url
-    }
-]
-const myActionList = [
-    {
-        action: 'myOrg',
-        text: '我的组织',
-        image: orgIcon2
-    },
-    {
-        action: 'personInfo',
-        image: personImage,
-        text: '个人资料'
-    },
-    {
-        action: 'setting',
-        image: settingImage,
-        text: '账号设置'
-    },
-    {
-        action: 'logout',
-        border: true,
-        image: logoutImage,
-        text: '安全退出'
+        title: '活动一二三'
     }
 ]
 const router = useRouter()
@@ -302,8 +239,11 @@ const pageData = reactive<{ [x: string]: any }>({
     orgList: [],
     isShadow: false,
     menuOpacity: 0,
-    isShowMenuLine: true
+    isShowMenuLine: true,
+    currentMessageActive: 1,
+    messageList: []
 })
+// yunit默认
 const yunitOrg = reactive({
     orgphoto: logo1,
     companyName: '公司',
@@ -321,7 +261,7 @@ const selectedItems: any = computed(() => {
 })
 const menuNavList: any = computed(() => propData.navList.filter((item) => !item.hiddenInMenu))
 const hiddenMenu: any = computed(() => {
-    const hiddenMenuList = propData.navList.filter(item => item.hiddenInMenu)
+    const hiddenMenuList = propData.navList.filter((item) => item.hiddenInMenu)
     const hiddenKeys = hiddenMenuList ? hiddenMenuList.map((item: any) => item.routeName) : []
     return selectedKeys.value.some((key: string) => hiddenKeys.indexOf(key) !== -1)
 })
@@ -344,6 +284,30 @@ const handleScroll = () => {
         pageData.menuOpacity = 0
         pageData.isShadow = false
     }
+}
+// 获取消息列表
+const handleFetchMessageList = () => {
+    useUserApi
+        .requestMyMessageList({
+            pageSize: 20,
+            pageNo: 1
+        })
+        .then((res) => {
+            if (res.success) {
+                pageData.messageList = res.result.records
+            }
+        })
+}
+handleFetchMessageList()
+// 消息tabs change
+const handleMessageTabChange = (type: number) => {
+    pageData.currentMessageActive = type
+    if (type === 2) handleFetchMessageList()
+}
+// 更新消息
+const updateMessage = (index: number) => {
+    pageData.messageList[index].readStatus = 1
+    userStore.handleGetUserInfo()
 }
 watch(
     () => route.name,
@@ -614,6 +578,37 @@ const handleClickActionBtn = (action: string) => {
         margin: 0 10px 0 0;
     }
 }
+.top-message-list-container {
+    width: 520px;
+    .title-tab {
+        border-bottom: 1px solid #ccc;
+        padding: 10px 0;
+        font-size: 16px;
+        > div {
+            border-right: 1px solid #ccc;
+        }
+        div {
+            padding: 5px 0;
+            &:last-child {
+                border-right: 0;
+            }
+        }
+        .tab-active {
+            color: #40a9ff;
+        }
+    }
+    .tab-content {
+        padding: 10px;
+        height: 300px;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+    .tab-bottom {
+        border-top: 1px solid #ccc;
+        padding: 10px;
+        color: #666;
+    }
+}
 </style>
 
 <style lang="scss">
@@ -674,6 +669,11 @@ const handleClickActionBtn = (action: string) => {
         .title {
             font-size: 14px;
         }
+    }
+}
+.message-popover {
+    .ant-popover-inner-content {
+        padding: 0;
     }
 }
 </style>

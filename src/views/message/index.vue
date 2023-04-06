@@ -1,7 +1,7 @@
 <template>
     <div class="page-max-width">
         <ARow :gutter="[20, 20]">
-            <ACol :span="4" :xs="24" :md="24" :lg="4">
+            <ACol :span="4" :xs="4" :md="4" :lg="4">
                 <div class="bg-white idm-component-common-box btn-container">
                     <div
                         v-for="(item, index) in btnList"
@@ -13,7 +13,7 @@
                     </div>
                 </div>
             </ACol>
-            <ACol :span="20" :xs="24" :md="24" :lg="20">
+            <ACol :span="20" :xs="20" :md="20" :lg="20">
                 <div class="bg-white idm-component-common-box message-list-container">
                     <router-view></router-view>
                 </div>

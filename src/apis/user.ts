@@ -25,7 +25,9 @@ enum Apis {
     // 取消关注用户
     unFollowUser = '/core/user/unFollowUser',
     // 我的消息列表查询
-    getMyMessageList = '/core/user/getMyMessageList'
+    getMyMessageList = '/core/user/getMyMessageList',
+    // 设置消息为已读
+    setMyMessageRead = '/core/user/setMyMessageRead'
 }
 export interface SmsData {
     mobile?: string
@@ -69,5 +71,6 @@ export default {
     requestUserUnCollect: (data: any) => http.postForm({ url: Apis.userUnCollect, data }),
     requestFollowUser: (data: any) => http.postForm({ url: Apis.followUser, data }),
     requestUnFollowUser: (data: any) => http.postForm({ url: Apis.unFollowUser, data }),
-    requestMyMessageList: (params: any) => http.get({ url: Apis.getMyMessageList, params })
+    requestMyMessageList: (params: any) => http.get({ url: Apis.getMyMessageList, params }),
+    requestSetMyMessageRead: (data: any) => http.postForm({ url: Apis.setMyMessageRead, data })
 }

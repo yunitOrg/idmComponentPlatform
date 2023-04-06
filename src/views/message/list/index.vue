@@ -5,37 +5,34 @@
                 <svg-icon iconClass="search" style="color: #aaa8a8; font-size: 20px"></svg-icon>
             </template>
         </a-input>
-        <span class="clear-text cursor-pointer">清空所有消息</span>
+        <span class="clear-text cursor-pointer" @click="setAllRead">全部已读</span>
     </div>
-    <div>
-        <AboutMe v-if="false"></AboutMe>
-        <AllMessage v-if="false"></AllMessage>
-        <Praise v-if="false"></Praise>
-        <Comment v-if="false"></Comment>
-        <Fans v-if="false"></Fans>
-        <Invitation v-if="false"></Invitation>
-        <Private v-if="false"></Private>
-        <System v-if="false"></System>
-        <Appreciate v-if="false"></Appreciate>
-    </div>
-
+    <AllMessage size="normal" showLocation="messagePage" :message-list="pageData.result.records" @updateMessage="updateMessage"></AllMessage>
+    <a-empty v-if="!pageData.isFirst && pageData.result && pageData.result.records && pageData.result.records.length === 0" description="暂无消息" />
     <div class="text-center" style="margin: 10px 0 0 0">
         <a-pagination v-model:current="pageData.pageConfig.pageNo" :defaultPageSize="pageData.pageConfig.pageSize" :total="pageData.result.total" show-less-items />
     </div>
 </template>
 
 <script lang="ts" setup>
-import AboutMe from './AboutMe.vue'
 import AllMessage from './AllMessage.vue'
-import Praise from './Praise.vue'
-import Comment from './Comment.vue'
-import Fans from './Fans.vue'
-import Invitation from './Invitation.vue'
-import Private from './Private.vue'
-import System from './System.vue'
-import Appreciate from './Appreciate.vue'
 import { useUserApi } from '@/apis'
-const pageData = reactive({
+import { useUserStore } from '@/store/modules/user'
+const userStore = useUserStore()
+interface PageData {
+    pageConfig: {
+        pageNo: number
+        pageSize: number
+    }
+    result: {
+        records: Array<MessageData>
+        total: number
+    }
+    msgTypes: string
+    searchTxt: string
+    isFirst: boolean
+}
+const pageData = reactive<PageData>({
     pageConfig: {
         pageSize: 20,
         pageNo: 1
@@ -45,7 +42,8 @@ const pageData = reactive({
         total: 0
     },
     msgTypes: '',
-    searchTxt: ''
+    searchTxt: '',
+    isFirst: true
 })
 const handleFetchMessageList = () => {
     useUserApi
@@ -57,15 +55,29 @@ const handleFetchMessageList = () => {
         .then((res) => {
             if (res.success) {
                 pageData.result = res.result
+                pageData.isFirst = false
             }
         })
 }
 const route = useRoute()
+const setAllRead = () => {
+    useUserApi
+        .requestSetMyMessageRead({
+            msgIds: ''
+        })
+        .then((res) => {
+            if (res.success) {
+                userStore.handleGetUserInfo()
+                handleFetchMessageList()
+            }
+        })
+}
 
 watch(
     () => route.query.type,
     (newV) => {
         if (newV !== undefined) pageData.msgTypes = newV as string
+        else pageData.msgTypes = ''
 
         handleFetchMessageList()
     },
@@ -73,6 +85,10 @@ watch(
         immediate: true
     }
 )
+const updateMessage = (index: number) => {
+    pageData.result.records[index].readStatus = 1
+    userStore.handleGetUserInfo()
+}
 </script>
 
 <style lang="scss" scoped>

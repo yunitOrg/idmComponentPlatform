@@ -1,0 +1,29 @@
+.message-box-container {
+    padding: 20px 0;
+    border-bottom: 1px solid #f1f1f1;
+    .message-icon-container {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        font-size: 21px;
+        color: #fff;
+        margin: 0 10px 0 0;
+    }
+    .message-title{
+        color: #999;
+    }
+    .message-content{
+        font-size: 15px;
+        font-weight: 600;
+        color: #333;
+        cursor: pointer;
+    }
+    .message-time{
+        margin: 0 0 0 20px;
+    }
+}
+.message-box-mini{
+    .message-box-container {
+        padding: 10px 0;
+    }
+}

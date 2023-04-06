@@ -1,11 +1,13 @@
 <template>settings</template>
 <script lang="ts" setup>
 defineProps({
-    dataList: {
-        type: Array,
-        default: () => []
+    messageData: {
+        type: Object,
+        default: () => {}
     }
 })
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+@import './common.scss';
+</style>
