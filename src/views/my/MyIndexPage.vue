@@ -46,6 +46,7 @@
                                             show-manage
                                             :show-join="false"
                                             @handleOrgInvite="handleOrgInvite(orgItem)"
+                                            @handle-member-manage="handleOrgMember(orgItem)"
                                         />
                                     </div>
                                     <div v-if="item.pagination" style="text-align: center;margin: 20px 0;">
@@ -70,6 +71,7 @@
         </ARow>
     </div>
     <OrgInviteModal v-model:visible="pageData.orgInviteModalVisible" :itemData="pageData.orgItemData" />
+    <OrgMemberModal v-model:visible="pageData.orgMemberModalVisible" :itemData="pageData.orgItemData" />
 </template>
 
 <script lang="ts" setup>
@@ -109,6 +111,7 @@ const pageData = reactive({
     pageSize: 10,
     loading: false,
     orgInviteModalVisible: false,
+    orgMemberModalVisible: false,
     orgItemData: {}
 })
 const resetPagination = () => {
@@ -153,6 +156,10 @@ const handlePageChange = () => {
 const handleOrgInvite = (itemData: any) => {
     pageData.orgItemData = itemData
     pageData.orgInviteModalVisible = true
+}
+const handleOrgMember = (itemData: any) => {
+    pageData.orgItemData = itemData
+    pageData.orgMemberModalVisible = true
 }
 </script>
 

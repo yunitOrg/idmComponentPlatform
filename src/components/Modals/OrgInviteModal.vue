@@ -1,5 +1,6 @@
 <template>
     <a-modal
+        destroy-on-close
         width="660px"
         centered
         :visible="visible"
