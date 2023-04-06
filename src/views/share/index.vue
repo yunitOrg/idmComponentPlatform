@@ -7,7 +7,7 @@
                 邀请你加入
             </div>
             <div class="org-line flex flex-direction-column align-center">
-                <a-image :width="100" :preview="false" style="object-fit: cover;" :height="100" alt="图标加载失败" :src="getImagePath(pageData.inviteInfo.org.orgphoto)" />
+                <a-image :width="100" :preview="false" style="object-fit: cover" :height="100" alt="logo加载失败" :src="getImagePath(pageData.inviteInfo.org.orgphoto)" />
                 <div class="text-center org-name">{{ pageData.inviteInfo.org.orgname }}</div>
                 <div v-if="pageData.inviteInfo.org.introduce" class="flex-1 org-introduce">{{ pageData.inviteInfo.org.introduce }}</div>
                 <div v-else class="flex-1 org-introduce">正在使用云it进行组件分享，请尽快加入</div>
@@ -50,6 +50,11 @@
                 授权该组织管理员可查看手机号
             </a-checkbox>
         </div>
+        <div class="flex justify-center align-center" style="margin: 10px 0;">
+            <a-image :src="yunitLogo" :width="100" style="opacity: .6;" :preview="false"></a-image>
+            <span class="bottom-line"></span>
+            <div class="bottom-website">{{ settings.website }}</div>
+        </div>
     </div>
 </template>
 
@@ -57,10 +62,11 @@
 import { shareCodeAes } from '@/utils/cipher'
 import { coreApi } from '@/apis'
 import { getImagePath } from '@/utils'
-// import { yunitLogo } from '@/assets/images'
+import { yunitLogo } from '@/assets/images'
 import { useUserStore } from '@/store/modules/user'
 import { isEmail, isPhone } from '@/utils/is'
 import { message } from '@/plugins/globalComponents'
+import { settings } from '@/settings/idmSettings'
 const userStore = useUserStore()
 const route = useRoute()
 const router = useRouter()
@@ -251,6 +257,15 @@ const handleSendCode = async (): Promise<any> => {
     }
     .color-999 {
         color: #999 !important;
+    }
+    .bottom-line {
+        border-left: 1px solid #c4c4c4;
+        height: 24px;
+        margin: 0 10px;
+    }
+    .bottom-website {
+        color: #c4c4c4;
+        font-size: 20px;
     }
 }
 </style>

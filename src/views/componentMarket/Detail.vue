@@ -111,6 +111,8 @@ const handlePraise = () => {
             pageData.packageDetail.isPraise = !pageData.packageDetail.isPraise
             if (pageData.packageDetail.isPraise) pageData.packageDetail.componentInfo.praiseNumber += 1
             else pageData.packageDetail.componentInfo.praiseNumber -= 1
+        } else {
+            message.error(res.message)
         }
     })
 }

@@ -1,8 +1,10 @@
 <template>
     <!-- 组织页面列表 -->
-    <div class="org-box idm-component-common-box cursor-pointer" :class="{'style-type-1': styleType === '1', 'style-type-2': styleType === '2'}">
+    <div class="org-box idm-component-common-box cursor-pointer" :class="{ 'style-type-1': styleType === '1', 'style-type-2': styleType === '2' }">
         <div class="flex">
-            <AImage :preview="false" :width="70" :height="70" :src="getImagePath(componentProps.orgphoto)"></AImage>
+            <div class="org-avatar">
+                <AImage :preview="false" :width="70" :height="70" :src="getImagePath(componentProps.orgphoto)"></AImage>
+            </div>
             <div class="flex-1" style="margin: 0 0 0 25px">
                 <div class="flex justify-between">
                     <div class="org-title">{{ componentProps.orgname }}</div>
@@ -131,12 +133,18 @@ const emits = defineEmits(['handleApplyOrg', 'handleOrgHome', 'handleOrgManage',
     .org-title {
         font-size: 18px;
     }
+    .org-avatar{
+        ::v-deep(.ant-image) {
+            overflow: hidden;
+        }
+    }
     .person {
         font-size: 18px;
     }
     .org-image {
         &::v-deep(.ant-image) {
             margin: 0 5px 0 0;
+            overflow: hidden;
         }
     }
     .org-box-bottom {
