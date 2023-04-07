@@ -36,10 +36,10 @@
                 <div class="pr-10">云圈 <span class="instroduce-number">0</span></div>
             </div>
             <div class="flex">
-                <div v-if="showHome" class="apply-btn flex align-center" @click="emits('handleOrgHome', componentProps)">
+                <!-- <div v-if="showHome" class="apply-btn flex align-center" @click="emits('handleOrgHome', componentProps)">
                     <AImage :width="14" :preview="false" :src="orgHome"></AImage>
                     <a>主页</a>
-                </div>
+                </div> -->
                 <div v-if="showJoin && componentProps.joinStatus != '1'" class="apply-btn flex align-center" @click="emits('handleApplyOrg', componentProps)">
                     <AImage :width="14" :preview="false" :src="orgApply"></AImage>
                     <a>申请加入</a>
@@ -48,9 +48,16 @@
                     <AImage :width="14" :preview="false" :src="orgManage"></AImage>
                     <a>组织管理</a>
                 </div>
-                <div v-if="showManage && isAdmin" class="apply-btn flex align-center" @click="emits('handleMemberManage', componentProps)">
-                    <AImage :width="14" :preview="false" :src="orgMember"></AImage>
-                    <a>成员管理</a>
+                <div v-if="showManage" class="apply-btn flex align-center" @click="emits('handleMemberManage', componentProps)">
+                    <template v-if="isAdmin">
+                        <AImage :width="14" :preview="false" :src="orgMember"></AImage>
+                        <a>成员管理</a>
+                    </template>
+                    <template v-else>
+                        <!-- todo -->
+                        <!-- <AImage :width="14" :preview="false" :src="orgMember"></AImage> -->
+                        <a>成员列表</a>
+                    </template>
                 </div>
                 <div v-if="showInvite && allowInvite" class="apply-btn flex align-center" @click="emits('handleOrgInvite', componentProps)">
                     <AImage :width="14" :preview="false" :src="orgInvite"></AImage>
@@ -65,7 +72,7 @@
 import { IOrgData } from './mock/mockData'
 import { useUserStore } from '@/store/modules/user'
 import { getImagePath } from '@/utils'
-import { orgIcon, orgUser, orgApply, orgHome, orgManage, orgMember, orgInvite } from '@/assets/images'
+import { orgIcon, orgUser, orgApply, orgManage, orgMember, orgInvite } from '@/assets/images'
 const userStore = useUserStore()
 const props = defineProps({
     componentProps: {
