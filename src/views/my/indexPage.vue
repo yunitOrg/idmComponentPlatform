@@ -100,7 +100,7 @@ const pageData = reactive({
     activeKey: 'trends',
     tabList: [
         {
-            text: '我的动态',
+            text: isSelfPage ? '我的动态' : '他的动态',
             key: 'trends'
         },
         {

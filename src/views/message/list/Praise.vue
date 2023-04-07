@@ -5,7 +5,9 @@
         </div>
         <div>
             <div class="message-title">
-                <span  class="cursor-pointer" @click="jumpIndexPage">{{ messageData.nickname }}</span> {{ messageActionType[messageData.type] }}了你的{{ messageSourceType[messageData.sourceType] }}
+                <span class="cursor-pointer" @click="jumpIndexPage">{{ messageData.nickname }}</span> {{ messageActionType[messageData.type] }}了你的{{
+                    messageSourceType[messageData.sourceType]
+                }}
                 <span class="message-time">{{ messageData.msgTime }}</span>
             </div>
             <div class="message-content">{{ messageData[messageTitleFields[messageData.sourceType]] }}</div>
