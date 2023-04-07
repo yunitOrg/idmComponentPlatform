@@ -439,11 +439,6 @@ const handleClickActionBtn = (action: string) => {
                 }
             })
             break
-        case 'personInfo':
-            router.push({
-                name: 'my-personalData'
-            })
-            break
     }
 }
 </script>
