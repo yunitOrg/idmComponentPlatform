@@ -118,7 +118,11 @@ const allowChangeType: ComputedRef<boolean> = computed(() => {
     return false
 })
 const allowCheck: ComputedRef<boolean> = computed(() => {
-    if (props.data.joinType === 1 && props.data.checkStatus === 0 && props.userType !== 0 && props.data.userId !== userStore.userInfo?.id) {
+    if (props.data.joinType === 1 &&
+      props.data.checkStatus !== 1 &&
+      props.userType !== 0 &&
+      props.data.userId !== userStore.userInfo?.id
+    ) {
         return true
     }
     return false

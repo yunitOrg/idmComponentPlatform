@@ -9,7 +9,7 @@
         title="成员管理"
     >
         <template #default>
-            <div class="flex">
+            <div class="flex" style="margin-bottom: 10px;">
                 <div class="flex-1" style="padding: 0 10px;">
                     <a-select
                         v-model:value="state.userType"
