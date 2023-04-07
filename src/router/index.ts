@@ -14,15 +14,14 @@ const routes: Array<RouteRecordRaw> = [
                 path: '',
                 name: 'index',
                 meta: {
-                    keepAlive: false,
-                    title: '首页'
+                    keepAlive: false
                 },
                 component: () => import('@/views/index/List.vue')
             },
             {
                 path: 'componentPackage',
                 meta: {
-                    title: '组件包列表'
+                    title: '组件包'
                 },
                 name: 'index-componentPackage',
                 component: () => import('@/views/componentPackage/List.vue')
@@ -94,6 +93,9 @@ const routes: Array<RouteRecordRaw> = [
             {
                 path: 'indexPage/:userId',
                 name: 'indexPage',
+                meta: {
+                    title: '个人主页'
+                },
                 props: true,
                 component: () => import('@/views/my/indexPage.vue')
             },
@@ -133,6 +135,9 @@ const routes: Array<RouteRecordRaw> = [
                 children: [
                     {
                         path: 'list',
+                        meta: {
+                            title: '消息列表'
+                        },
                         name: 'message-list',
                         component: () => import('@/views/message/list/index.vue')
                     }
