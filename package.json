@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "vite --port 9527 --open --mode dev --host",
     "dev:local": "vite --port 9527 --open --mode localhost --host",
+    "prod": "vite --port 8088 --mode prod --host",
     "build": "vue-tsc && vite build --mode prod",
     "lint": "eslint --ext js,ts,vue src/",
     "preview": "vite preview",

@@ -9,7 +9,7 @@
             <div class="userinfo-container-left">
                 <AAvatar :size="160" class="user-avatar" :src="getImagePath(pageData.userInfo.userphoto) || defaultSettings.userphoto" alt="头像加载失败" />
                 <div class="text-center cursor-pointer" style="padding: 6px 0 0 0">
-                    <span v-if="isSelfPage" class="edit-btn" @click="router.push({ name: 'my-personalData' })">编辑个人资料</span>
+                    <span v-if="isSelfPage" class="edit-btn">编辑个人资料</span>
                 </div>
             </div>
             <div class="userinfo-base">
@@ -19,13 +19,13 @@
                 </div>
                 <div class="userinfo-line flex align-center">
                     <svg-icon iconClass="gongwen" style="margin: 0 0 0 2px" class="userinfo-icon"></svg-icon>
-                    <span class="intr-text">{{ pageData.userInfo.businessName }}</span>
-                    <span class="intr-text">{{ pageData.userInfo.jobInfo }}</span>
+                    <span v-if="pageData.userInfo.businessName" class="intr-text">{{ pageData.userInfo.businessName }}</span>
+                    <span v-if="pageData.userInfo.jobInfo" class="intr-text">{{ pageData.userInfo.jobInfo }}</span>
                 </div>
                 <div class="userinfo-line flex align-center">
                     <svg-icon iconClass="school" style="font-size: 20px; margin: 0 -2px 0 0" class="userinfo-icon"></svg-icon>
-                    <span class="intr-text">{{ pageData.userInfo.schoolinfo }}</span>
-                    <span class="intr-text">{{ pageData.userInfo.gender }}</span>
+                    <span v-if="pageData.userInfo.schoolinfo" class="intr-text">{{ pageData.userInfo.schoolinfo }}</span>
+                    <img class="intr-text" style="padding: 0; margin: 0 0 0 10px; width: 16px" :preview="false" :src="pageData.userInfo.gender == 1 ? memberMale : memberfemale" />
                 </div>
                 <div class="userinfo-line flex align-center userinfo-icon cursor-pointer" style="margin-bottom: 10px">
                     <DownOutlined style="margin: 0 7px 0 12px"></DownOutlined>
@@ -83,7 +83,7 @@
 </template>
 
 <script lang="ts" setup>
-import { defaultBgImage } from '@/assets/images'
+import { defaultBgImage, memberMale, memberfemale } from '@/assets/images'
 import { message } from 'ant-design-vue'
 import { defaultSettings } from '@/settings/defaultSetting'
 import { useUserStore } from '@/store/modules/user'
@@ -91,7 +91,6 @@ import { DownOutlined } from '@ant-design/icons-vue'
 import { useHomeCoreApi, useUserApi } from '@/apis'
 import { getImagePath } from '@/utils'
 const userStore = useUserStore()
-const router = useRouter()
 const route = useRoute()
 const propData = defineProps({
     userId: {
@@ -163,10 +162,15 @@ if (userStore.userInfo?.id === propData.userId) {
             pageData.userInfo = res.result
         })
 }
-
-if (route.query.tab) {
-    pageData.activeKey = route.query.tab as string
-}
+watch(
+    () => route.query,
+    (newV) => {
+        if (newV.tab) {
+            pageData.activeKey = newV.tab as string
+        }
+    },
+    { immediate: true, deep: true }
+)
 const resetPagination = () => {
     pageData.listData = []
     pageData.total = 0

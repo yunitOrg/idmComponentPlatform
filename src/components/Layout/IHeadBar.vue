@@ -37,10 +37,7 @@
                             class="cursor-pointer header-avatar"
                             :src="getImagePath(userStore.userInfo && userStore.userInfo.userphoto) || defaultSettings.userphoto" />
 
-                        <AButton
-                            style="font-size: 16px"
-                            type="link"
-                            @click="router.push({ name: 'indexPage', params: { userId: userStore.userInfo && userStore.userInfo.id } })">
+                        <AButton style="font-size: 16px" type="link" @click="router.push({ name: 'indexPage', params: { userId: userStore.userInfo && userStore.userInfo.id } })">
                             我的主页
                         </AButton>
                         <template #content>
@@ -112,7 +109,11 @@
                                 </div>
                                 <!-- 私信 -->
                                 <div v-if="pageData.currentMessageActive === 1">
-                                    <div class="tab-content common-scrollbar_style">123</div>
+                                    <div class="tab-content common-scrollbar_style">
+                                        <div v-if="pageData.messageLoading" class="flex justify-center align-center" style="height: 100%">
+                                            <a-spin></a-spin>
+                                        </div>
+                                    </div>
                                     <div class="flex justify-between align-center tab-bottom">
                                         <div class="cursor-pointer"><svg-icon iconClass="edit"></svg-icon> 写信私信</div>
                                         <div class="cursor-pointer">查看全部私信</div>
@@ -122,6 +123,9 @@
                                 <div v-if="pageData.currentMessageActive === 2">
                                     <div class="tab-content common-scrollbar_style">
                                         <AllMessage showLocation="navbar" size="mini" :messageList="pageData.messageList" @updateMessage="updateMessage"></AllMessage>
+                                        <div v-if="pageData.messageLoading" class="flex justify-center align-center" style="height: 100%">
+                                            <a-spin></a-spin>
+                                        </div>
                                     </div>
                                     <div class="flex justify-between align-center tab-bottom">
                                         <div class="cursor-pointer"><svg-icon iconClass="settings"></svg-icon> 设置</div>
@@ -251,7 +255,8 @@ const pageData = reactive<{ [x: string]: any }>({
     menuOpacity: 0,
     isShowMenuLine: true,
     currentMessageActive: 1,
-    messageList: []
+    messageList: [],
+    messageLoading: false
 })
 // yunit默认
 const yunitOrg = reactive({
@@ -307,9 +312,13 @@ const handleFetchMessageList = () => {
                 pageData.messageList = res.result.records
             }
         })
+        .finally(() => {
+            pageData.messageLoading = false
+        })
 }
 // 消息tabs change
 const handleMessageTabChange = (type: number) => {
+    pageData.messageLoading = true
     pageData.currentMessageActive = type
     if (type === 2) handleFetchMessageList()
 }

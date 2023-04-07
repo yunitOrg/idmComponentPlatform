@@ -1,4 +1,11 @@
 import { isObject, isUrl } from '@/utils/is'
+
+/**
+ * 深度合并对象
+ * @param src 源对象
+ * @param target 目标对象
+ * @returns
+ */
 export function deepMerge<T = any>(src: any = {}, target: any = {}): T {
     let key: string
     for (key in target) {
@@ -6,6 +13,12 @@ export function deepMerge<T = any>(src: any = {}, target: any = {}): T {
     }
     return src
 }
+
+/**
+ * 转换image路径
+ * @param url
+ * @returns
+ */
 
 export function getImagePath(url: string | null = '') {
     if (url === null || url === '') return ''
@@ -17,6 +30,11 @@ export function getImagePath(url: string | null = '') {
     return baseUrl + url
 }
 
+/**
+ * 转换文件大小显示单位
+ * @param limit
+ * @returns
+ */
 export function transformSize(limit?: number): string {
     if (!limit) return '0B'
     let size = ''

@@ -133,18 +133,12 @@ const emits = defineEmits(['handleApplyOrg', 'handleOrgHome', 'handleOrgManage',
     .org-title {
         font-size: 18px;
     }
-    .org-avatar{
-        ::v-deep(.ant-image) {
-            overflow: hidden;
-        }
-    }
     .person {
         font-size: 18px;
     }
     .org-image {
         &::v-deep(.ant-image) {
             margin: 0 5px 0 0;
-            overflow: hidden;
         }
     }
     .org-box-bottom {
