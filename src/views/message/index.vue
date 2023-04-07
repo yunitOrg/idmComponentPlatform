@@ -1,5 +1,5 @@
 <template>
-    <div class="page-max-width">
+    <div class="page-max-width" style="padding: 0 0 16px 0">
         <ARow :gutter="[20, 20]">
             <ACol :span="4" :xs="4" :md="4" :lg="4">
                 <div class="bg-white idm-component-common-box btn-container">
@@ -91,6 +91,9 @@ watch(
     { immediate: true, deep: true }
 )
 const handleBtnClick = (item: any) => {
+    if (item.value === '11') { // 私信
+        return
+    }
     pageData.currentBtn = item
     router.push({
         name: 'message-list',
@@ -112,7 +115,7 @@ const handleBtnClick = (item: any) => {
 }
 .btn-box {
     width: 80%;
-    margin: 0 auto;
+    margin: 10px auto;
     padding: 9px 20px;
 }
 .btn-active {

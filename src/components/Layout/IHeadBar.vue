@@ -8,7 +8,12 @@
                     <div v-for="item in selectedItems" :key="item.routeName" class="nav-title">{{ item.title }}</div>
                 </template>
                 <template v-else>
-                    <a-menu v-model:selectedKeys="selectedKeys" :style="{ opacity: pageData.menuOpacity }" class="flex-1" mode="horizontal" @click="handleMenuClick">
+                    <a-menu
+                        v-model:selectedKeys="selectedKeys"
+                        :style="{ opacity: pageData.menuOpacity, display: pageData.menuOpacity == 0 ? 'none' : 'block' }"
+                        class="flex-1"
+                        mode="horizontal"
+                        @click="handleMenuClick">
                         <a-menu-item v-for="item in menuNavList" :key="item.routeName">{{ item.title }}</a-menu-item>
                     </a-menu>
                 </template>
@@ -16,7 +21,7 @@
             <div class="flex justify-between align-center">
                 <AInput
                     v-model:value="searchText"
-                    :style="{ opacity: pageData.menuOpacity }"
+                    :style="{ opacity: pageData.menuOpacity, display: pageData.menuOpacity == 0 ? 'none' : 'inline-flex' }"
                     class="header-top-search"
                     placeholder="请输入关键字..."
                     style="width: 260px"
@@ -32,7 +37,12 @@
                             class="cursor-pointer header-avatar"
                             :src="getImagePath(userStore.userInfo && userStore.userInfo.userphoto) || defaultSettings.userphoto" />
 
-                        <AButton style="font-size: 16px" type="link" @click="router.push({ name: 'my-indexPage' })">我的主页</AButton>
+                        <AButton
+                            style="font-size: 16px"
+                            type="link"
+                            @click="router.push({ name: 'indexPage', params: { userId: userStore.userInfo && userStore.userInfo.id } })">
+                            我的主页
+                        </AButton>
                         <template #content>
                             <div class="navbar-avatar-popover-top">
                                 <div class="flex align-end">
@@ -80,7 +90,7 @@
                             </div>
                         </template>
                     </a-popover>
-                    <a-popover placement="bottomRight" overlayClassName="message-popover">
+                    <a-popover placement="bottomRight" overlayClassName="message-popover" @visibleChange="messageVisibleChange">
                         <a-badge :count="messageCount" style="margin: 0 10px">
                             <span class="message-btn cursor-pointer">消息</span>
                         </a-badge>
@@ -298,12 +308,18 @@ const handleFetchMessageList = () => {
             }
         })
 }
-handleFetchMessageList()
 // 消息tabs change
 const handleMessageTabChange = (type: number) => {
     pageData.currentMessageActive = type
     if (type === 2) handleFetchMessageList()
 }
+
+const messageVisibleChange = (visible: boolean) => {
+    if (visible) {
+        handleMessageTabChange(pageData.currentMessageActive)
+    }
+}
+
 // 更新消息
 const updateMessage = (index: number) => {
     pageData.messageList[index].readStatus = 1
@@ -411,6 +427,22 @@ const handleClickActionBtn = (action: string) => {
     switch (action) {
         case 'logout':
             userStore.handleUserLogout()
+            break
+        case 'myOrg':
+            router.push({
+                name: 'indexPage',
+                params: {
+                    userId: userStore.userInfo?.id
+                },
+                query: {
+                    tab: 'org'
+                }
+            })
+            break
+        case 'personInfo':
+            router.push({
+                name: 'my-personalData'
+            })
             break
     }
 }

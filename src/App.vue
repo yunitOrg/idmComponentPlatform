@@ -30,7 +30,7 @@ provide('reload', reload)
 @import './styles/layout.scss';
 @import './styles/antd.scss';
 body {
-    background: #f2f3f5 !important;
+    background: rgb(247, 248, 250) !important;
 }
 .page-min-height {
     min-height: calc(100vh - 280px);

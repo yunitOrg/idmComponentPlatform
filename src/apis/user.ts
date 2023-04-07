@@ -58,7 +58,7 @@ export default {
     // 重置密码
     requestCoreResetPwd: (data: any) => http.postForm({ url: Apis.coreResetPwd, data }),
     // 获取用户信息
-    requestGetUserInfo: () => http.get({ url: Apis.userGetUserInfo }),
+    requestGetUserInfo: (params?: any) => http.get({ url: Apis.userGetUserInfo, params }),
     // 获取验证码
     requestRandomImage: (key: string) => http.get({ url: Apis.randomImage + key }),
     requestCreateCollectFolder: (data: any) =>

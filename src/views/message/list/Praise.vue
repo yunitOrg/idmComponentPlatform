@@ -5,7 +5,7 @@
         </div>
         <div>
             <div class="message-title">
-                {{ messageData.nickname }} {{ messageActionType[messageData.type] }}了你的{{ messageSourceType[messageData.sourceType] }}
+                <span  class="cursor-pointer" @click="jumpIndexPage">{{ messageData.nickname }}</span> {{ messageActionType[messageData.type] }}了你的{{ messageSourceType[messageData.sourceType] }}
                 <span class="message-time">{{ messageData.msgTime }}</span>
             </div>
             <div class="message-content">{{ messageData[messageTitleFields[messageData.sourceType]] }}</div>
@@ -14,7 +14,12 @@
 </template>
 <script lang="ts" setup>
 import { messageActionType, messageSourceType, messageTitleFields } from '@/enums/messageEnum'
-defineProps<{ messageData: MessageData }>()
+const propData = defineProps<{ messageData: MessageData }>()
+const router = useRouter()
+const jumpIndexPage = () => {
+    const { href } = router.resolve({ name: 'indexPage', params: { userId: propData.messageData.sendUserId } })
+    window.open(href, '_blank')
+}
 </script>
 
 <style lang="scss" scoped>

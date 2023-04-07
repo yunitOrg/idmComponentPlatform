@@ -1,8 +1,8 @@
 <template>
     <div class="flex justify-between align-center" style="margin: 0 0 15px 0">
-        <a-input v-model:value="pageData.searchTxt" style="width: 300px; border-radius: 50px" placeholder="消息关键字搜索">
+        <a-input v-model:value="pageData.searchTxt" style="width: 300px; border-radius: 50px" placeholder="消息关键字搜索" @keyup.enter="handleFetchMessageList">
             <template #suffix>
-                <svg-icon iconClass="search" style="color: #aaa8a8; font-size: 20px"></svg-icon>
+                <svg-icon iconClass="search" className="cursor-pointer" style="color: #aaa8a8; font-size: 20px" @click="handleFetchMessageList"></svg-icon>
             </template>
         </a-input>
         <span class="clear-text cursor-pointer" @click="setAllRead">全部已读</span>

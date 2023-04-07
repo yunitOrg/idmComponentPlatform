@@ -5,7 +5,7 @@
         </div>
         <div>
             <div class="message-title">
-                {{ messageData.nickname }}{{ messageActionType[messageData.type] }}{{ messageData.type == 6 ? '您加入他的组织' : '加入您的组织' }}
+                <span class="cursor-pointer" @click="jumpIndexPage">{{ messageData.nickname }}</span>{{ messageActionType[messageData.type] }}{{ messageData.type == 6 ? '您加入他的组织' : '加入您的组织' }}
                 <span class="message-time">{{ messageData.msgTime }}</span>
             </div>
             <div class="message-content">
@@ -34,7 +34,7 @@
                 v-if="messageData.type === 7 && messageData.readStatus != 1"
                 style="margin: 0 0 0 20px"
                 :size="size === 'mini' ? 'small' : undefined"
-                @click="handleClickBtn('requestApproveJoinOrgAdmin', { checkStatus: 0 })">
+                @click="handleClickBtn('requestApproveJoinOrgAdmin', { checkStatus: 2 })">
                 拒绝加入
             </a-button>
             <span v-if="messageData.readStatus == 1" style="color: #999">已处理</span>
@@ -51,6 +51,7 @@ import { ExclamationCircleOutlined } from '@ant-design/icons-vue'
 const propData = defineProps<{ messageData: MessageData; size: string, showLocation: string }>()
 type RequestType = 'requestAgreeJoinOrg' | 'requestRejectJoinOrg' | 'requestApproveJoinOrgAdmin'
 const emitter = defineEmits(['updateMessage'])
+const router = useRouter()
 const handleClickBtn = (type: RequestType, params: Object = {}) => {
     useOrgAboutApi[type]({
         msgId: propData.messageData.id,
@@ -63,15 +64,22 @@ const handleClickBtn = (type: RequestType, params: Object = {}) => {
         }
     })
 }
+const jumpIndexPage = () => {
+    const { href } = router.resolve({ name: 'indexPage', params: { userId: propData.messageData.sendUserId } })
+    window.open(href, '_blank')
+}
 const showConfirm = () => {
     Modal.confirm({
         title: '提示',
         icon: createVNode(ExclamationCircleOutlined),
         content: '是否授权手机号给该组织管理员查看',
-        okText: '确认',
-        cancelText: '取消',
+        okText: '授权',
+        cancelText: '不授权',
         onOk: () => {
             handleClickBtn('requestAgreeJoinOrg', { shareMobile: 1 })
+        },
+        onCancel: () => {
+            handleClickBtn('requestAgreeJoinOrg', { shareMobile: 0 })
         }
     })
 }

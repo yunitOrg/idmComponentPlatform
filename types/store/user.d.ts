@@ -40,4 +40,6 @@ interface YunitUser {
     orgTotal: number
     level: number
     messageCount: number
+    businessName: string
+    jobInfo: string
 }
