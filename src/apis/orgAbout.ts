@@ -9,6 +9,8 @@ enum Apis {
     rejectJoinOrg = '/core/org/rejectJoinOrg',
     // 审批加入组织
     approveJoinOrgAdmin = '/core/org/approveJoinOrgAdmin',
+    // 审批加入组织-列表内
+    approveJoinOrgAdminList = '/core/org/approveJoinOrgAdminList',
     // 发送邀请加入组织
     sendInviteJoinOrgUrl = '/core/org/sendInviteJoinOrg',
     // 查看组织下成员
@@ -27,6 +29,7 @@ export default {
     requestAgreeJoinOrg: (data: Object) => http.postForm({ url: Apis.agreeJoinOrg, data }),
     requestRejectJoinOrg: (data: Object) => http.postForm({ url: Apis.rejectJoinOrg, data }),
     requestApproveJoinOrgAdmin: (data: Object) => http.postForm({ url: Apis.approveJoinOrgAdmin, data }),
+    requestApproveJoinOrgAdminList: (data: Object) => http.postForm({ url: Apis.approveJoinOrgAdminList, data }),
     requestSendInviteJoinOrg: (data: Object) => http.postForm({ url: Apis.sendInviteJoinOrgUrl, data }),
     requestGetOrgUserList: (params: any) => http.get({ url: Apis.requestGetOrgUserListUrl, params }),
     requestRemoveOrgUser: (data: Object) => http.postForm({ url: Apis.requestRemoveOrgUserUrl, data }),

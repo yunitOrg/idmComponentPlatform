@@ -158,7 +158,7 @@ const handleDelete = async (data: any) => {
 }
 const handleCheck = async (data: any, check: number) => {
     state.loading = true
-    const res = await useOrgAboutApi.requestApproveJoinOrgAdmin({ checkStatus: check, orgUserId: data.id })
+    const res = await useOrgAboutApi.requestApproveJoinOrgAdminList({ checkStatus: check, orgUserId: data.id })
     if (res.success) {
         message.success(check === 1 ? '已通过！' : '已拒绝！')
         getList()
