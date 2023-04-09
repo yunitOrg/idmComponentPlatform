@@ -36,7 +36,7 @@
                 <ACol :span="18">
                     <div class="idm-component-common-box index-page-tab-container">
                         <ATabs v-model:activeKey="pageData.activeKey" :tabBarStyle="{ padding: '0 20px' }" @change="tabsChange">
-                            <ATabPane v-for="item in pageData.tabList" :key="item.key">
+                            <ATabPane v-for="item in currentTabList" :key="item.key">
                                 <template #tab>
                                     {{ item.text }} <span class="tab-number" :style="{ color: pageData.activeKey === item.key ? '' : '#ccc' }">{{ item.num }}</span>
                                 </template>
@@ -51,7 +51,10 @@
                                                 show-invite
                                                 show-manage
                                                 :show-join="false"
-                                                @handleOrgInvite="handleOrgInvite(orgItem)" />
+                                                @handle-org-invite="handleModalBtnClick(orgItem, 'orgInviteModalVisible')"
+                                                @handle-member-manage="handleModalBtnClick(orgItem, 'orgMemberModalVisible')"
+                                                @handle-org-manage="handleModalBtnClick(orgItem, 'orgManageModalVisible')"
+                                            />
                                         </div>
                                         <div v-if="item.pagination" style="text-align: center; margin: 20px 0">
                                             <a-pagination
@@ -75,6 +78,8 @@
         </div>
     </div>
     <OrgInviteModal v-model:visible="pageData.orgInviteModalVisible" :itemData="pageData.orgItemData" />
+    <OrgMemberModal v-model:visible="pageData.orgMemberModalVisible" :itemData="pageData.orgItemData" />
+    <OrgManageModal v-model:visible="pageData.orgManageModalVisible" :itemData="pageData.orgItemData" />
 </template>
 
 <script lang="ts" setup>
@@ -95,7 +100,7 @@ const propData = defineProps({
 })
 const isSelfPage = computed(() => propData.userId === userStore.userInfo?.id)
 
-const pageData = reactive({
+const pageData = reactive<{[x: string]: any}>({
     activeKey: 'trends',
     tabList: [
         {
@@ -124,6 +129,8 @@ const pageData = reactive({
     pageSize: 10,
     loading: false,
     orgInviteModalVisible: false,
+    orgMemberModalVisible: false,
+    orgManageModalVisible: false,
     orgItemData: {},
     userInfo: {
         centerBackground: '',
@@ -135,6 +142,13 @@ const pageData = reactive({
         schoolinfo: '',
         gender: 1
     }
+})
+
+const currentTabList = computed(() => {
+    if (!isSelfPage.value) {
+        return pageData.tabList.filter((item: any) => item.key !== 'org')
+    }
+    return pageData.tabList
 })
 
 if (userStore.userInfo?.id === propData.userId) {
@@ -200,9 +214,9 @@ const handleGetOrgList = () => {
 const handlePageChange = () => {
     getListData()
 }
-const handleOrgInvite = (itemData: any) => {
+const handleModalBtnClick = (itemData: any, key: string) => {
     pageData.orgItemData = itemData
-    pageData.orgInviteModalVisible = true
+    pageData[key] = true
 }
 getListData()
 </script>
