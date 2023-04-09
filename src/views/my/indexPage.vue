@@ -88,7 +88,7 @@ import { message } from 'ant-design-vue'
 import { defaultSettings } from '@/settings/defaultSetting'
 import { useUserStore } from '@/store/modules/user'
 import { DownOutlined } from '@ant-design/icons-vue'
-import { useHomeCoreApi, useUserApi } from '@/apis'
+import { useUserApi, useOrgAboutApi } from '@/apis'
 import { getImagePath } from '@/utils'
 const userStore = useUserStore()
 const route = useRoute()
@@ -195,8 +195,8 @@ const handleGetOrgList = () => {
         pageSize: pageData.pageSize,
         joinStatus: 1
     }
-    useHomeCoreApi
-        .requestCoreMyOrgList(params)
+    useOrgAboutApi
+        .requestMyOrgList(params)
         .then((res) => {
             if (res.success) {
                 pageData.listData = res.result.records

@@ -71,7 +71,7 @@
 
 <script lang="ts" setup>
 import { message } from 'ant-design-vue'
-import { useHomeCoreApi, coreApi } from '@/apis'
+import { coreApi, useOrgAboutApi } from '@/apis'
 import { orgMemberTypeSelectData, orgMemberStatusSelectData } from './mock/mockData'
 import { useUserStore } from '@/store/modules/user'
 const userStore = useUserStore()
@@ -112,7 +112,7 @@ const getList = () => {
         userType: state.userType,
         checkStatus: state.checkStatus
     }
-    useHomeCoreApi.requestGetOrgUserList(params).then((res: any) => {
+    useOrgAboutApi.requestGetOrgUserList(params).then((res: any) => {
         if (res.success) {
             state.total = res.result.total
             state.list = res.result.records
@@ -147,7 +147,7 @@ const getJobInfo = () => {
 }
 const handleDelete = async (data: any) => {
     state.loading = true
-    const res = await useHomeCoreApi.requestRemoveOrgUser({ orgUserId: data.id })
+    const res = await useOrgAboutApi.requestRemoveOrgUser({ orgUserId: data.id })
     if (res.success) {
         message.success('移除成功！')
         getList()
@@ -158,7 +158,7 @@ const handleDelete = async (data: any) => {
 }
 const handleCheck = async (data: any, check: number) => {
     state.loading = true
-    const res = await useHomeCoreApi.requestApproveJoinOrgAdmin({ checkStatus: check, msgId: 'todo' })
+    const res = await useOrgAboutApi.requestApproveJoinOrgAdmin({ checkStatus: check, orgUserId: data.id })
     if (res.success) {
         message.success(check === 1 ? '已通过！' : '已拒绝！')
         getList()
@@ -169,7 +169,7 @@ const handleCheck = async (data: any, check: number) => {
 }
 const handleChangeType = async (data: any, type: number) => {
     state.loading = true
-    const res = await useHomeCoreApi.requestChangeOrgUserType({ orgUserId: data.id, type })
+    const res = await useOrgAboutApi.requestChangeOrgUserType({ orgUserId: data.id, type })
     if (res.success) {
         message.success('设置成功！')
         getList()

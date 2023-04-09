@@ -42,16 +42,16 @@ export default {
     requestComponentStatic: (url: string) => http.get({ url: Apis.componentStaticUrl + url }),
     // 下载文件
     downloadStaticFile: (filePath: string) => http.downloadFile(Apis.componentStaticUrl + filePath),
-    requestAutocreate: (params: object) => http.post({ url: Apis.requestAutocreateUrl, params }),
+    requestAutocreate: (data: object) => http.postForm({ url: Apis.requestAutocreateUrl, data }),
     requestComInfo: (params: object) => http.get({ url: Apis.requestComInfoUrl, params }),
     requestSaveCom: (data: object) => http.post({ url: Apis.requestSaveComUrl, data }),
     requestMyAllCodePackageList: () => http.get({ url: Apis.requestMyAllCodePackageListUrl }),
     requestCodePackageVersionList: (params: object) => http.get({ url: Apis.requestCodePackageVersionListUrl, params }),
     requestComponentVersionList: (params: object) => http.get({ url: Apis.requestComponentVersionListUrl, params }),
-    requestChangeComponentStatus: (params: object) => http.post({ url: Apis.requestChangeComponentStatusUrl, params }),
-    requestChangeStatus: (params: object) => http.post({ url: Apis.requestChangeStatusUrl, params }),
-    requestDeleteChange: (params: object) => http.post({ url: Apis.requestDeleteChangeUrl, params }),
-    requestDeleteChangeComponent: (params: object) => http.post({ url: Apis.requestDeleteChangeComponentUrl, params }),
+    requestChangeComponentStatus: (data: object) => http.postForm({ url: Apis.requestChangeComponentStatusUrl, data }),
+    requestChangeStatus: (data: object) => http.postForm({ url: Apis.requestChangeStatusUrl, data }),
+    requestDeleteChange: (data: object) => http.postForm({ url: Apis.requestDeleteChangeUrl, data }),
+    requestDeleteChangeComponent: (data: object) => http.postForm({ url: Apis.requestDeleteChangeComponentUrl, data }),
 
     componentStaticUrl: Apis.componentStaticUrl
 }
