@@ -323,6 +323,7 @@ const handleMessageTabChange = (type: number) => {
     if (type === 2) handleFetchMessageList()
 }
 
+// 消息弹出事件
 const messageVisibleChange = (visible: boolean) => {
     if (visible) {
         handleMessageTabChange(pageData.currentMessageActive)

@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter as _createRouter, createWebHistory, createMemoryHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 import type { App } from 'vue'
 import { useUserStoreWithOut } from '@/store/modules/user'
@@ -155,15 +155,14 @@ const routes: Array<RouteRecordRaw> = [
     }
 ]
 
-const router = createRouter({
-    history: createWebHistory(),
+const router = _createRouter({
+    history: import.meta.env.SSR ? createMemoryHistory() : createWebHistory(),
     routes,
     scrollBehavior(to, from, savedPosition) {
         if (savedPosition) return savedPosition
         else return { top: 0 }
     }
 })
-
 router.beforeEach(async (from, to, next) => {
     // 用户没有登录，有token ，用token登录
     if (!userStore.isUserLogined && getToken() && !userStore.isRouterGetedUserInfo) {

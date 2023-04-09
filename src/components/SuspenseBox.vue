@@ -1,16 +1,14 @@
 <template>
     <div class="suspense-container flex flex-direction-column justify-center align-center">
-        <AImage :preview="false" :width="120" :height="120" class="idm-loading-image" :src="logo1"></AImage>
+        <AImage :preview="false" :width="120" :height="120" class="idm-loading-image" src="/static/img/logo1.png"></AImage>
         <div class="app-loading-dots">
             <span class="dot dot-spin"><i></i><i></i><i></i><i></i></span>
         </div>
-        <div class="text-tip">云IT <span style="font-weight: 800;">·</span> 组件共享平台</div>
+        <div class="text-tip">云IT <span style="font-weight: 800">·</span> IDM组件共享平台</div>
     </div>
 </template>
 
-<script lang="ts" setup>
-import { logo1 } from '@/assets/images'
-</script>
+<script lang="ts" setup></script>
 
 <style lang="scss" scoped>
 .suspense-container {
