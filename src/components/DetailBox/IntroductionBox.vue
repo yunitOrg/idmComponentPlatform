@@ -8,13 +8,13 @@
                 <div class="download-box text-center cursor-pointer" :class="isDownloadDisabled(1) && 'disabled'" @click="handleDownLoad(1)">
                     <div>下载生产包</div>
                     <div class="package-size">
-                        {{ propData.type === 'codePackage' ? transformSize(codePackageProp.currentRunSize) : transformSize(codePackageVersionInfoProp.runSize) }}
+                        {{ propData.type === 'codePackage' ? transformSize(codePackageProp.currentRunSize) : transformSize(codePackageVersionInfoProp && codePackageVersionInfoProp.runSize) }}
                     </div>
                 </div>
                 <div class="download-box text-center cursor-pointer" :class="isDownloadDisabled(2) && 'disabled'" @click="handleDownLoad(2)">
                     <div>下载源码包</div>
                     <div class="package-size">
-                        {{ propData.type === 'codePackage' ? transformSize(codePackageProp.currentZipSize) : transformSize(codePackageVersionInfoProp.zipSize) }}
+                        {{ propData.type === 'codePackage' ? transformSize(codePackageProp.currentZipSize) : transformSize(codePackageVersionInfoProp && codePackageVersionInfoProp.zipSize) }}
                     </div>
                 </div>
             </div>
@@ -78,11 +78,11 @@ const handleDownLoad = async (type: number) => {
     switch (type) {
         case 1: // 生产
             if (propData.type === 'codePackage') url = currentVersionObj?.runPath
-            else url = propData.codePackageVersionInfoProp.runPath
+            else url = propData.codePackageVersionInfoProp?.runPath
             break
         case 2: // 源码
             if (propData.type === 'codePackage') url = currentVersionObj?.zipPath
-            else url = propData.codePackageVersionInfoProp.zipPath
+            else url = propData.codePackageVersionInfoProp?.zipPath
             break
     }
     if (url) {
@@ -98,7 +98,7 @@ const isDownloadDisabled = (type: number) => {
         if (propData.type === 'codePackage') {
             if (currentVersionObj?.runPath && 1) return false
         } else {
-            if (propData.codePackageVersionInfoProp.runPath && propData.codePackageVersionInfoProp.runSize) return false
+            if (propData.codePackageVersionInfoProp?.runPath && propData.codePackageVersionInfoProp?.runSize) return false
         }
         return true
     }
@@ -106,7 +106,7 @@ const isDownloadDisabled = (type: number) => {
         if (propData.type === 'codePackage') {
             if (currentVersionObj?.zipPath && 1) return false
         } else {
-            if (propData.codePackageVersionInfoProp.zipPath && propData.codePackageVersionInfoProp.zipSize) return false
+            if (propData.codePackageVersionInfoProp?.zipPath && propData.codePackageVersionInfoProp?.zipSize) return false
         }
         return true
     }

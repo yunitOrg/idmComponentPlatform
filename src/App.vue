@@ -18,7 +18,7 @@ dayjs.locale('zh-cn')
 const appStore = useAppStore()
 const isAlive = ref(true)
 const isShowSuspense = computed(() => {
-    const isFirstRoute = router.getRoutes().some(el => el.name === route.name)
+    const isFirstRoute = router.options.routes.some(el => el.name === route.name)
     return !appStore.isAppMounted && !getSession('isAppMounted') && !isFirstRoute
 })
 function reload() {

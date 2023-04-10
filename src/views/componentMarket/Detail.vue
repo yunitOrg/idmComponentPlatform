@@ -31,7 +31,7 @@
                 <VersionList :versionList="pageData.packageDetail.componentVersionList" :codePackageProp="pageData.packageDetail.codepackageInfo"></VersionList>
                 <ComponentList
                     title="组件包内其他组件"
-                    :componentList="pageData.packageDetail.componentInfoList"
+                    :componentList="componentInfoList"
                     :componentProp="pageData.packageDetail.componentInfo"
                     :codePackageProp="pageData.packageDetail.codepackageInfo"></ComponentList>
             </ACol>
@@ -55,6 +55,9 @@ const pageData = reactive({
         isPraise: false // 是否点赞
     },
     contentUrl: ''
+})
+const componentInfoList = computed(() => {
+    return pageData.packageDetail?.componentInfoList?.filter((el: any) => el.id !== route.query.componentId)
 })
 
 const handleFetchPageData = () => {

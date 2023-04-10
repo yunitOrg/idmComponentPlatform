@@ -7,7 +7,6 @@ const userStore = useUserStoreWithOut()
 const routes: Array<RouteRecordRaw> = [
     {
         path: '/',
-        name: '',
         component: () => import('@/views/index.vue'),
         children: [
             {
