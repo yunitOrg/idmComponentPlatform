@@ -16,7 +16,7 @@
             <ACol :span="17">
                 <TitleInfoBox :componentProp="pageData.packageDetail.componentInfo" :codePackageProp="pageData.packageDetail.codepackageInfo"></TitleInfoBox>
                 <ImagePreview :comPreviewImgJson="comPreviewImgJson"></ImagePreview>
-                <MdContent :contentUrl="pageData.contentUrl"></MdContent>
+                <MdContent :codePackageProp="pageData.packageDetail.codepackageInfo" :contentUrl="pageData.contentUrl"></MdContent>
                 <CommentBox title="组件文档" commentTypeId="componentId" articleType="2"></CommentBox>
             </ACol>
             <!-- right -->

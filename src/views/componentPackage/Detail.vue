@@ -15,7 +15,7 @@
             <!-- left -->
             <ACol :span="17">
                 <TitleInfoBox type="codePackage" :codePackageProp="pageData.packageDetail.codepackageInfo"></TitleInfoBox>
-                <MdContent :contentUrl="pageData.contentUrl"></MdContent>
+                <MdContent :codePackageProp="pageData.packageDetail.codepackageInfo" :contentUrl="pageData.contentUrl"></MdContent>
                 <CommentBox commentTypeId="codepackageId" articleType="1"></CommentBox>
             </ACol>
             <!-- right -->
