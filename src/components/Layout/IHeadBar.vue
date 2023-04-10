@@ -357,8 +357,12 @@ watch(
 const isIndexPage = computed(() => {
     return route.name === 'index'
 })
+const isDetailPage = computed(() => {
+    const routerName = route.name as string
+    return routerName.indexOf('detail') > -1
+})
 const scrollFunc = (event: any) => {
-    if (!isIndexPage.value) {
+    if (!isIndexPage.value && isDetailPage.value) {
         const scrollValue = document.documentElement.scrollTop
         if (event.wheelDelta > 0) {
             // 向上 显示
@@ -526,7 +530,7 @@ const handleClickActionBtn = (action: string) => {
 .head-bar-container-fix {
     position: fixed;
     width: 100%;
-    z-index: 600;
+    z-index: 1600;
     top: 0;
     box-shadow: none;
     transition: all 0.3s;
