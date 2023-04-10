@@ -35,6 +35,10 @@ const propData = defineProps({
     contentUrl: {
         type: String,
         default: ''
+    },
+    codePackageProp: {
+        type: Object,
+        default: () => {}
     }
 })
 const preview = ref()
@@ -50,11 +54,26 @@ watch(
         }
     }
 )
+const replaceUrl = (str: string): string => {
+    const reg = /\!\[.*\]\(.*\)/gi
+    str = str.replace(reg, (str: string) => {
+        str = str.replace(/\(.*\)/gi, (str1: string) => {
+            let url = str1.replace('(', '').replace(')', '')
+            const prefix = componentPublishApi.componentStaticUrl + propData.codePackageProp.currentCodePath
+            if (url.startsWith('./idm_modules')) {
+                url = '(' + prefix + url.replace('./idm_modules', '') + ')'
+            }
+            return url
+        })
+        return str
+    })
+    return str
+}
 const handleRequestContent = async () => {
     try {
         const res = await componentPublishApi.requestComponentStatic(propData.contentUrl)
         if (typeof res === 'string') {
-            pageData.content = res
+            pageData.content = replaceUrl(res)
             handleGetTitle()
         }
     } catch (error) {}
@@ -73,7 +92,6 @@ const handleGetTitle = () => {
             lineIndex: el.getAttribute('data-v-md-line'),
             indent: hTags.indexOf(el.tagName)
         }))
-        console.log(pageData.titles)
     })
 }
 const handleAnchorClick = (anchor: any) => {
@@ -92,7 +110,7 @@ const handleAnchorClick = (anchor: any) => {
 <style lang="scss" scoped>
 .md-content-container {
     margin: 16px 0 0 0;
-    .anchor-container{
+    .anchor-container {
         max-height: 500px;
         overflow: auto;
     }
