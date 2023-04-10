@@ -6,13 +6,15 @@
                     <div style="margin: 10px 0; font-size: 16px; font-weight: 600">目录</div>
                 </template>
                 <template #content>
-                    <div
-                        v-for="(anchor, index) in pageData.titles"
-                        :key="index"
-                        class="anchor-line cursor-pointer"
-                        :style="{ paddingLeft: `${anchor.indent * 20 + 16}px`, paddingRight: '16px' }"
-                        @click="handleAnchorClick(anchor)">
-                        {{ anchor.title }}
+                    <div class="anchor-container common-scrollbar_style">
+                        <div
+                            v-for="(anchor, index) in pageData.titles"
+                            :key="index"
+                            class="anchor-line cursor-pointer"
+                            :style="{ paddingLeft: `${anchor.indent * 20 + 16}px`, paddingRight: '16px' }"
+                            @click="handleAnchorClick(anchor)">
+                            {{ anchor.title }}
+                        </div>
                     </div>
                 </template>
                 <svg-icon iconClass="menu" class="md-menu-icon"></svg-icon> <span class="title-text">{{ title }}</span>
@@ -90,6 +92,10 @@ const handleAnchorClick = (anchor: any) => {
 <style lang="scss" scoped>
 .md-content-container {
     margin: 16px 0 0 0;
+    .anchor-container{
+        max-height: 500px;
+        overflow: auto;
+    }
     .md-content-container-title {
         font-size: 16px;
         color: #666666;

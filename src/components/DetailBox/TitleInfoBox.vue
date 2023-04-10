@@ -26,7 +26,7 @@
         </div>
         <!-- 组件包信息 -->
         <div v-if="type === 'component'" class="flex justify-between align-center codepackage-info">
-            <div class="flex-1">
+            <div class="flex-1" style="margin: 0 50px 0 0">
                 <div class="package-title-2">{{ codePackageProp.title }} （{{ codePackageProp.classname }}）</div>
                 <div class="package-remark text-o-e-2">{{ codePackageProp.currentRemark || defaultSettings.introduction }}</div>
             </div>

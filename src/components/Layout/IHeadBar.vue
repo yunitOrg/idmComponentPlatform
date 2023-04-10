@@ -347,6 +347,7 @@ watch(
         nextTick(() => {
             handleScroll()
         })
+        pageData.currentOrg = yunitOrg
     },
     {
         immediate: true
