@@ -110,10 +110,7 @@ const handleAnchorClick = (anchor: any) => {
 <style lang="scss" scoped>
 .md-content-container {
     margin: 16px 0 0 0;
-    .anchor-container {
-        max-height: 500px;
-        overflow: auto;
-    }
+
     .md-content-container-title {
         font-size: 16px;
         color: #666666;
@@ -138,6 +135,10 @@ const handleAnchorClick = (anchor: any) => {
 <style lang="scss">
 .md-tip-pop {
     min-width: 300px;
+    .anchor-container {
+        max-height: 500px;
+        overflow: auto;
+    }
     .ant-popover-inner-content {
         padding: {
             left: 0;

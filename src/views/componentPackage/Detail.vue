@@ -15,14 +15,19 @@
             <!-- left -->
             <ACol :span="17">
                 <TitleInfoBox type="codePackage" :codePackageProp="pageData.packageDetail.codepackageInfo"></TitleInfoBox>
-                <MdContent ref="mdContent" :codePackageProp="pageData.packageDetail.codepackageInfo" :contentUrl="pageData.contentUrl"></MdContent>
+                <MdContent :codePackageProp="pageData.packageDetail.codepackageInfo" :contentUrl="pageData.contentUrl"></MdContent>
                 <CommentBox commentTypeId="codepackageId" articleType="1"></CommentBox>
             </ACol>
             <!-- right -->
             <ACol :span="7">
                 <UserInfoBox :userInfoProp="pageData.packageDetail.codepackageUserInfo" @onDoFollow="onDoFollow"></UserInfoBox>
-                <IntroductionBox :codePackageVersionListProp="pageData.packageDetail.codePackageVersionList" :codePackageProp="pageData.packageDetail.codepackageInfo"></IntroductionBox>
-                <VersionList type="codePackage" :versionList="pageData.packageDetail.codePackageVersionList" :codePackageProp="pageData.packageDetail.codepackageInfo"></VersionList>
+                <IntroductionBox
+                    :codePackageVersionListProp="pageData.packageDetail.codePackageVersionList"
+                    :codePackageProp="pageData.packageDetail.codepackageInfo"></IntroductionBox>
+                <VersionList
+                    type="codePackage"
+                    :versionList="pageData.packageDetail.codePackageVersionList"
+                    :codePackageProp="pageData.packageDetail.codepackageInfo"></VersionList>
                 <ComponentList :componentList="pageData.packageDetail.componentInfoList" :codePackageProp="pageData.packageDetail.codepackageInfo"></ComponentList>
             </ACol>
         </ARow>
@@ -49,7 +54,6 @@ const pageData = reactive({
     errText: '',
     isFirst: true
 })
-const mdContent = ref()
 const handleFetchPageData = () => {
     pageData.isFirst = false
     useHomePageApi
