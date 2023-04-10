@@ -80,7 +80,7 @@ const routes: Array<RouteRecordRaw> = [
                     title: '图文详情'
                 },
                 name: 'index-iSchool-imageTextDetail',
-                component: () => import('@/views/iSchool/detail/imageText.vue')
+                component: () => import('@/views/iSchool/detail/ImageText.vue')
             },
             {
                 path: 'yunquan',
