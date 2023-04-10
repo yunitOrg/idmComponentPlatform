@@ -11,11 +11,15 @@ import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
 import dayjs from 'dayjs'
 import 'dayjs/locale/zh-cn'
 import { useAppStore } from '@/store/modules/app'
+const route = useRoute()
+const router = useRouter()
+
 dayjs.locale('zh-cn')
 const appStore = useAppStore()
 const isAlive = ref(true)
 const isShowSuspense = computed(() => {
-    return !appStore.isAppMounted && !getSession('isAppMounted')
+    const isFirstRoute = router.getRoutes().some(el => el.name === route.name)
+    return !appStore.isAppMounted && !getSession('isAppMounted') && !isFirstRoute
 })
 function reload() {
     isAlive.value = false
