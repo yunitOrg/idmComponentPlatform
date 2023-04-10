@@ -31,7 +31,7 @@
                 <VersionList :versionList="pageData.packageDetail.componentVersionList" :codePackageProp="pageData.packageDetail.codepackageInfo"></VersionList>
                 <ComponentList
                     title="组件包内其他组件"
-                    :componenList="pageData.packageDetail.componentInfoList"
+                    :componentList="pageData.packageDetail.componentInfoList"
                     :componentProp="pageData.packageDetail.componentInfo"
                     :codePackageProp="pageData.packageDetail.codepackageInfo"></ComponentList>
             </ACol>

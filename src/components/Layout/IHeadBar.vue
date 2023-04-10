@@ -422,7 +422,7 @@ const handleCreativeCenterClick = () => {
 }
 useHomeCoreApi.requestCoreMyOrgList().then((res) => {
     if (res.success) {
-        pageData.orgList = res.result.records
+        pageData.orgList = res.result
     }
 })
 
@@ -503,7 +503,7 @@ const handleClickActionBtn = (action: string) => {
             font-size: 16px;
         }
         .header-avatar {
-            margin: 0 0 2px 0;
+            margin: 0 0 4px 0;
         }
     }
     .login-reg-box {

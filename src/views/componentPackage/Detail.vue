@@ -23,7 +23,7 @@
                 <UserInfoBox :userInfoProp="pageData.packageDetail.codepackageUserInfo" @onDoFollow="onDoFollow"></UserInfoBox>
                 <IntroductionBox :codePackageVersionListProp="pageData.packageDetail.codePackageVersionList" :codePackageProp="pageData.packageDetail.codepackageInfo"></IntroductionBox>
                 <VersionList type="codePackage" :versionList="pageData.packageDetail.codePackageVersionList" :codePackageProp="pageData.packageDetail.codepackageInfo"></VersionList>
-                <ComponentList :componenList="pageData.packageDetail.componentInfoList" :codePackageProp="pageData.packageDetail.codepackageInfo"></ComponentList>
+                <ComponentList :componentList="pageData.packageDetail.componentInfoList" :codePackageProp="pageData.packageDetail.codepackageInfo"></ComponentList>
             </ACol>
         </ARow>
     </div>
