@@ -6,13 +6,15 @@
                     <div style="margin: 10px 0; font-size: 16px; font-weight: 600">目录</div>
                 </template>
                 <template #content>
-                    <div
-                        v-for="(anchor, index) in pageData.titles"
-                        :key="index"
-                        class="anchor-line cursor-pointer"
-                        :style="{ paddingLeft: `${anchor.indent * 20 + 16}px`, paddingRight: '16px' }"
-                        @click="handleAnchorClick(anchor)">
-                        {{ anchor.title }}
+                    <div class="anchor-container common-scrollbar_style">
+                        <div
+                            v-for="(anchor, index) in pageData.titles"
+                            :key="index"
+                            class="anchor-line cursor-pointer"
+                            :style="{ paddingLeft: `${anchor.indent * 20 + 16}px`, paddingRight: '16px' }"
+                            @click="handleAnchorClick(anchor)">
+                            {{ anchor.title }}
+                        </div>
                     </div>
                 </template>
                 <svg-icon iconClass="menu" class="md-menu-icon"></svg-icon> <span class="title-text">{{ title }}</span>
@@ -33,6 +35,10 @@ const propData = defineProps({
     contentUrl: {
         type: String,
         default: ''
+    },
+    codePackageProp: {
+        type: Object,
+        default: () => {}
     }
 })
 const preview = ref()
@@ -48,11 +54,26 @@ watch(
         }
     }
 )
+const replaceUrl = (str: string): string => {
+    const reg = /\!\[.*\]\(.*\)/gi
+    str = str.replace(reg, (str: string) => {
+        str = str.replace(/\(.*\)/gi, (str1: string) => {
+            let url = str1.replace('(', '').replace(')', '')
+            const prefix = componentPublishApi.componentStaticUrl + propData.codePackageProp.currentCodePath
+            if (url.startsWith('./idm_modules')) {
+                url = '(' + prefix + url.replace('./idm_modules', '') + ')'
+            }
+            return url
+        })
+        return str
+    })
+    return str
+}
 const handleRequestContent = async () => {
     try {
         const res = await componentPublishApi.requestComponentStatic(propData.contentUrl)
         if (typeof res === 'string') {
-            pageData.content = res
+            pageData.content = replaceUrl(res)
             handleGetTitle()
         }
     } catch (error) {}
@@ -71,7 +92,6 @@ const handleGetTitle = () => {
             lineIndex: el.getAttribute('data-v-md-line'),
             indent: hTags.indexOf(el.tagName)
         }))
-        console.log(pageData.titles)
     })
 }
 const handleAnchorClick = (anchor: any) => {
@@ -90,6 +110,7 @@ const handleAnchorClick = (anchor: any) => {
 <style lang="scss" scoped>
 .md-content-container {
     margin: 16px 0 0 0;
+
     .md-content-container-title {
         font-size: 16px;
         color: #666666;
@@ -114,6 +135,10 @@ const handleAnchorClick = (anchor: any) => {
 <style lang="scss">
 .md-tip-pop {
     min-width: 300px;
+    .anchor-container {
+        max-height: 500px;
+        overflow: auto;
+    }
     .ant-popover-inner-content {
         padding: {
             left: 0;

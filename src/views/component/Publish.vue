@@ -40,7 +40,7 @@
                                     :model="formData"
                                     :label-col="{span: 6}"
                                     :wrapper-col="{span: state.queryId && state.formDataList && state.formDataList.length > 1 ? 16 : 18}"
-                                    @finish="(data) => onFinish(data)"
+                                    @finish="(data: any) => onFinish(data)"
                                     @finish-failed="onFinishFailed"
                                 >
                                     <div class="dist-form-title">

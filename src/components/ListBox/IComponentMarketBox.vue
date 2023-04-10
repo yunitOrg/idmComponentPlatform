@@ -19,7 +19,7 @@
         <div class="flex justify-between align-center component-market-bottom">
             <div class="flex align-center">
                 <a-avatar :size="15" :src="getImagePath(componentProps.userPhoto)" />
-                <span class="ml-6">{{ componentProps.userNickname }}</span>
+                <span class="ml-6 nowrap">{{ componentProps.userNickname }}</span>
             </div>
             <div class="text-o-e text-right" style="margin: 0 0 0 10px">
                 {{ componentProps.updateTime || componentProps.createTime }}
@@ -119,6 +119,9 @@ const handleItemClick = () => {
     }
     .ml-6 {
         margin-left: 6px;
+    }
+    .nowrap{
+        white-space: nowrap;
     }
     .text-blue {
         color: rgb(33, 124, 255);

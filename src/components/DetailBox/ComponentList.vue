@@ -4,9 +4,9 @@
             {{ title }} <span class="component-number">（{{ componentList.length }}）</span>
         </div>
         <div class="component-list-content common-scrollbar_style">
-            <div v-for="(item, index) in componentList" :key="index" class="component-box flex align-center" :class="[index+1 > pageData.limit && 'dis-n']">
+            <div v-for="(item, index) in componentList" :key="index" class="component-box flex align-center" :class="[index + 1 > pageData.limit && 'dis-n']">
                 <AImage :preview="false" :width="80" :height="50" :src="getImagePath(item.coverPath) || componentMarketDetault"></AImage>
-                <div class="flex-1" style="margin: 0 0 0 15px">
+                <div class="flex-1 cursor-pointer" style="margin: 0 0 0 15px" @click="handleClickItem(item)">
                     <div class="component-text">{{ item.comTitle }}</div>
                     <div class="component-class">
                         类名: <span> {{ item.comClassname }}</span>
@@ -23,6 +23,7 @@
 import { useHomePageApi } from '@/apis'
 import { componentMarketDetault } from '@/assets/images'
 import { getImagePath } from '@/utils'
+const router = useRouter()
 const propData = defineProps({
     title: {
         type: String,
@@ -48,6 +49,16 @@ const handlePreview = (item: any) => {
 }
 const handleLookMore = () => {
     pageData.limit = 99
+}
+const handleClickItem = (item: any) => {
+    const { href } = router.resolve({
+        name: 'index-componentMarket-detail',
+        query: {
+            componentId: item.id,
+            version: item.codepackageVersion
+        }
+    })
+    window.open(href, '_blank')
 }
 </script>
 

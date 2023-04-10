@@ -7,7 +7,6 @@ const userStore = useUserStoreWithOut()
 const routes: Array<RouteRecordRaw> = [
     {
         path: '/',
-        name: '',
         component: () => import('@/views/index.vue'),
         children: [
             {
@@ -106,6 +105,14 @@ const routes: Array<RouteRecordRaw> = [
                 },
                 props: true,
                 component: () => import('@/views/my/indexPage.vue')
+            },
+            {
+                path: 'AccountPassword',
+                meta: {
+                    title: '账号密码'
+                },
+                name: 'AccountPassword',
+                component: () => import('@/views/my/AccountPassword.vue')
             },
             {
                 path: 'creativeCenter',

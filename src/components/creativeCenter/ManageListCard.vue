@@ -13,7 +13,7 @@
                 <div v-if="!props.open" class="org-tag range"><team-outlined />{{ props.range }}</div>
                 <div v-else class="org-tag open"><cloud-outlined />公开</div>
             </div>
-            <div class="content">{{ props.content }}</div>
+            <div class="content text-o-e-2">{{ props.content }}</div>
             <div class="info-wapper">
                 <div class="time">{{ props.time }}</div>
                 <div class="statistics">浏览 {{ props.readNumber }} · 赞 {{ props.praiseNumber }} · 评论 {{ props.commentNumber }} · 收藏 {{ props.collectNumber }}</div>
@@ -265,7 +265,9 @@ const handleVersionCountClick = async (visible: boolean) => {
     }
   }
   .items {
-    flex: 1;
+    width: 0;
+    flex-grow: 1;
+    flex-shrink: 1;
     .title-wapper{
       display: flex;
       width: 100%;
@@ -336,15 +338,8 @@ const handleVersionCountClick = async (visible: boolean) => {
       font-size: 14px;
       line-height: 22px;
       min-height: 22px;
-      // text-indent: 2em;
-      display: -webkit-box;
-      overflow: hidden;
-      -webkit-box-orient: vertical;
-      line-clamp: 3;
       margin-bottom: 10px;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
+      // text-indent: 2em;
     }
     .info-wapper {
       display: flex;

@@ -1,5 +1,5 @@
 <template>
-    <div class="page-max-width package-page flex">
+    <div v-if="pageData.hasPermission && !pageData.isFirst" class="page-max-width package-page flex">
         <div style="padding: 50px 30px 0 0">
             <ButtonList
                 :componentProp="pageData.packageDetail.componentInfo"
@@ -16,7 +16,7 @@
             <ACol :span="17">
                 <TitleInfoBox :componentProp="pageData.packageDetail.componentInfo" :codePackageProp="pageData.packageDetail.codepackageInfo"></TitleInfoBox>
                 <ImagePreview :comPreviewImgJson="comPreviewImgJson"></ImagePreview>
-                <MdContent :contentUrl="pageData.contentUrl"></MdContent>
+                <MdContent :codePackageProp="pageData.packageDetail.codepackageInfo" :contentUrl="pageData.contentUrl"></MdContent>
                 <CommentBox title="组件文档" commentTypeId="componentId" articleType="2"></CommentBox>
             </ACol>
             <!-- right -->
@@ -31,12 +31,13 @@
                 <VersionList :versionList="pageData.packageDetail.componentVersionList" :codePackageProp="pageData.packageDetail.codepackageInfo"></VersionList>
                 <ComponentList
                     title="组件包内其他组件"
-                    :componentList="pageData.packageDetail.componentInfoList"
+                    :componentList="componentInfoList"
                     :componentProp="pageData.packageDetail.componentInfo"
                     :codePackageProp="pageData.packageDetail.codepackageInfo"></ComponentList>
             </ACol>
         </ARow>
     </div>
+    <INoPermission v-if="!pageData.hasPermission && !pageData.isFirst" :text="pageData.errText"></INoPermission>
 </template>
 <script lang="ts" setup>
 import { useHomePageApi, useUserApi, useHomeActionApi } from '@/apis'
@@ -54,10 +55,17 @@ const pageData = reactive({
         isCollect: false, // 是否收藏
         isPraise: false // 是否点赞
     },
-    contentUrl: ''
+    contentUrl: '',
+    hasPermission: true,
+    errText: '',
+    isFirst: true
+})
+const componentInfoList = computed(() => {
+    return pageData.packageDetail?.componentInfoList?.filter((el: any) => el.id !== route.query.componentId)
 })
 
 const handleFetchPageData = () => {
+    pageData.isFirst = false
     useHomePageApi
         .requestHomeGetComponentDetail({
             componentId: route.query.componentId,
@@ -68,7 +76,8 @@ const handleFetchPageData = () => {
                 pageData.packageDetail = res.result
                 pageData.contentUrl = res.result.codepackageInfo.currentCodePath + `/static/doc/components/${res.result.componentInfo.comClassname}.md`
             } else {
-                message.error(res.message)
+                pageData.hasPermission = false
+                pageData.errText = res.message
             }
         })
 }

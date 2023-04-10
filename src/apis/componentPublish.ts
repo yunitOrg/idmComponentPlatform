@@ -1,4 +1,4 @@
-import { http } from '@/plugins/axios'
+import { http, baseURL } from '@/plugins/axios'
 import { AxiosProgressEvent } from 'axios'
 
 enum Apis {
@@ -53,5 +53,5 @@ export default {
     requestDeleteChange: (data: object) => http.postForm({ url: Apis.requestDeleteChangeUrl, data }),
     requestDeleteChangeComponent: (data: object) => http.postForm({ url: Apis.requestDeleteChangeComponentUrl, data }),
 
-    componentStaticUrl: Apis.componentStaticUrl
+    componentStaticUrl: baseURL + Apis.componentStaticUrl
 }

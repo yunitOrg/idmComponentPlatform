@@ -80,7 +80,7 @@
                                         :model="formData"
                                         :label-col="{span: 6}"
                                         :wrapper-col="{span: !state.queryId ? 16 : 18}"
-                                        @finish="(data) => onFinish(data)"
+                                        @finish="(data: any) => onFinish(data)"
                                         @finish-failed="onFinishFailed"
                                     >
                                         <a-alert v-if="!state.queryId" v-show="!formData.isNewVersion" message="该组件包已有历史版本，此次上传将会更新组件包的版本，不会新创建组件包" type="warning" show-icon closable :style="{ marginBottom: '20px' }" />

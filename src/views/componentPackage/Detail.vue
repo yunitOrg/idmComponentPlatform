@@ -1,5 +1,5 @@
 <template>
-    <div class="page-max-width package-page flex">
+    <div v-if="pageData.hasPermission && !pageData.isFirst" class="page-max-width package-page flex">
         <div style="padding: 50px 30px 0 0">
             <ButtonList
                 :componentProp="pageData.packageDetail.codepackageInfo"
@@ -15,18 +15,24 @@
             <!-- left -->
             <ACol :span="17">
                 <TitleInfoBox type="codePackage" :codePackageProp="pageData.packageDetail.codepackageInfo"></TitleInfoBox>
-                <MdContent :contentUrl="pageData.contentUrl"></MdContent>
+                <MdContent :codePackageProp="pageData.packageDetail.codepackageInfo" :contentUrl="pageData.contentUrl"></MdContent>
                 <CommentBox commentTypeId="codepackageId" articleType="1"></CommentBox>
             </ACol>
             <!-- right -->
             <ACol :span="7">
                 <UserInfoBox :userInfoProp="pageData.packageDetail.codepackageUserInfo" @onDoFollow="onDoFollow"></UserInfoBox>
-                <IntroductionBox :codePackageVersionListProp="pageData.packageDetail.codePackageVersionList" :codePackageProp="pageData.packageDetail.codepackageInfo"></IntroductionBox>
-                <VersionList type="codePackage" :versionList="pageData.packageDetail.codePackageVersionList" :codePackageProp="pageData.packageDetail.codepackageInfo"></VersionList>
+                <IntroductionBox
+                    :codePackageVersionListProp="pageData.packageDetail.codePackageVersionList"
+                    :codePackageProp="pageData.packageDetail.codepackageInfo"></IntroductionBox>
+                <VersionList
+                    type="codePackage"
+                    :versionList="pageData.packageDetail.codePackageVersionList"
+                    :codePackageProp="pageData.packageDetail.codepackageInfo"></VersionList>
                 <ComponentList :componentList="pageData.packageDetail.componentInfoList" :codePackageProp="pageData.packageDetail.codepackageInfo"></ComponentList>
             </ACol>
         </ARow>
     </div>
+    <INoPermission v-if="!pageData.hasPermission && !pageData.isFirst" :text="pageData.errText"></INoPermission>
 </template>
 
 <script lang="ts" setup>
@@ -43,9 +49,13 @@ const pageData = reactive({
         isCollect: false, // 是否收藏
         isPraise: false // 是否点赞
     },
-    contentUrl: ''
+    contentUrl: '',
+    hasPermission: true,
+    errText: '',
+    isFirst: true
 })
 const handleFetchPageData = () => {
+    pageData.isFirst = false
     useHomePageApi
         .requestHomeGetCodepackageDetail({
             ...route.query
@@ -55,7 +65,8 @@ const handleFetchPageData = () => {
                 pageData.packageDetail = res.result
                 pageData.contentUrl = res.result.codepackageInfo.currentCodePath + '/static/doc/index.md'
             } else {
-                message.error(res.message)
+                pageData.hasPermission = false
+                pageData.errText = res.message
             }
         })
 }

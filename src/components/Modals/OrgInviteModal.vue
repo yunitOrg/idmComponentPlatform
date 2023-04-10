@@ -51,7 +51,7 @@ import QRCode from 'qrcode'
 import { copyToBoard } from '@/utils/copy'
 import { shareCodeAes } from '@/utils/cipher'
 import { message } from 'ant-design-vue'
-import { useHomeCoreApi } from '@/apis'
+import { useOrgAboutApi, useHomeCoreApi } from '@/apis'
 const props = defineProps({
     visible: {
         type: Boolean,
@@ -74,7 +74,7 @@ const handleClose = () => {
 }
 const handleSendInvite = () => {
     state.loading = true
-    useHomeCoreApi.requestSendInviteJoinOrg({ id: props.itemData.id, userIds: state.userIds?.join(',') }).then((res: any) => {
+    useOrgAboutApi.requestSendInviteJoinOrg({ id: props.itemData.id, userIds: state.userIds?.join(',') }).then((res: any) => {
         state.loading = false
         if (res.success) {
             message.success('邀请成功！')
