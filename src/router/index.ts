@@ -115,28 +115,6 @@ const routes: Array<RouteRecordRaw> = [
                 component: () => import('@/views/my/AccountPassword.vue')
             },
             {
-                path: 'my',
-                component: () => import('@/views/my/index.vue'),
-                children: [
-                    {
-                        path: 'indexPage',
-                        meta: {
-                            title: '我的首页'
-                        },
-                        name: 'my-indexPage',
-                        component: () => import('@/views/my/MyIndexPage.vue')
-                    },
-                    {
-                        path: 'personalData',
-                        meta: {
-                            title: '个人资料'
-                        },
-                        name: 'my-personalData',
-                        component: () => import('@/views/my/PersonalData.vue')
-                    }
-                ]
-            },
-            {
                 path: 'creativeCenter',
                 component: () => import('@/views/creativeCenter/index.vue'),
                 children: [
