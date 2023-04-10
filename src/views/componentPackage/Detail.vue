@@ -15,7 +15,7 @@
             <!-- left -->
             <ACol :span="17">
                 <TitleInfoBox type="codePackage" :codePackageProp="pageData.packageDetail.codepackageInfo"></TitleInfoBox>
-                <MdContent :codePackageProp="pageData.packageDetail.codepackageInfo" :contentUrl="pageData.contentUrl"></MdContent>
+                <MdContent ref="mdContent" :codePackageProp="pageData.packageDetail.codepackageInfo" :contentUrl="pageData.contentUrl"></MdContent>
                 <CommentBox commentTypeId="codepackageId" articleType="1"></CommentBox>
             </ACol>
             <!-- right -->
@@ -49,7 +49,9 @@ const pageData = reactive({
     errText: '',
     isFirst: true
 })
+const mdContent = ref()
 const handleFetchPageData = () => {
+    pageData.isFirst = false
     useHomePageApi
         .requestHomeGetCodepackageDetail({
             ...route.query
@@ -62,8 +64,6 @@ const handleFetchPageData = () => {
                 pageData.hasPermission = false
                 pageData.errText = res.message
             }
-        }).finally(() => {
-            pageData.isFirst = false
         })
 }
 handleFetchPageData()

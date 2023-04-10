@@ -65,6 +65,7 @@ const componentInfoList = computed(() => {
 })
 
 const handleFetchPageData = () => {
+    pageData.isFirst = false
     useHomePageApi
         .requestHomeGetComponentDetail({
             componentId: route.query.componentId,
@@ -78,8 +79,6 @@ const handleFetchPageData = () => {
                 pageData.hasPermission = false
                 pageData.errText = res.message
             }
-        }).finally(() => {
-            pageData.isFirst = false
         })
 }
 const comPreviewImgJson = computed(() => {
