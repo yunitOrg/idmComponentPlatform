@@ -15,10 +15,12 @@
 import configObject from '@/settings/indexPageConfig'
 import { useUserStore } from '@/store/modules/user'
 import { useAppStore } from '@/store/modules/app'
-const appStore = useAppStore()
+import { setSession } from '@/utils/cache/sessionStorage'
 const userStore = useUserStore()
+const appStore = useAppStore()
 const pageConfig = reactive(configObject)
 onMounted(() => {
     appStore.setAppMounted(true)
+    setSession('isAppMounted', 1)
 })
 </script>

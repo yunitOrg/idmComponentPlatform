@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter as _createRouter, createWebHistory, createMemoryHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 import type { App } from 'vue'
 import { useUserStoreWithOut } from '@/store/modules/user'
@@ -14,15 +14,14 @@ const routes: Array<RouteRecordRaw> = [
                 path: '',
                 name: 'index',
                 meta: {
-                    keepAlive: false,
-                    title: '首页'
+                    keepAlive: false
                 },
                 component: () => import('@/views/index/List.vue')
             },
             {
                 path: 'componentPackage',
                 meta: {
-                    title: '组件包列表'
+                    title: '组件包'
                 },
                 name: 'index-componentPackage',
                 component: () => import('@/views/componentPackage/List.vue')
@@ -94,32 +93,19 @@ const routes: Array<RouteRecordRaw> = [
             {
                 path: 'org',
                 meta: {
-                    title: '云圈列表'
+                    title: '组织'
                 },
                 name: 'index-org',
                 component: () => import('@/views/org/List.vue')
             },
             {
-                path: 'my',
-                component: () => import('@/views/my/index.vue'),
-                children: [
-                    {
-                        path: 'indexPage',
-                        meta: {
-                            title: '我的首页'
-                        },
-                        name: 'my-indexPage',
-                        component: () => import('@/views/my/MyIndexPage.vue')
-                    },
-                    {
-                        path: 'personalData',
-                        meta: {
-                            title: '个人资料'
-                        },
-                        name: 'my-personalData',
-                        component: () => import('@/views/my/PersonalData.vue')
-                    }
-                ]
+                path: 'indexPage/:userId',
+                name: 'indexPage',
+                meta: {
+                    title: '个人主页'
+                },
+                props: true,
+                component: () => import('@/views/my/indexPage.vue')
             },
             {
                 path: 'creativeCenter',
@@ -150,20 +136,41 @@ const routes: Array<RouteRecordRaw> = [
                         component: () => import('@/views/creativeCenter/ComponentManageList.vue')
                     }
                 ]
+            },
+            {
+                path: '/message',
+                component: () => import('@/views/message/index.vue'),
+                children: [
+                    {
+                        path: 'list',
+                        meta: {
+                            title: '消息列表'
+                        },
+                        name: 'message-list',
+                        component: () => import('@/views/message/list/index.vue')
+                    }
+                ]
             }
         ]
+    },
+    {
+        path: '/share',
+        name: 'share',
+        meta: {
+            title: '组织邀请'
+        },
+        component: () => import('@/views/share/index.vue')
     }
 ]
 
-const router = createRouter({
-    history: createWebHistory(),
+const router = _createRouter({
+    history: import.meta.env.SSR ? createMemoryHistory() : createWebHistory(),
     routes,
     scrollBehavior(to, from, savedPosition) {
         if (savedPosition) return savedPosition
         else return { top: 0 }
     }
 })
-
 router.beforeEach(async (from, to, next) => {
     // 用户没有登录，有token ，用token登录
     if (!userStore.isUserLogined && getToken() && !userStore.isRouterGetedUserInfo) {

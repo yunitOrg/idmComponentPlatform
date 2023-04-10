@@ -1,5 +1,6 @@
 export const settings = {
     url: 'https://yunit-code.github.io/zh/',
+    website: 'www.yunit.cn',
     subIntr: '一个组件标准化、可视化拖拽低代码的免费开源框架',
     product: '©云IT (yunit.cn) 旗下产品',
     filingIntr: '云企·社区团队版权所有',

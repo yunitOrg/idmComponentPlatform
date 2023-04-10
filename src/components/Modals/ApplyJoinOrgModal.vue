@@ -20,7 +20,7 @@
                 <div class="admin-name text-o-e" style="max-width: 115px">{{ handleGetAdmin() }}</div>
             </div>
             <div class="info-container text-left">
-                <div>您将授权一下信息给该组织管理员查看</div>
+                <div>您将授权以下信息给该组织管理员查看</div>
                 <a-checkbox v-model:checked="pageData.baseChecked" style="margin: 10px 0 5px 0" disabled>头像、昵称、个性签名、个人简介</a-checkbox>
                 <div>
                     <a-checkbox v-model:checked="pageData.phoneChecked">

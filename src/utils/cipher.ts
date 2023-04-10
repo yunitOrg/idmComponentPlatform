@@ -53,3 +53,4 @@ export function decodeByBase64(cipherText: string) {
 export function encryptByMd5(password: string) {
     return md5(password).toString()
 }
+export const shareCodeAes = new AesEncryption({ key: 'shareCode0000000' })

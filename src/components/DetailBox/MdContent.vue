@@ -98,12 +98,13 @@ const handleAnchorClick = (anchor: any) => {
         background-color: #fefefe;
         position: sticky;
         top: 0px;
+        z-index: 100;
         .title-text {
             margin: 0 10px;
             font-weight: 600;
         }
     }
-    .md-menu-icon{
+    .md-menu-icon {
         font-size: 24px;
         margin: 0 0 -2px 0;
     }

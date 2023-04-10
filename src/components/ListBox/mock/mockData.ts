@@ -55,4 +55,22 @@ export const IOrgData = {
     userCount: 321
 }
 
+export const orgMemberType: {[x:number]: string} = {
+    0: '普通人员',
+    1: '超级管理员',
+    2: '管理员'
+}
+
+export const orgMemberInviteStatus: {[x:number]: string} = {
+    0: '待处理',
+    1: '同意',
+    2: '拒绝'
+}
+
+export const orgMemberCheckStatus: {[x:number]: string} = {
+    0: '待审核',
+    1: '审核通过',
+    2: '审核未通过'
+}
+
 export default {}

@@ -40,7 +40,7 @@ const handleJump = (item: { url: string }) => {
 </script>
 <style lang="scss" scoped>
 .idm-components-plateform-footer {
-    box-shadow: 0 -3px 3px #f1f1f1;
+    box-shadow: 0 -2px 6px 0 rgba($color: #000000, $alpha: 0.06);
     padding: 30px 0 20px;
     .intr-title {
         color: #333;

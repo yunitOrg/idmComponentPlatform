@@ -1,11 +1,12 @@
 <template>
-    <SuspenseBox v-if="!appStore.isAppMounted"></SuspenseBox>
+    <SuspenseBox v-if="isShowSuspense"></SuspenseBox>
     <AConfigProvider :locale="zhCN">
         <RouterView v-if="isAlive"></RouterView>
     </AConfigProvider>
 </template>
 
 <script lang="ts" setup>
+import { getSession } from '@/utils/cache/sessionStorage'
 import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
 import dayjs from 'dayjs'
 import 'dayjs/locale/zh-cn'
@@ -13,6 +14,9 @@ import { useAppStore } from '@/store/modules/app'
 dayjs.locale('zh-cn')
 const appStore = useAppStore()
 const isAlive = ref(true)
+const isShowSuspense = computed(() => {
+    return !appStore.isAppMounted && !getSession('isAppMounted')
+})
 function reload() {
     isAlive.value = false
     nextTick(() => {
@@ -30,7 +34,7 @@ provide('reload', reload)
 @import './styles/layout.scss';
 @import './styles/antd.scss';
 body {
-    background: #f2f3f5 !important;
+    background: rgb(247, 248, 250) !important;
 }
 .page-min-height {
     min-height: calc(100vh - 280px);

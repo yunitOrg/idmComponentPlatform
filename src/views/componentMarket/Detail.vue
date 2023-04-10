@@ -31,7 +31,7 @@
                 <VersionList :versionList="pageData.packageDetail.componentVersionList" :codePackageProp="pageData.packageDetail.codepackageInfo"></VersionList>
                 <ComponentList
                     title="组件包内其他组件"
-                    :componenList="pageData.packageDetail.componentInfoList"
+                    :componentList="pageData.packageDetail.componentInfoList"
                     :componentProp="pageData.packageDetail.componentInfo"
                     :codePackageProp="pageData.packageDetail.codepackageInfo"></ComponentList>
             </ACol>
@@ -111,6 +111,8 @@ const handlePraise = () => {
             pageData.packageDetail.isPraise = !pageData.packageDetail.isPraise
             if (pageData.packageDetail.isPraise) pageData.packageDetail.componentInfo.praiseNumber += 1
             else pageData.packageDetail.componentInfo.praiseNumber -= 1
+        } else {
+            message.error(res.message)
         }
     })
 }

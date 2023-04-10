@@ -5,7 +5,7 @@
                 <a-avatar :size="48" :src="getImagePath(userInfoProp.userphoto) || defaultSettings.userphoto"></a-avatar>
                 <div style="margin: 0 0 0 10px" class="flex-1">
                     <div class="text-o-e-1">{{ userInfoProp.nickname || 'yunit' }}</div>
-                    <div class="text-o-e-1" style="color: #999;">{{ userInfoProp.saying || '这家伙很懒什么也没留下' }}</div>
+                    <div class="text-o-e-1" style="color: #999">{{ userInfoProp.saying || '这家伙很懒什么也没留下' }}</div>
                 </div>
             </div>
             <div :class="['guanzhu-btn', 'cursor-pointer']" @click="handleFlow">
@@ -25,6 +25,7 @@ import { defaultSettings } from '@/settings/defaultSetting'
 import { useUserApi } from '@/apis'
 import { useUserStore } from '@/store/modules/user'
 import { getImagePath } from '@/utils'
+import { message } from '@/plugins/globalComponents'
 const userStore = useUserStore()
 
 const propData = defineProps({
@@ -43,6 +44,7 @@ const handleFlow = () => {
         userId: propData.userInfoProp.id
     }).then((res) => {
         if (res.success) emits('onDoFollow')
+        else message.error(res.message)
     })
 }
 </script>

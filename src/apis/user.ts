@@ -23,7 +23,11 @@ enum Apis {
     // 关注用户
     followUser = '/core/user/followUser',
     // 取消关注用户
-    unFollowUser = '/core/user/unFollowUser'
+    unFollowUser = '/core/user/unFollowUser',
+    // 我的消息列表查询
+    getMyMessageList = '/core/user/getMyMessageList',
+    // 设置消息为已读
+    setMyMessageRead = '/core/user/setMyMessageRead'
 }
 export interface SmsData {
     mobile?: string
@@ -33,7 +37,7 @@ export interface SmsData {
 
 export interface LoginData {
     username: string
-    password: string
+    password?: string
     captcha: string
     checkKey?: string
 }
@@ -54,7 +58,7 @@ export default {
     // 重置密码
     requestCoreResetPwd: (data: any) => http.postForm({ url: Apis.coreResetPwd, data }),
     // 获取用户信息
-    requestGetUserInfo: () => http.get({ url: Apis.userGetUserInfo }),
+    requestGetUserInfo: (params?: any) => http.get({ url: Apis.userGetUserInfo, params }),
     // 获取验证码
     requestRandomImage: (key: string) => http.get({ url: Apis.randomImage + key }),
     requestCreateCollectFolder: (data: any) =>
@@ -66,5 +70,7 @@ export default {
     requestUserCollect: (data: any) => http.postForm({ url: Apis.userCollect, data }),
     requestUserUnCollect: (data: any) => http.postForm({ url: Apis.userUnCollect, data }),
     requestFollowUser: (data: any) => http.postForm({ url: Apis.followUser, data }),
-    requestUnFollowUser: (data: any) => http.postForm({ url: Apis.unFollowUser, data })
+    requestUnFollowUser: (data: any) => http.postForm({ url: Apis.unFollowUser, data }),
+    requestMyMessageList: (params: any) => http.get({ url: Apis.getMyMessageList, params }),
+    requestSetMyMessageRead: (data: any) => http.postForm({ url: Apis.setMyMessageRead, data })
 }

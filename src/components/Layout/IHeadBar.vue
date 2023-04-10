@@ -1,17 +1,19 @@
 <template>
-    <div v-if="!isIndexPage && pageData.isShowMenuLine" class="head-bar-container" style="margin: 36px 0 20px 0"></div>
-    <div
-        :style="{ top: pageData.isShowMenuLine ? '0' : '-55px'}"
-        class="head-bar-container head-bar-container-fix"
-        :class="[pageData.isShadow && 'head-bar-container-shadow']">
+    <div v-if="!isIndexPage && pageData.isShowMenuLine" class="head-bar-container" style="margin: 35px 0 20px 0"></div>
+    <div :style="{ top: pageData.isShowMenuLine ? '0' : '-55px' }" class="head-bar-container head-bar-container-fix" :class="[pageData.isShadow && 'head-bar-container-shadow']">
         <div class="flex justify-between align-center head-bar-container-main">
-            <div class="flex align-center flex-1" :class="{'justify-between': !hiddenMenu}">
+            <div class="flex align-center flex-1" :class="{ 'justify-between': !hiddenMenu }">
                 <img alt="logo" title="logo" class="cursor-pointer header-logo" :src="yunitLogo" @click="handleJump({ routeName: 'index', title: 'logo' })" />
                 <template v-if="hiddenMenu">
                     <div v-for="item in selectedItems" :key="item.routeName" class="nav-title">{{ item.title }}</div>
                 </template>
                 <template v-else>
-                    <a-menu v-model:selectedKeys="selectedKeys" :style="{ opacity: pageData.menuOpacity }" class="flex-1" mode="horizontal" @click="handleMenuClick">
+                    <a-menu
+                        v-model:selectedKeys="selectedKeys"
+                        :style="{ opacity: pageData.menuOpacity, display: pageData.menuOpacity == 0 ? 'none' : 'block' }"
+                        class="flex-1"
+                        mode="horizontal"
+                        @click="handleMenuClick">
                         <a-menu-item v-for="item in menuNavList" :key="item.routeName">{{ item.title }}</a-menu-item>
                     </a-menu>
                 </template>
@@ -19,20 +21,25 @@
             <div class="flex justify-between align-center">
                 <AInput
                     v-model:value="searchText"
-                    :style="{ opacity: pageData.menuOpacity }"
+                    :style="{ opacity: pageData.menuOpacity, display: pageData.menuOpacity == 0 ? 'none' : 'inline-flex' }"
                     class="header-top-search"
                     placeholder="请输入关键字..."
                     style="width: 260px"
                     @keyup.enter="handleSearch">
                     <template #suffix>
-                        <search-outlined style="color: rgba(0, 0, 0, 0.45)" @click="handleSearch" />
+                        <search-outlined style="color: rgba(0, 0, 0, 0.45); font-size: 20px" @click="handleSearch" />
                     </template>
                 </AInput>
                 <div v-if="userStore.isUserLogined" class="login-status-box flex justify-center align-center">
                     <a-popover placement="bottom" overlayClassName="navbar-avatar-popover">
-                        <a-avatar :size="24" class="cursor-pointer" :src="getImagePath(userStore.userInfo && userStore.userInfo.userphoto) || defaultSettings.userphoto" />
+                        <a-avatar
+                            :size="24"
+                            class="cursor-pointer header-avatar"
+                            :src="getImagePath(userStore.userInfo && userStore.userInfo.userphoto) || defaultSettings.userphoto" />
 
-                        <AButton type="link" @click="router.push({ name: 'my-indexPage' })">我的主页</AButton>
+                        <AButton style="font-size: 16px" type="link" @click="router.push({ name: 'indexPage', params: { userId: userStore.userInfo && userStore.userInfo.id } })">
+                            我的主页
+                        </AButton>
                         <template #content>
                             <div class="navbar-avatar-popover-top">
                                 <div class="flex align-end">
@@ -80,7 +87,54 @@
                             </div>
                         </template>
                     </a-popover>
-                    <AButton type="link">消息</AButton>
+                    <a-popover placement="bottomRight" overlayClassName="message-popover" @visibleChange="messageVisibleChange">
+                        <a-badge :count="messageCount" style="margin: 0 10px">
+                            <span class="message-btn cursor-pointer">消息</span>
+                        </a-badge>
+                        <template #content>
+                            <div class="top-message-list-container">
+                                <div class="flex justify-between title-tab">
+                                    <div
+                                        class="flex-1 text-center cursor-pointer"
+                                        :class="[pageData.currentMessageActive === 1 && 'tab-active']"
+                                        @click="handleMessageTabChange(1)">
+                                        我的私信
+                                    </div>
+                                    <div
+                                        class="flex-1 text-center cursor-pointer"
+                                        :class="[pageData.currentMessageActive === 2 && 'tab-active']"
+                                        @click="handleMessageTabChange(2)">
+                                        通知消息
+                                    </div>
+                                </div>
+                                <!-- 私信 -->
+                                <div v-if="pageData.currentMessageActive === 1">
+                                    <div class="tab-content common-scrollbar_style">
+                                        <div v-if="pageData.messageLoading" class="flex justify-center align-center" style="height: 100%">
+                                            <a-spin></a-spin>
+                                        </div>
+                                    </div>
+                                    <div class="flex justify-between align-center tab-bottom">
+                                        <div class="cursor-pointer"><svg-icon iconClass="edit"></svg-icon> 写信私信</div>
+                                        <div class="cursor-pointer">查看全部私信</div>
+                                    </div>
+                                </div>
+                                <!-- 通知 -->
+                                <div v-if="pageData.currentMessageActive === 2">
+                                    <div class="tab-content common-scrollbar_style">
+                                        <AllMessage showLocation="navbar" size="mini" :messageList="pageData.messageList" @updateMessage="updateMessage"></AllMessage>
+                                        <div v-if="pageData.messageLoading" class="flex justify-center align-center" style="height: 100%">
+                                            <a-spin></a-spin>
+                                        </div>
+                                    </div>
+                                    <div class="flex justify-between align-center tab-bottom">
+                                        <div class="cursor-pointer"><svg-icon iconClass="settings"></svg-icon> 设置</div>
+                                        <div class="cursor-pointer" @click="router.push({ name: 'message-list' })">查看全部通知</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </a-popover>
                     <a-popover placement="bottomRight">
                         <template #content>
                             <div class="want-send-top flex justify-between align-center">
@@ -111,11 +165,11 @@
                         </AButton>
                     </a-popover>
                 </div>
-                <div v-else class="login-status-box flex justify-center align-center">
+                <div v-else class="login-status-box flex justify-center align-center" @click="userStore.setLoginModal(true)">
                     <div class="login-reg-box flex justify-between align-center cursor-pointer">
-                        <div @click="userStore.setLoginModal(true)">登录</div>
+                        <div>登录</div>
                         <div class="line">|</div>
-                        <div @click="userStore.setLoginModal(true)">注册</div>
+                        <div>注册</div>
                     </div>
                 </div>
             </div>
@@ -154,31 +208,18 @@
 </template>
 
 <script lang="ts" setup>
-import {
-    yunitLogo,
-    codeImage,
-    componentImage,
-    schoolImage,
-    yunQuanImage,
-    idmImage2,
-    orgImage,
-    logo1,
-    personImage,
-    orgIcon2,
-    logoutImage,
-    settingImage,
-    createEntranceImage
-} from '@/assets/images'
+import { yunitLogo, logo1, createEntranceImage } from '@/assets/images'
 import { defaultSettings } from '@/settings/defaultSetting'
 import type { MenuProps } from 'ant-design-vue'
 import IOrgBox from '@/components/ListBox/IOrgBox.vue'
 import { SearchOutlined, RightOutlined } from '@ant-design/icons-vue'
 import { useUserStore } from '@/store/modules/user'
 import { isUrl } from '@/utils/is'
-import { settings } from '@/settings/idmSettings'
-import { useHomeCoreApi } from '@/apis'
+import { useHomeCoreApi, useUserApi } from '@/apis'
 import { getImagePath } from '@/utils'
 import emitter from '@/utils/bus'
+import AllMessage from '@/views/message/list/AllMessage.vue'
+import { sendListMap, navBoxList, myActionList } from '@/settings/navbarSettings'
 const userStore = useUserStore()
 const propData = defineProps({
     navList: {
@@ -186,101 +227,19 @@ const propData = defineProps({
         default: () => []
     }
 })
-const sendListMap = [
-    {
-        text: '发组件',
-        icon: 'lifang',
-        iconSize: 16,
-        type: 'window',
-        url: '/componentPublish'
-    },
-    {
-        text: '发圈子',
-        icon: 'quan',
-        iconSize: 16,
-        url: ''
-    },
-    {
-        text: '组件包',
-        icon: 'upload',
-        iconSize: 22,
-        type: 'window',
-        url: '/componentPackagePublish'
-    },
-    {
-        text: '发教程',
-        icon: 'tushu',
-        iconSize: 16,
-        url: ''
-    },
-    {
-        text: '建组织',
-        icon: 'jianzhu',
-        iconSize: 14,
-        url: 'index-org'
+const messageCount = computed(() => {
+    if (userStore?.userInfo?.messageCount) {
+        return Number(userStore.userInfo.messageCount)
     }
-]
+    return 0
+})
+
 const activityList = [
     {
-        title: '哈哈哈哈哈'
+        title: '活动一二三四'
     },
     {
-        title: '呼呼呼呼'
-    }
-]
-const navBoxList: Array<MenuItem> = [
-    {
-        title: '组件包',
-        image: codeImage,
-        routeName: 'index-componentPackage'
-    },
-    {
-        title: '组件市场',
-        image: componentImage,
-        routeName: 'index-componentMarket'
-    },
-    {
-        title: 'i学院',
-        image: schoolImage,
-        routeName: 'index-iSchool'
-    },
-    {
-        title: '云圈',
-        image: yunQuanImage,
-        routeName: 'index-yunquan'
-    },
-    {
-        title: '组织',
-        image: orgImage,
-        routeName: 'index-org'
-    },
-    {
-        title: 'IDM',
-        image: idmImage2,
-        routeName: settings.url
-    }
-]
-const myActionList = [
-    {
-        action: 'myOrg',
-        text: '我的组织',
-        image: orgIcon2
-    },
-    {
-        action: 'personInfo',
-        image: personImage,
-        text: '个人资料'
-    },
-    {
-        action: 'setting',
-        image: settingImage,
-        text: '账号设置'
-    },
-    {
-        action: 'logout',
-        border: true,
-        image: logoutImage,
-        text: '安全退出'
+        title: '活动一二三'
     }
 ]
 const router = useRouter()
@@ -294,8 +253,12 @@ const pageData = reactive<{ [x: string]: any }>({
     orgList: [],
     isShadow: false,
     menuOpacity: 0,
-    isShowMenuLine: true
+    isShowMenuLine: true,
+    currentMessageActive: 1,
+    messageList: [],
+    messageLoading: false
 })
+// yunit默认
 const yunitOrg = reactive({
     orgphoto: logo1,
     companyName: '公司',
@@ -305,16 +268,17 @@ const yunitOrg = reactive({
 })
 const selectedItems: any = computed(() => {
     const arr: any = []
-    selectedKeys.value.forEach(key => {
-        const item = propData.navList.find(item => item.routeName === key)
+    selectedKeys.value.forEach((key) => {
+        const item = propData.navList.find((item) => item.routeName === key)
         item && arr.push(item)
     })
     return arr
 })
-const menuNavList: any = computed(() => propData.navList.filter(item => !item.hiddenInMenu))
+const menuNavList: any = computed(() => propData.navList.filter((item) => !item.hiddenInMenu))
 const hiddenMenu: any = computed(() => {
-    const menuNavKeys = menuNavList.value.map((item: any) => item.routeName)
-    return selectedKeys.value.some((key: string) => menuNavKeys.indexOf(key) === -1)
+    const hiddenMenuList = propData.navList.filter((item) => item.hiddenInMenu)
+    const hiddenKeys = hiddenMenuList ? hiddenMenuList.map((item: any) => item.routeName) : []
+    return selectedKeys.value.some((key: string) => hiddenKeys.indexOf(key) !== -1)
 })
 
 const handleScroll = () => {
@@ -335,6 +299,41 @@ const handleScroll = () => {
         pageData.menuOpacity = 0
         pageData.isShadow = false
     }
+}
+// 获取消息列表
+const handleFetchMessageList = () => {
+    useUserApi
+        .requestMyMessageList({
+            pageSize: 20,
+            pageNo: 1
+        })
+        .then((res) => {
+            if (res.success) {
+                pageData.messageList = res.result.records
+            }
+        })
+        .finally(() => {
+            pageData.messageLoading = false
+        })
+}
+// 消息tabs change
+const handleMessageTabChange = (type: number) => {
+    pageData.messageLoading = true
+    pageData.currentMessageActive = type
+    if (type === 2) handleFetchMessageList()
+}
+
+// 消息弹出事件
+const messageVisibleChange = (visible: boolean) => {
+    if (visible) {
+        handleMessageTabChange(pageData.currentMessageActive)
+    }
+}
+
+// 更新消息
+const updateMessage = (index: number) => {
+    pageData.messageList[index].readStatus = 1
+    userStore.handleGetUserInfo()
 }
 watch(
     () => route.name,
@@ -381,11 +380,9 @@ nextTick(() => {
 })
 
 const handleCreateOrg = () => {
-    if (userStore.isUserLogined) {
-        pageData.createOrgVisible = true
-    } else {
-        userStore.setLoginModal(true)
-    }
+    router.push({
+        name: 'index-org'
+    })
 }
 const handleJump = (menuItem?: MenuItem) => {
     if (isUrl(menuItem?.routeName)) {
@@ -441,6 +438,17 @@ const handleClickActionBtn = (action: string) => {
         case 'logout':
             userStore.handleUserLogout()
             break
+        case 'myOrg':
+            router.push({
+                name: 'indexPage',
+                params: {
+                    userId: userStore.userInfo?.id
+                },
+                query: {
+                    tab: 'org'
+                }
+            })
+            break
     }
 }
 </script>
@@ -490,6 +498,13 @@ const handleClickActionBtn = (action: string) => {
     }
     .login-status-box {
         margin-left: 50px;
+        .message-btn {
+            margin: 0 10px;
+            font-size: 16px;
+        }
+        .header-avatar {
+            margin: 0 0 4px 0;
+        }
     }
     .login-reg-box {
         background: rgba(30, 128, 255, 0.05);
@@ -516,7 +531,7 @@ const handleClickActionBtn = (action: string) => {
     transition: all 0.3s;
 }
 .head-bar-container-shadow {
-    box-shadow: 0 3px 5px rgba($color: #000000, $alpha: 0.06);
+    box-shadow: 0 2px 6px 0 rgba($color: #000000, $alpha: 0.06);
 }
 .want-send-top {
     min-width: 300px;
@@ -600,6 +615,37 @@ const handleClickActionBtn = (action: string) => {
         margin: 0 10px 0 0;
     }
 }
+.top-message-list-container {
+    width: 520px;
+    .title-tab {
+        border-bottom: 1px solid #ccc;
+        padding: 10px 0;
+        font-size: 16px;
+        > div {
+            border-right: 1px solid #ccc;
+        }
+        div {
+            padding: 5px 0;
+            &:last-child {
+                border-right: 0;
+            }
+        }
+        .tab-active {
+            color: #40a9ff;
+        }
+    }
+    .tab-content {
+        padding: 10px;
+        height: 300px;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+    .tab-bottom {
+        border-top: 1px solid #ccc;
+        padding: 10px;
+        color: #666;
+    }
+}
 </style>
 
 <style lang="scss">
@@ -660,6 +706,11 @@ const handleClickActionBtn = (action: string) => {
         .title {
             font-size: 14px;
         }
+    }
+}
+.message-popover {
+    .ant-popover-inner-content {
+        padding: 0;
     }
 }
 </style>
