@@ -25,7 +25,9 @@ import config from '@/settings/creativeCenterPageConfig'
     margin-right: 20px;
   }
   .content {
-    flex: 1
+    width: 0;
+    flex-grow: 1;
+    flex-shrink: 1;
   }
 }
 </style>
