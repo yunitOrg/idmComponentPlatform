@@ -1,5 +1,5 @@
 <template>
-    <div v-if="!isIndexPage && pageData.isShowMenuLine" class="head-bar-container" style="margin: 36px 0 20px 0"></div>
+    <div v-if="!isIndexPage && pageData.isShowMenuLine" class="head-bar-container" style="margin: 35px 0 20px 0"></div>
     <div :style="{ top: pageData.isShowMenuLine ? '0' : '-55px' }" class="head-bar-container head-bar-container-fix" :class="[pageData.isShadow && 'head-bar-container-shadow']">
         <div class="flex justify-between align-center head-bar-container-main">
             <div class="flex align-center flex-1" :class="{ 'justify-between': !hiddenMenu }">
@@ -531,7 +531,7 @@ const handleClickActionBtn = (action: string) => {
     transition: all 0.3s;
 }
 .head-bar-container-shadow {
-    box-shadow: 0 3px 5px rgba($color: #000000, $alpha: 0.06);
+    box-shadow: 0 2px 6px 0 rgba($color: #000000, $alpha: 0.06);
 }
 .want-send-top {
     min-width: 300px;
