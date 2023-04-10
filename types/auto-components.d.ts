@@ -46,6 +46,7 @@ declare module '@vue/runtime-core' {
     ChooseCollectionModal: typeof import('./../src/components/Modals/ChooseCollectionModal.vue')['default']
     CommentBox: typeof import('./../src/components/DetailBox/CommentBox.vue')['default']
     ComponentList: typeof import('./../src/components/DetailBox/ComponentList.vue')['default']
+    CourseBox: typeof import('./../src/components/DetailBox/CourseBox.vue')['default']
     CreateCollectionModal: typeof import('./../src/components/Modals/CreateCollectionModal.vue')['default']
     CreateOrgModal: typeof import('./../src/components/Modals/CreateOrgModal.vue')['default']
     ICommonBoxContainer: typeof import('./../src/components/ICommonBoxContainer.vue')['default']

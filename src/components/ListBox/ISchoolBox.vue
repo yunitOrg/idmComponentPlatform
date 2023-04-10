@@ -1,5 +1,5 @@
 <template>
-    <a-card hoverable :bordered="false" class="school-box">
+    <a-card hoverable :bordered="false" class="school-box" @click="handleItemClick">
         <template #cover>
             <div class="school-box-top">
                 <img alt="图片加载失败" class="school-box-top-image" :src="componentProps.cover" />
@@ -23,12 +23,21 @@
 </template>
 <script lang="ts" setup>
 import { ISchoolData } from './mock/mockData'
+const router = useRouter()
 defineProps({
     componentProps: {
         type: Object,
         default: () => ISchoolData
     }
 })
+const handleItemClick = () => {
+    router.push({
+        name: 'index-iSchool-imageTextDetail',
+        query: {
+            docId: '123'
+        }
+    })
+}
 </script>
 
 <style lang="scss" scoped>
