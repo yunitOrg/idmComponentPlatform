@@ -7,7 +7,7 @@
         "strict": true,
         "jsx": "preserve",
         "resolveJsonModule": true,
-        "isolatedModules": true,
+        "isolatedModules": false,
         "esModuleInterop": true,
         "lib": ["ESNext", "DOM"],
         "skipLibCheck": true,
@@ -15,7 +15,7 @@
         "paths": {
             "@/*": ["./src/*"]
         },
-        "types": ["vite/client", "unplugin-vue-define-options/macros-global"]
+        "types": ["vite/client", "unplugin-vue-define-options/macros-global", "unplugin-vue-define-options/macros"]
     },
     "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "types/**/*.d.ts"],
     "references": [{ "path": "./tsconfig.node.json" }]

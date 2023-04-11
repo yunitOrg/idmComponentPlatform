@@ -91,7 +91,7 @@ const pageData = reactive({
     hasMore: true,
     commentPageConfig: {
         page: 0,
-        size: 50
+        size: 20
     }
 })
 const propData = defineProps({
@@ -229,7 +229,7 @@ onMounted(() => {
         const divHeight = document.documentElement?.offsetHeight ?? 0
         const nScrollHeight = document.documentElement?.scrollHeight ?? 0
         const nScrollTop = document.documentElement?.scrollTop ?? 0
-        if (nScrollTop + divHeight + 1 >= nScrollHeight) {
+        if (nScrollTop + divHeight + 200 >= nScrollHeight) {
             pageData.commentPageConfig.page += 1
             handleFetchMoreComment()
         }

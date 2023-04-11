@@ -31,7 +31,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
                 dts: 'types/auto-components.d.ts',
                 resolvers: [
                     AntDesignVueResolver({
-                        importStyle: false
+                        importStyle: mode === 'prod'
                     })
                 ]
             }),

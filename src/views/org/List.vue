@@ -15,6 +15,7 @@
         <ARow :gutter="[20, 20]">
             <ACol :span="18">
                 <IOrgBox2 v-for="(item, index) in pageData.leftData.records" :key="index" :componentProps="item" @handleApplyOrg="handleApplyOrg"></IOrgBox2>
+                <a-empty v-if="!pageData.isFirst && pageData.leftData.records && pageData.leftData.records.length === 0" description="暂无组织" />
                 <div class="text-center padding-20 bg-white">
                     <a-pagination
                         v-model:current="pageData.leftPageConfig.pageNo"
@@ -56,6 +57,12 @@
                         </div>
                         <a v-if="item.joinStatus != '1'" class="apply-button" @click="handleApplyOrg(item)">+加入</a>
                         <a v-else class="apply-button color-999">已加入</a>
+                    </div>
+                    <div
+                        v-if="!pageData.isRightFirst && pageData.rightData.records && pageData.rightData.records.length === 0"
+                        style="padding: 10px 0; color: #666"
+                        class="text-center empty-text">
+                        暂无新组织
                     </div>
                 </div>
             </ACol>
@@ -101,7 +108,9 @@ const pageData = reactive<{ [x: string]: any }>({
     rightData: {
         total: 0,
         records: []
-    }
+    },
+    isFirst: true,
+    isRightFirst: true
 })
 const handleGetLeftOrgList = () => {
     useOrgAboutApi
@@ -113,6 +122,9 @@ const handleGetLeftOrgList = () => {
         .then((res) => {
             pageData.leftData = res.result
         })
+        .finally(() => {
+            pageData.isFirst = false
+        })
 }
 const handleGetRightOrgList = () => {
     useOrgAboutApi
@@ -123,6 +135,9 @@ const handleGetRightOrgList = () => {
         })
         .then((res) => {
             pageData.rightData = res.result
+        })
+        .finally(() => {
+            pageData.isRightFirst = false
         })
 }
 const handleGetMoreRightOrgList = () => {

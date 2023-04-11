@@ -1,13 +1,21 @@
 <template>
     <div v-if="comPreviewImgJson && comPreviewImgJson.length > 0" class="idm-component-common-box image-preview-box">
-        <IScrollContainer :id="'scroll_' + Date.now()" :moveWidth="1075" :limitLength="3" :listLength="comPreviewImgJson.length">
+        <IScrollContainer :id="'scroll_' + Date.now()" :moveWidth="1075" :listLength="comPreviewImgJson.length">
             <a-image-preview-group>
-                <a-image v-for="item in comPreviewImgJson" :key="item.url" class="preview-image" :width="220" :height="120" :src="item.url" style="object-fit: cover"></a-image>
+                <a-image
+                    v-for="item in comPreviewImgJson"
+                    :key="item.url"
+                    class="preview-image"
+                    :width="220"
+                    :height="120"
+                    :src="getImagePath(item.url)"
+                    style="object-fit: cover"></a-image>
             </a-image-preview-group>
         </IScrollContainer>
     </div>
 </template>
 <script lang="ts" setup>
+import { getImagePath } from '@/utils'
 defineProps({
     comPreviewImgJson: {
         type: Array<any>,
