@@ -28,7 +28,6 @@ export default ({ mode }: ConfigEnv): UserConfig => {
             DefineOptions(),
             // auto import components
             Components({
-                dts: 'types/auto-components.d.ts',
                 resolvers: [
                     AntDesignVueResolver({
                         importStyle: mode === 'prod'
@@ -37,8 +36,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
             }),
             // auto import vue vue-router
             AutoImport({
-                imports: ['vue', 'vue-router'],
-                dts: 'types/auto-dependencies.d.ts'
+                imports: ['vue', 'vue-router']
             }),
             // eslint
             eslintPlugin({

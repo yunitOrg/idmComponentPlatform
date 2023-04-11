@@ -23,5 +23,5 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-./types/auto-components.d.ts
-./types/auto-dependencies.d.ts
+components.d.ts
+auto-imports.d.ts
