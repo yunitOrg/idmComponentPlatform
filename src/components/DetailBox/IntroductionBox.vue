@@ -131,7 +131,7 @@ const openUrl = (url: string) => {
         padding: 0 15px 10px;
     }
     .remark {
-        font-size: 12px;
+        font-size: 14px;
         color: #666666;
         margin: 20px 0;
     }

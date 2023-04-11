@@ -5,7 +5,7 @@
                 <a-avatar :size="48" :src="getImagePath(userInfoProp.userphoto) || defaultSettings.userphoto"></a-avatar>
                 <div style="margin: 0 0 0 10px" class="flex-1">
                     <div class="text-o-e-1">{{ userInfoProp.nickname || 'yunit' }}</div>
-                    <div class="text-o-e-1" style="color: #999">{{ userInfoProp.saying || '这家伙很懒什么也没留下' }}</div>
+                    <div class="text-o-e-1" style="color: #999">{{ userInfoProp.saying || defaultSettings.saying }}</div>
                 </div>
             </div>
             <div :class="['guanzhu-btn', 'cursor-pointer']" @click="handleFlow">

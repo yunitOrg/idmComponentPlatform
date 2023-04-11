@@ -29,7 +29,7 @@
                         <a-avatar :size="45" class="cursor-pointer" :src="getImagePath(userStore.userInfo && userStore.userInfo.userphoto) || defaultSettings.userphoto" />
                         <div style="margin: 0 0 0 20px">
                             <div class="text-o-e-1">{{ userStore.userInfo && userStore.userInfo.nickname }}</div>
-                            <div class="text-o-e-1 color-999">{{ (userStore.userInfo && userStore.userInfo.saying) || '这家伙很懒什么也没留下' }}</div>
+                            <div class="text-o-e-1 color-999">{{ (userStore.userInfo && userStore.userInfo.saying) || defaultSettings.saying }}</div>
                         </div>
                     </div>
                     <div class="box-bottom flex justify-around">

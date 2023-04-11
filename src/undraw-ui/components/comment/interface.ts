@@ -34,13 +34,13 @@ export interface UserApi {
 }
 
 export interface ConfigApi {
+    showSize?: number
+    replyShowSize?: number
+    total?: number
+    tools?: Array<string>
     user: UserApi
     emoji: EmojiApi
     comments: CommentApi[]
-    total: number
-    showSize?: number
-    replyShowSize?: number
-    tools?: string[]
 }
 
 export interface SubmitParamApi {
@@ -55,4 +55,18 @@ export interface ReplyPageParamApi {
     pageNum: number
     pageSize: number
     finish: (reply: ReplyApi) => void
+}
+
+export interface CommentSubmitParam {
+    content: string
+    parentId: string | null
+    files: any[]
+    finish: (comment: CommentApi) => void
+}
+
+export interface ReplyPageParam {
+    parentId: string | number
+    pageNum: number
+    pageSize: number
+    finish: (comments: ReplyApi) => void
 }

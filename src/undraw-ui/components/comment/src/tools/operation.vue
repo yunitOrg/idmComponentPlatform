@@ -1,36 +1,36 @@
 <template>
     <a-popover v-if="tools" ref="popoverRef" placement="bottomRight" popper-class="operatoin-popover" trigger="click">
-        <ul class="operation-list select-none">
-            <template v-for="(v, i) in tools" :key="i">
-                <template v-if="v.split('#')[1]">
-                    <li
-                        v-if="(comment.uid == user.id && v.split('#')[1] == '1') || (v.split('#')[1] == '2' && comment.uid != user.id)"
-                        :class="{ active: active }"
-                        class="operation-option"
-                        @click="report(v.split('#')[0])">
-                        <span>{{ v.split('#')[0] }}</span>
+        <template #content>
+            <ul class="operation-list select-none">
+                <template v-for="(v, i) in tools" :key="i">
+                    <template v-if="v.split('#')[1]">
+                        <li
+                            v-if="(comment.uid == user.id && v.split('#')[1] == '1') || (v.split('#')[1] == '2' && comment.uid != user.id)"
+                            :class="{ active: active }"
+                            class="operation-option"
+                            @click="report(v.split('#')[0])">
+                            <span>{{ v.split('#')[0] }}</span>
+                        </li>
+                    </template>
+                    <li v-else :class="{ active: active }" class="operation-option" @click="report(v.split('#')[0])">
+                        <span>{{ v }}</span>
                     </li>
                 </template>
-                <li v-else :class="{ active: active }" class="operation-option" @click="report(v.split('#')[0])">
-                    <span>{{ v }}</span>
-                </li>
-            </template>
-        </ul>
-        <template #reference>
-            <div class="operation-warp">
-                <u-icon>
-                    <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M586.624 234.624a74.624 74.624 0 1 1-149.184 0 74.624 74.624 0 0 1 149.12 0z m0 554.624a74.624 74.624 0 1 1-149.248 0 74.624 74.624 0 0 1 149.248 0zM512 586.624a74.624 74.624 0 1 0 0-149.248 74.624 74.624 0 0 0 0 149.248z"
-                            fill="currentColor"></path>
-                    </svg>
-                </u-icon>
-            </div>
+            </ul>
         </template>
+        <div class="operation-warp">
+            <u-icon>
+                <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M586.624 234.624a74.624 74.624 0 1 1-149.184 0 74.624 74.624 0 0 1 149.12 0z m0 554.624a74.624 74.624 0 1 1-149.248 0 74.624 74.624 0 0 1 149.248 0zM512 586.624a74.624 74.624 0 1 0 0-149.248 74.624 74.624 0 0 0 0 149.248z"
+                        fill="currentColor"></path>
+                </svg>
+            </u-icon>
+        </div>
     </a-popover>
 </template>
 <script setup lang="ts">
-import { CommentApi } from '@/undraw-ui/components'
+import { CommentApi, UIcon } from '@/undraw-ui/components'
 import { InjectOperation, InjectOperationApi } from '../../key'
 
 interface Props {

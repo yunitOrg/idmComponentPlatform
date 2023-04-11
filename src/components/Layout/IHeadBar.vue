@@ -36,7 +36,6 @@
                             :size="24"
                             class="cursor-pointer header-avatar"
                             :src="getImagePath(userStore.userInfo && userStore.userInfo.userphoto) || defaultSettings.userphoto" />
-
                         <AButton style="font-size: 16px" type="link" @click="router.push({ name: 'indexPage', params: { userId: userStore.userInfo && userStore.userInfo.id } })">
                             我的主页
                         </AButton>
@@ -52,15 +51,15 @@
                                 <div class="flex justify-around">
                                     <div class="flex flex-direction-column align-center">
                                         <span class="number">{{ (userStore.userInfo && userStore.userInfo.likeTotal) || '0' }}</span>
-                                        <div class="title">赞</div>
-                                    </div>
-                                    <div class="flex flex-direction-column align-center">
-                                        <span class="number">{{ (userStore.userInfo && userStore.userInfo.componentTotal) || '0' }}</span>
-                                        <div class="title">组件</div>
+                                        <div class="title">获赞</div>
                                     </div>
                                     <div class="flex flex-direction-column align-center">
                                         <span class="number">{{ (userStore.userInfo && userStore.userInfo.fansTotal) || '0' }}</span>
                                         <div class="title">粉丝</div>
+                                    </div>
+                                    <div class="flex flex-direction-column align-center">
+                                        <span class="number">{{ (userStore.userInfo && userStore.userInfo.componentTotal) || '0' }}</span>
+                                        <div class="title">组件</div>
                                     </div>
                                 </div>
                             </div>
@@ -486,7 +485,7 @@ const handleClickActionBtn = (action: string) => {
         padding: 0 15px !important;
     }
     ::v-deep(.ant-menu-item::after) {
-        bottom: 33.5px !important;
+        bottom: 34px !important;
     }
     .input-bgcolor {
         background-color: rgb(243, 245, 246);

@@ -1,8 +1,8 @@
 <template>
-    <div class="comment" :class="{ reply: props.reply }">
+    <div class="comment" :class="{ reply: propData.reply }">
         <div class="comment-sub">
             <UserCard :uid="str(data.uid)">
-                <a :href="data.user.homeLink" target="_blank" class="no-underline" style="display: block">
+                <a class="no-underline" style="display: block" @click="goIndexPage">
                     <a-avatar style="margin-top: 5px" :size="40" fit="cover" :src="getImagePath(data.user.avatar)">
                         <img :src="defaultSettings.userphoto" />
                     </a-avatar>
@@ -15,17 +15,15 @@
                     <Info />
                 </template>
                 <div v-else class="user-info">
-                    <UserCard :uid="str(data.uid)">
-                        <a :href="data.user.homeLink" target="_blank" class="no-underline" style="display: block">
-                            <div class="username">
-                                <span class="name" style="max-width: 10em">{{ data.user.username }}</span>
-                                <span blank="true" class="rank">
-                                    <!-- <u-icon size="24" v-html="">{{ useLevel(data.user.level) }}</u-icon> -->
-                                    <u-icon size="24">{{ useLevel(data.user.level) }}</u-icon>
-                                </span>
-                            </div>
-                        </a>
-                    </UserCard>
+                    <a class="no-underline" style="display: block" @click="goIndexPage">
+                        <div class="username">
+                            <span class="name" style="max-width: 10em">{{ data.user.username }}</span>
+                            <span blank="true" class="rank">
+                                <!-- <u-icon size="24" v-html="">{{ useLevel(data.user.level) }}</u-icon> -->
+                                <u-icon size="24">{{ useLevel(data.user.level) }}</u-icon>
+                            </span>
+                        </div>
+                    </a>
                     <!-- <span class="author-badge-text">（作者）</span> -->
                     <span class="address" style="color: #939393; font-size: 12px">&nbsp;&nbsp;{{ data.address }}</span>
                     <time class="time">{{ data.createTime }}</time>
@@ -34,15 +32,9 @@
                     <u-fold unfold>
                         <div v-html="contents"></div>
                         <div class="imgbox" style="display: flex">
-                            <template v-for="(url, index) in imgList" :key="index">
-                                <AImage
-                                    :preview="false"
-                                    :src="getImagePath(url)"
-                                    style="height: 72px; padding: 8px 4px"
-                                    lazy
-                                    :preview-src-list="imgList"
-                                    :initial-index="index"></AImage>
-                            </template>
+                            <a-image-preview-group>
+                                <a-image v-for="(url, index) in imgList" :key="index" :src="getImagePath(url)" style="height: 72px; padding: 8px 4px" />
+                            </a-image-preview-group>
                         </div>
                     </u-fold>
                 </div>
@@ -113,7 +105,8 @@ interface Props {
     id: string
 }
 
-const props = defineProps<Props>()
+const propData = defineProps<Props>()
+const router = useRouter()
 
 const state = reactive({
     active: false
@@ -123,7 +116,7 @@ const commentRef = ref<InputBoxApi>()
 const btnRef = ref<HTMLDivElement>()
 
 const imgList = computed(() => {
-    const temp = props.data.contentImg
+    const temp = propData.data.contentImg
     if (isEmpty(temp)) return []
     return temp?.split('||')
 })
@@ -153,9 +146,19 @@ function hide(event: Event) {
 // 工具slots
 const slots = inject(InjectSlots) as any
 // 用户信息卡槽
-const Info = () => h('div', slots.info(props.data))
+const Info = () => h('div', slots.info(propData.data))
 
-const contents = computed(() => useEmojiParse(allEmoji, props.data.content))
+const goIndexPage = () => {
+    const { href } = router.resolve({
+        name: 'indexPage',
+        params: {
+            userId: propData.data.uid
+        }
+    })
+    window.open(href, '_blank')
+}
+
+const contents = computed(() => useEmojiParse(allEmoji, propData.data.content))
 </script>
 
 <style lang="scss" scoped>

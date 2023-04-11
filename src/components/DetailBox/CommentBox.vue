@@ -13,6 +13,49 @@
             @report="handleReport">
             <!-- 去掉title -->
             <template #list-title><div></div></template>
+            <template #card="scope">
+                <div class="user-card">
+                    <div class="flex" style="height: 70px">
+                        <div class="user-avatar">
+                            <a-avatar :size="75" fit="cover" :src="getImagePath(scope.userphoto)">
+                                <img :src="defaultSettings.userphoto" />
+                            </a-avatar>
+                        </div>
+                        <div class="user-content">
+                            <div class="user-info">
+                                <div class="username text-o-e-1" @click="void 0">
+                                    <span class="name">{{ scope.nickname }}</span>
+                                    <span blank="true" class="rank">
+                                        <u-icon size="24">{{ useLevel(scope.level) }}</u-icon>
+                                    </span>
+                                </div>
+                                <div class="text-o-e-1">
+                                    {{ scope.saying || defaultSettings.saying }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="social-info flex text-center justify-around">
+                        <div class="like" @click="void 0">
+                            <div>{{ scope.likeTotal || '0' }}</div>
+                            <span>获赞</span>
+                        </div>
+                        <div class="follower" @click="void 0">
+                            <div>{{ scope.fansTotal || '0' }}</div>
+                            <span>粉丝</span>
+                        </div>
+                        <div class="attention" @click="void 0">
+                            <div>{{ scope.componentTotal || '0' }}</div>
+                            <span>组件</span>
+                        </div>
+                    </div>
+                    <div v-if="userStore.isUserLogined && scope.id !== userStore.userInfo?.id" class="card-btn text-center">
+                        <a-button size="small" type="primary" @click="handleFlow">{{ userStore.userInfo && userStore.userInfo.focusThis == 1 ? '已关注' : '关注' }}</a-button>
+                        <a-button size="small" style="margin: 0 0 0 20px" @click="handleSendMessage">发消息</a-button>
+                    </div>
+                </div>
+            </template>
         </u-comment>
         <div class="text-center">
             <a-spin v-if="pageData.loading"></a-spin>
@@ -21,9 +64,11 @@
     </div>
 </template>
 <script setup lang="ts">
-import type { CommentSubmitParam, ConfigApi, ReplyPageParam } from 'undraw-ui'
+import type { CommentSubmitParam, ConfigApi, ReplyPageParam } from '@/undraw-ui'
+import { UIcon } from '@/undraw-ui'
+import { useLevel } from '@/undraw-ui/hooks'
 import { defaultSettings } from '@/settings/defaultSetting'
-import { useCommentApi } from '@/apis'
+import { useCommentApi, useUserApi } from '@/apis'
 import emoji from '@/utils/emoji'
 import { message } from '@/plugins/globalComponents'
 import { useUserStore } from '@/store/modules/user'
@@ -45,8 +90,8 @@ const pageData = reactive({
     loading: false,
     hasMore: true,
     commentPageConfig: {
-        page: 1,
-        size: 100
+        page: 0,
+        size: 50
     }
 })
 const propData = defineProps({
@@ -62,6 +107,23 @@ const propData = defineProps({
 
 const route = useRoute()
 
+// 点击关注
+const handleFlow = () => {
+    const userInfo = userStore.userInfo || { focusThis: 0, id: 0 }
+    if (userInfo.focusThis === undefined) return
+    useUserApi[userInfo.focusThis !== 1 || userInfo.focusThis !== null ? 'requestFollowUser' : 'requestUnFollowUser']({
+        userId: userInfo.id
+    }).then((res) => {
+        if (res.success) {
+            userStore.userInfo!.focusThis = userInfo.focusThis === 1 ? 0 : 1
+        } else message.error(res.message)
+    })
+}
+
+// 发消息
+const handleSendMessage = () => {}
+
+// 获取文章id参数
 const handleGetArticleId = () => {
     const articleId = (route.query[propData.commentTypeId] as string) || ''
     return articleId
@@ -168,6 +230,7 @@ onMounted(() => {
         const nScrollHeight = document.documentElement?.scrollHeight ?? 0
         const nScrollTop = document.documentElement?.scrollTop ?? 0
         if (nScrollTop + divHeight + 1 >= nScrollHeight) {
+            pageData.commentPageConfig.page += 1
             handleFetchMoreComment()
         }
     })
@@ -198,6 +261,50 @@ onMounted(() => {
         svg {
             vertical-align: middle;
         }
+    }
+}
+.user-card {
+    .user-content {
+        flex: 1;
+        margin-left: 16px;
+        .user-info {
+            .username {
+                display: flex;
+                align-items: center;
+                text-decoration: none;
+                .name {
+                    max-width: 10rem;
+                    font-weight: 500;
+                    font-size: 15px;
+                    color: #252933;
+                    line-height: 32px;
+                    margin-right: 4px;
+                }
+            }
+        }
+    }
+    .user-avatar {
+        position: relative;
+        top: -28px;
+        border: 5px solid #fff;
+        border-radius: 50%;
+    }
+
+    .social-info {
+        margin: 0 0 10px;
+        border-top: 1px solid #f1f1f1;
+        padding: 10px 0 0;
+        .like,
+        .follower,
+        .attention {
+            div {
+                font-weight: 600;
+                font-size: 18px;
+            }
+        }
+    }
+    .card-btn {
+        margin-top: 10px;
     }
 }
 </style>
