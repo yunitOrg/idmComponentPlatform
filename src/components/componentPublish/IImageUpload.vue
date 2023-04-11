@@ -21,6 +21,7 @@
 </template>
 <script lang="ts" setup>
 import { componentPublishApi } from '@/apis'
+import { getImagePath } from '@/utils'
 import { PlusOutlined } from '@ant-design/icons-vue'
 import { message, UploadFile } from 'ant-design-vue'
 const props = defineProps({
@@ -87,7 +88,7 @@ const handleUpload = async (data: any) => {
     })
     if (res.success) {
         file.status = 'done'
-        file.url = import.meta.env.VITE_BASE_URL + componentPublishApi.componentStaticUrl + res.result.filePath
+        file.url = getImagePath(res.result.filePath)
         file.src = res.result.filePath
         file.width = res.result.imageWidth
         file.height = res.result.imageHeight

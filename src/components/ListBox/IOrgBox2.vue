@@ -15,11 +15,11 @@
                 <div style="margin: 15px 0 0 0">
                     <a-row>
                         <a-col class="flex align-center" :span="5">
-                            <AImage style="margin-top: -4px;" :width="20" :preview="false" :src="orgIcon"></AImage>
+                            <AImage :width="20" :preview="false" :src="orgIcon"></AImage>
                             <span class="text-o-e" style="margin: 0 0 0 5px;">{{ componentProps.companyName }}</span>
                         </a-col>
                         <a-col class="flex align-center" :span="10">
-                            <AImage style="margin-top: -4px;" :width="20" :preview="false" :src="orgUser"></AImage>
+                            <AImage :width="20" :preview="false" :src="orgUser"></AImage>
                             <span class="text-o-e" style="margin: 0 0 0 5px;">{{ componentProps.userInfoModels.map((el: any) => el.nickname).join(',') }}</span>
                         </a-col>
                     </a-row>

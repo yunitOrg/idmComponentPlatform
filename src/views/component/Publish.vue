@@ -218,6 +218,7 @@
 <script lang="ts" setup>
 import { reactive, createVNode } from 'vue'
 import { componentPublishApi, coreApi, useHomeCoreApi } from '@/apis'
+import { getImagePath } from '@/utils'
 import { Modal, message } from 'ant-design-vue'
 import { ExclamationCircleOutlined, CheckCircleOutlined } from '@ant-design/icons-vue'
 import type { FormInstance } from 'ant-design-vue'
@@ -292,7 +293,7 @@ const getDistinfo = async (comId: string, index: number) => {
             ...res.result,
             ...res.result.component,
             tags: res.result.component.tags ? res.result.component.tags.split(',') : [],
-            coverPath: res.result.component.coverPath ? [{ url: import.meta.env.VITE_BASE_URL + componentPublishApi.componentStaticUrl + res.result.component.coverPath, src: res.result.component.coverPath }] : [],
+            coverPath: res.result.component.coverPath ? [{ url: getImagePath(res.result.component.coverPath), src: res.result.component.coverPath }] : [],
             comPreviewImgJson: res.result.component.comPreviewImgJson ? JSON.parse(res.result.component.comPreviewImgJson) : [],
             cooperationUserIds: res.result.cooperationUserList?.map((item: any) => ({ value: item.id, label: item.nickname })) || [],
             historyHidden: false,

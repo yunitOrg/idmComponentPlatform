@@ -20,7 +20,11 @@ enum Apis {
     // 设置成员的类型
     requestChangeOrgUserTypeUrl = '/core/org/changeOrgUserType',
     // 我的组织-分页列表查询
-    requestMyOrgListUrl= '/core/org/getMyOrgList'
+    requestMyOrgListUrl= '/core/org/getMyOrgList',
+    // 获取组织详情
+    requestOrgInfoUrl = '/core/org/getOrgInfo',
+    // 保存组织
+    requestSaveOrgInfoUrl = '/core/org/saveOrgInfo'
 }
 
 export default {
@@ -34,5 +38,7 @@ export default {
     requestGetOrgUserList: (params: any) => http.get({ url: Apis.requestGetOrgUserListUrl, params }),
     requestRemoveOrgUser: (data: Object) => http.postForm({ url: Apis.requestRemoveOrgUserUrl, data }),
     requestChangeOrgUserType: (data: Object) => http.postForm({ url: Apis.requestChangeOrgUserTypeUrl, data }),
-    requestMyOrgList: (params: any) => http.get({ url: Apis.requestMyOrgListUrl, params })
+    requestMyOrgList: (params: any) => http.get({ url: Apis.requestMyOrgListUrl, params }),
+    requestOrgInfo: (params: any) => http.get({ url: Apis.requestOrgInfoUrl, params }),
+    requestSaveOrgInfo: (data: Object) => http.post({ url: Apis.requestSaveOrgInfoUrl, data })
 }
