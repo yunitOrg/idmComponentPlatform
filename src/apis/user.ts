@@ -27,7 +27,11 @@ enum Apis {
     // 我的消息列表查询
     getMyMessageList = '/core/user/getMyMessageList',
     // 设置消息为已读
-    setMyMessageRead = '/core/user/setMyMessageRead'
+    setMyMessageRead = '/core/user/setMyMessageRead',
+    // 校验手机号-邮箱的验证码
+    checkAccountCaptcha = '/core/user/checkAccountCaptcha',
+    // 修改手机号-邮箱
+    resetAccountInfo = '/core/user/resetAccountInfo'
 }
 export interface SmsData {
     mobile?: string
@@ -72,5 +76,7 @@ export default {
     requestFollowUser: (data: any) => http.postForm({ url: Apis.followUser, data }),
     requestUnFollowUser: (data: any) => http.postForm({ url: Apis.unFollowUser, data }),
     requestMyMessageList: (params: any) => http.get({ url: Apis.getMyMessageList, params }),
-    requestSetMyMessageRead: (data: any) => http.postForm({ url: Apis.setMyMessageRead, data })
+    requestSetMyMessageRead: (data: any) => http.postForm({ url: Apis.setMyMessageRead, data }),
+    checkAccountCaptchaApi: (data: any) => http.postForm({ url: Apis.checkAccountCaptcha, data }),
+    resetAccountInfoApi: (data: any) => http.postForm({ url: Apis.resetAccountInfo, data })
 }
