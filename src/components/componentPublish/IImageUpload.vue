@@ -1,7 +1,7 @@
 <template>
     <div class="clearfix">
         <a-upload
-            :file-list="state.fileList"
+            :file-list="computedFileList"
             accept=".png,.jpg,.jpeg,.gif"
             list-type="picture-card"
             :before-upload="handleUpload"
@@ -61,6 +61,8 @@ watch(() => props.value, () => {
     state.fileList = props.value
 }, { deep: true, immediate: true })
 
+const computedFileList = computed(() => state.fileList?.map((item: any) => ({ ...item, url: getImagePath(item.src) })))
+
 const handleUpload = async (data: any) => {
     console.log(data)
     const params = {
@@ -88,7 +90,7 @@ const handleUpload = async (data: any) => {
     })
     if (res.success) {
         file.status = 'done'
-        file.url = getImagePath(res.result.filePath)
+        // file.url = getImagePath(res.result.filePath)
         file.src = res.result.filePath
         file.width = res.result.imageWidth
         file.height = res.result.imageHeight

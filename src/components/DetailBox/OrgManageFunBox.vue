@@ -1,19 +1,19 @@
 <template>
     <div class="org-manage-fun-box">
         <div class="item">
-            <span style="margin-right: 25px;">组织是否公开：</span>
+            <span style="margin-right: 10px;">组织是否公开：</span>
             <a-radio-group :value="data.rolePublic" :options="rolePublicOptions" @change="(e:RadioChangeEvent) => handleChange(e, 'rolePublic')" />
         </div>
         <div class="item">
-            <span style="margin-right: 25px;">邀请成员限制：</span>
+            <span style="margin-right: 10px;">邀请成员限制：</span>
             <a-radio-group :value="data.roleInvitation" :options="roleInvitationOptions" @change="(e:RadioChangeEvent) => handleChange(e, 'roleInvitation')" />
         </div>
         <div class="item">
-            <span style="margin-right: 25px;">创建话题权限：</span>
+            <span style="margin-right: 10px;">创建话题权限：</span>
             <a-radio-group :value="data.roleTopic" :options="roleTopicOptions" @change="(e:RadioChangeEvent) => handleChange(e, 'roleTopic')" />
         </div>
         <div class="item">
-            <span style="margin-right: 25px;">加入审核设置：</span>
+            <span style="margin-right: 10px;">加入审核设置：</span>
             <a-radio-group :value="data.joinCheck" :options="joinCheckOptions" @change="(e:RadioChangeEvent) => handleChange(e, 'joinCheck')" />
         </div>
     </div>
@@ -41,7 +41,7 @@ const handleChange = (e: RadioChangeEvent, key: string) => {
     :deep(.ant-radio-group) {
       flex-grow: 1;
       .ant-radio-wrapper {
-        min-width: 20%;
+        min-width: 25%;
       }
     }
     &:not(:last-child) {

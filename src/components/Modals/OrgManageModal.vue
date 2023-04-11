@@ -1,7 +1,7 @@
 <template>
     <a-modal
         destroy-on-close
-        width="1000px"
+        width="800px"
         centered
         :visible="visible"
         :mask-closable="false"
@@ -10,6 +10,9 @@
         cancel-text="取消"
         ok-text="保存"
         :confirm-loading="state.btnLoading"
+        :ok-button-props="{
+            disabled: disabledSave
+        }"
         @cancel="handleClose"
         @ok="handleOk"
     >
@@ -48,6 +51,8 @@ const state = reactive<{[x: string]: any}>({
     loading: false,
     btnLoading: false
 })
+const required = ['orgphoto', 'orgname', 'introduce']
+const disabledSave = computed(() => required.some((str: string) => !state.data[str]))
 const isAdmin = computed(() => props.itemData.userInfoModels?.find((item: any) => item.id === userStore.userInfo?.id))
 const activeKey = ref('1')
 const emits = defineEmits(['update:visible'])
