@@ -4,6 +4,7 @@ import vue from '@vitejs/plugin-vue'
 import path from 'path'
 import Components from 'unplugin-vue-components/vite'
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
+import DefineOptions from 'unplugin-vue-define-options/vite'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import eslintPlugin from 'vite-plugin-eslint'
 import AutoImport from 'unplugin-auto-import/vite'
@@ -24,6 +25,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
     return {
         plugins: [
             vue(),
+            DefineOptions(),
             // auto import components
             Components({
                 dts: 'types/auto-components.d.ts',

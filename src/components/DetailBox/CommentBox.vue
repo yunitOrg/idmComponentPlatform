@@ -3,6 +3,7 @@
         id="comment-box-container"
         :config="commentConfigData"
         page
+        upload
         :show-size="2"
         @submit="handleSubmit"
         @like="handleLike"
