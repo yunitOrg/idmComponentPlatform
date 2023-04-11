@@ -9,7 +9,6 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    AAlert: typeof import('ant-design-vue/es')['Alert']
     AAvatar: typeof import('ant-design-vue/es')['Avatar']
     ABackTop: typeof import('ant-design-vue/es')['BackTop']
     ABadge: typeof import('ant-design-vue/es')['Badge']
@@ -18,7 +17,6 @@ declare module '@vue/runtime-core' {
     ACard: typeof import('ant-design-vue/es')['Card']
     ACol: typeof import('ant-design-vue/es')['Col']
     AConfigProvider: typeof import('ant-design-vue/es')['ConfigProvider']
-    ADatePicker: typeof import('ant-design-vue/es')['DatePicker']
     AEmpty: typeof import('ant-design-vue/es')['Empty']
     AForm: typeof import('ant-design-vue/es')['Form']
     AFormItem: typeof import('ant-design-vue/es')['FormItem']
@@ -32,16 +30,13 @@ declare module '@vue/runtime-core' {
     APagination: typeof import('ant-design-vue/es')['Pagination']
     APopover: typeof import('ant-design-vue/es')['Popover']
     ApplyJoinOrgModal: typeof import('./../src/components/Modals/ApplyJoinOrgModal.vue')['default']
-    AProgress: typeof import('ant-design-vue/es')['Progress']
     ARadio: typeof import('ant-design-vue/es')['Radio']
     ARadioGroup: typeof import('ant-design-vue/es')['RadioGroup']
     ARow: typeof import('ant-design-vue/es')['Row']
     ASpin: typeof import('ant-design-vue/es')['Spin']
-    ASubMenu: typeof import('ant-design-vue/es')['SubMenu']
     AsyncSelect: typeof import('./../src/components/componentPublish/AsyncSelect.vue')['default']
     ATextarea: typeof import('ant-design-vue/es')['Textarea']
     AUpload: typeof import('ant-design-vue/es')['Upload']
-    AUploadDragger: typeof import('ant-design-vue/es')['UploadDragger']
     ButtonList: typeof import('./../src/components/DetailBox/ButtonList.vue')['default']
     ChooseCollectionModal: typeof import('./../src/components/Modals/ChooseCollectionModal.vue')['default']
     CommentBox: typeof import('./../src/components/DetailBox/CommentBox.vue')['default']
