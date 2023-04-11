@@ -430,7 +430,6 @@ useHomeCoreApi.requestCoreMyOrgList().then((res) => {
         pageData.orgList = res.result
     }
 })
-
 useHomeCoreApi.requestCoreAllUserTotal().then((res) => {
     yunitOrg.userCount = res.result
 })
@@ -530,7 +529,7 @@ const handleClickActionBtn = (action: string) => {
 .head-bar-container-fix {
     position: fixed;
     width: 100%;
-    z-index: 1600;
+    z-index: 600;
     top: 0;
     box-shadow: none;
     transition: all 0.3s;

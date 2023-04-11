@@ -2,7 +2,7 @@
     <div class="page-max-width my-page-container">
         <div class="my-index-page-top">
             <img :src="getImagePath(pageData.userInfo.centerBackground) || defaultBgImage" object-fit="cover" class="cover-bg" alt="封面加载失败" />
-            <div class="edit-btn cursor-pointer"><svg-icon iconClass="camera" style="margin: 0 3px -3px 0; font-size: 18px"></svg-icon> 编辑封面图片</div>
+            <div v-if="isSelfPage" class="edit-btn cursor-pointer"><svg-icon iconClass="camera" style="margin: 0 3px -3px 0; font-size: 18px"></svg-icon> 编辑封面图片</div>
         </div>
 
         <div class="userinfo-container">

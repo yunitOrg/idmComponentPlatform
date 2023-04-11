@@ -155,7 +155,6 @@ const handleSubmit = async () => {
 
 const handleGetCode = () => {
     if (isEmail(pageData.form.username) || isPhone(pageData.form.username)) {
-        console.log(132)
         pageData.isSendBtnLoading = true
         handleSendCode()
     } else {

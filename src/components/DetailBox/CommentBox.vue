@@ -1,19 +1,24 @@
 <template>
-    <u-comment
-        id="comment-box-container"
-        :config="commentConfigData"
-        page
-        upload
-        :show-size="2"
-        @submit="handleSubmit"
-        @like="handleLike"
-        @reply-page="handleReplyPage"
-        @remove="handleRemove"
-        @get-user="getUser"
-        @report="handleReport">
-        <!-- 去掉title -->
-        <template #list-title><div></div></template>
-    </u-comment>
+    <div class="idm-component-common-box comment-container">
+        <u-comment
+            id="comment-box-container"
+            :config="commentConfigData"
+            page
+            upload
+            :show-size="2"
+            @submit="handleSubmit"
+            @like="handleLike"
+            @reply-page="handleReplyPage"
+            @remove="handleRemove"
+            @report="handleReport">
+            <!-- 去掉title -->
+            <template #list-title><div></div></template>
+        </u-comment>
+        <div class="text-center">
+            <a-spin v-if="pageData.loading"></a-spin>
+            <div v-if="!pageData.hasMore">没有更多了</div>
+        </div>
+    </div>
 </template>
 <script setup lang="ts">
 import type { CommentSubmitParam, ConfigApi, ReplyPageParam } from 'undraw-ui'
@@ -23,6 +28,7 @@ import emoji from '@/utils/emoji'
 import { message } from '@/plugins/globalComponents'
 import { useUserStore } from '@/store/modules/user'
 import { getImagePath } from '@/utils'
+import { throttle } from 'lodash-es'
 const userStore = useUserStore()
 const commentConfigData = reactive<ConfigApi>({
     user: {
@@ -35,9 +41,14 @@ const commentConfigData = reactive<ConfigApi>({
     emoji,
     comments: []
 })
-const getUser = () => {
-    console.log(123)
-}
+const pageData = reactive({
+    loading: false,
+    hasMore: true,
+    commentPageConfig: {
+        page: 1,
+        size: 100
+    }
+})
 const propData = defineProps({
     commentTypeId: {
         type: String,
@@ -127,17 +138,54 @@ const handleReplyPage = ({ parentId, pageNum, pageSize, finish }: ReplyPageParam
         })
 }
 
+const fetchCommentList = () => {
+    if (!pageData.hasMore) return
+    pageData.loading = true
+    useCommentApi
+        .requestCommentList({ url: `/${pageData.commentPageConfig.page}/${pageData.commentPageConfig.size}`, articleId: handleGetArticleId() })
+        .then((res) => {
+            if (res.success && Array.isArray(res.result)) {
+                if (res.result.length === pageData.commentPageConfig.size) {
+                    pageData.hasMore = true
+                } else {
+                    pageData.hasMore = false
+                }
+                commentConfigData.comments = [...commentConfigData.comments, ...res.result]
+            }
+        })
+        .finally(() => {
+            pageData.loading = false
+        })
+}
+
+const handleFetchMoreComment = throttle(fetchCommentList, 2000)
 onMounted(() => {
-    useCommentApi.requestCommentList({ url: '/1/100', articleId: handleGetArticleId() }).then((res) => {
-        commentConfigData.comments = res.result || []
-    })
     useCommentApi.requestCommentCidList({ url: '' }).then((res) => {
         commentConfigData.user.likeIds = res.result
+    })
+    document?.addEventListener('scroll', () => {
+        const divHeight = document.documentElement?.offsetHeight ?? 0
+        const nScrollHeight = document.documentElement?.scrollHeight ?? 0
+        const nScrollTop = document.documentElement?.scrollTop ?? 0
+        if (nScrollTop + divHeight + 1 >= nScrollHeight) {
+            handleFetchMoreComment()
+        }
     })
 })
 </script>
 
 <style lang="scss" scoped>
+.comment-container {
+    padding-bottom: 20px;
+    .fetch-more-comment {
+        color: var(--u-color-primary);
+        box-sizing: border-box;
+        cursor: pointer;
+        svg {
+            fill: currentColor;
+        }
+    }
+}
 #comment-box-container {
     margin-top: 16px;
     ::v-deep(.header) {

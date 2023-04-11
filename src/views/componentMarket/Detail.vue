@@ -86,7 +86,6 @@ const handleFetchPageData = () => {
 const comPreviewImgJson = computed(() => {
     if (pageData.packageDetail?.componentInfo?.comPreviewImgJson?.length > 0) {
         try {
-            console.log(JSON.parse(pageData.packageDetail.componentInfo.comPreviewImgJson))
             return JSON.parse(pageData.packageDetail.componentInfo.comPreviewImgJson)
         } catch (error) {
             return []
