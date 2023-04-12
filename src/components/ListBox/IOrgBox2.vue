@@ -14,13 +14,13 @@
                 </div>
                 <div style="margin: 15px 0 0 0">
                     <a-row>
-                        <a-col class="flex align-center" :span="5">
+                        <a-col class="flex align-center info-item" style="display: flex;" :span="5">
                             <AImage :width="20" :preview="false" :src="orgIcon"></AImage>
-                            <span class="text-o-e" style="margin: 0 0 0 5px;">{{ componentProps.companyName }}</span>
+                            <span class="text-o-e text" style="margin: 0 10px 0 5px;">{{ componentProps.companyName }}</span>
                         </a-col>
-                        <a-col class="flex align-center" :span="10">
+                        <a-col class="flex align-center info-item" style="display: flex;" :span="10">
                             <AImage :width="20" :preview="false" :src="orgUser"></AImage>
-                            <span class="text-o-e" style="margin: 0 0 0 5px;">{{ componentProps.userInfoModels.map((el: any) => el.nickname).join(',') }}</span>
+                            <span class="text-o-e text" style="margin: 0 10px 0 5px;">{{ componentProps.userInfoModels.map((el: any) => el.nickname).join(',') }}</span>
                         </a-col>
                     </a-row>
                 </div>
@@ -177,6 +177,18 @@ const emits = defineEmits(['handleApplyOrg', 'handleOrgHome', 'handleOrgManage',
         }
         &:not(:last-child) {
             margin-right: 10px;
+        }
+    }
+
+    .info-item {
+        .text {
+            width: auto;
+            flex: 1;
+        }
+        :deep(.ant-image) {
+            img {
+                display: block;
+            }
         }
     }
 }
