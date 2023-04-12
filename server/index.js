@@ -37,7 +37,7 @@ const getIPAdress = function () {
 app.use(history())
 
 if (fs.existsSync(distDir)) {
-    app.use(express.static(path.join(__dirname, '../dist')))
+    app.use(express.static(distDir))
 } else {
     console.error('静态文件不存在')
 }
@@ -48,5 +48,5 @@ app.listen(port, () => {
     ips.forEach((ip) => {
         ipsAddr += `\r\n➜  Network: http://${ip}:${port}/`
     })
-    console.log(`server is running \r\n➜  Local:   http://localhost:${port}/ ${ipsAddr}`)
+    console.log('\x1b[36m%s\x1b[0m', `server is running \r\n➜  Local:   http://localhost:${port}/ ${ipsAddr}`)
 })

@@ -58,7 +58,7 @@
                         <span v-if="data.likes != 0">{{ data.likes }}</span>
                     </div>
                     <!-- 回复 -->
-                    <div ref="btnRef" class="item flex justify-center" :class="{ active: state.active }" @click="reply">
+                    <div ref="btnRef" class="item flex justify-center align-center" :class="{ active: state.active }" @click="reply">
                         <u-icon>
                             <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1320" width="200" height="200">
                                 <path

@@ -1,5 +1,5 @@
 <template>
-    <div v-if="!isIndexPage && pageData.isShowMenuLine" class="head-bar-container" style="margin: 35px 0 20px 0"></div>
+    <div v-if="!isIndexPage" class="head-bar-container" style="margin: 35px 0 20px 0"></div>
     <div :style="{ top: pageData.isShowMenuLine ? '0' : '-55px' }" class="head-bar-container head-bar-container-fix" :class="[pageData.isShadow && 'head-bar-container-shadow']">
         <div class="flex justify-between align-center head-bar-container-main">
             <div class="flex align-center flex-1" :class="{ 'justify-between': !hiddenMenu }">
@@ -380,7 +380,7 @@ nextTick(() => {
     // 给页面绑定鼠标滚轮事件,针对火狐的非标准事件
     window.addEventListener('DOMMouseScroll', scrollFunc)
     // 给页面绑定鼠标滚轮事件，针对IE和Google
-    window.addEventListener('wheel', scrollFunc)
+    window.addEventListener('wheel', scrollFunc, { passive: false })
 })
 
 const handleCreateOrg = () => {
