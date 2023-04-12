@@ -4,7 +4,7 @@
             <template #content>
                 <div style="width: 251px">
                     <div class="face-tooltip-head select-none">
-                        <label v-for="(item, index) in faceList" :key="index" :class="activeIndex == index ? 'active' : ''" @click="change(index)">
+                        <label v-for="(item, index) in faceList" :key="index" class="flex justify-center align-center" :class="activeIndex == index ? 'active' : ''" @click="change(index)">
                             <img :src="item" alt="" />
                         </label>
                     </div>
