@@ -13,7 +13,7 @@
             </div>
         </div>
         <div class="flex justify-around align-center" style="margin: 15px 0 0 0">
-            <div><span class="color-999 mr-5">组件包</span> {{ userInfoProp.codepackageTotal || userInfoProp.componentTotal || '0' }}</div>
+            <div><span class="color-999 mr-5">组件</span> {{ userInfoProp.codepackageTotal || userInfoProp.componentTotal || '0' }}</div>
             <div class="line"></div>
             <div><span class="color-999 mr-5">获赞总数</span> {{ userInfoProp.likeTotal || '0' }}</div>
         </div>

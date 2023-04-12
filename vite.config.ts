@@ -14,7 +14,7 @@ interface VITE_ENV_CONFIG {
     VITE_UPLOAD_URL: string
     VITE_PROXY_TARGET?: string
 }
-
+console.log(Components)
 const resolvePath = (dir) => path.resolve(__dirname, dir)
 
 export default ({ mode }: ConfigEnv): UserConfig => {
