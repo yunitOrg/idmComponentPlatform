@@ -31,7 +31,13 @@ enum Apis {
     // 校验手机号-邮箱的验证码
     checkAccountCaptcha = '/core/user/checkAccountCaptcha',
     // 修改手机号-邮箱
-    resetAccountInfo = '/core/user/resetAccountInfo'
+    resetAccountInfo = '/core/user/resetAccountInfo',
+    // 获取用户职业列表
+    getbusinessList = '/core/webinfo/listByGroup?groupCd=job',
+    // 编辑个人资料
+    editUserInfo = '/core/user/editUserInfo',
+    // 上传背景图
+    uploadFileUrl = '/publish/component/upload'
 }
 export interface SmsData {
     mobile?: string
@@ -78,5 +84,10 @@ export default {
     requestMyMessageList: (params: any) => http.get({ url: Apis.getMyMessageList, params }),
     requestSetMyMessageRead: (data: any) => http.postForm({ url: Apis.setMyMessageRead, data }),
     checkAccountCaptchaApi: (data: any) => http.postForm({ url: Apis.checkAccountCaptcha, data }),
-    resetAccountInfoApi: (data: any) => http.postForm({ url: Apis.resetAccountInfo, data })
+    resetAccountInfoApi: (data: any) => http.postForm({ url: Apis.resetAccountInfo, data }),
+    getbusinessListApi: (key: string) => http.get({ url: Apis.getbusinessList + key }),
+    editUserInfoApi: (data: any) => http.post({ url: Apis.editUserInfo, data }),
+    uploadFileApi(data: any, onProgress?: (progressEvent: AxiosProgressEvent) => void, signal?: any) {
+        return http.uploadFile({ url: Apis.uploadFileUrl, onUploadProgress: onProgress, signal }, data, { isReturnResponse: true })
+    }
 }

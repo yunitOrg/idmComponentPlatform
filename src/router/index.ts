@@ -115,6 +115,14 @@ const routes: Array<RouteRecordRaw> = [
                 component: () => import('@/views/my/AccountPassword.vue')
             },
             {
+                path: 'PersonInfo',
+                meta: {
+                    title: '个人资料'
+                },
+                name: 'PersonInfo',
+                component: () => import('@/views/my/PersonInfo.vue')
+            },
+            {
                 path: 'creativeCenter',
                 component: () => import('@/views/creativeCenter/index.vue'),
                 children: [
