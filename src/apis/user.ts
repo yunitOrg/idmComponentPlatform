@@ -36,6 +36,8 @@ enum Apis {
 export interface SmsData {
     mobile?: string
     email?: string
+    checkKey?: string
+    captcha?: string
     smsmode?: 0 | 1 | 2
 }
 

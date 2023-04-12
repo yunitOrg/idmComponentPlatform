@@ -22,6 +22,14 @@
                     @keyup.enter="handleLogin" />
             </AFormItem>
 
+            <AFormItem v-if="isPhoneLogin" label="">
+                <AInput v-model:value="pageState.captcha" placeholder="图形验证码" @keyup.enter="handleLogin">
+                    <template #suffix>
+                        <img v-if="pageState.randomImage" style="height: 25px" :src="pageState.randomImage" alt="点击刷新" class="randomImage" @click.stop="handleGetImage" />
+                    </template>
+                </AInput>
+            </AFormItem>
+
             <AFormItem v-if="[1, 3].includes(pageState.currentType)" label="" name="captcha" :rules="[{ required: true, message: '请输入验证码' }]">
                 <AInput v-model:value="formState.captcha" placeholder="请输入验证码" @keyup.enter="handleLogin">
                     <template #suffix>
@@ -92,7 +100,8 @@ const pageState = reactive({
     currentType: 1,
     isSendBtnLoading: false,
     isLoginLoading: false,
-    randomImage: ''
+    randomImage: '',
+    captcha: ''
 })
 const formRef = ref<FormInstance>()
 const formState = reactive<LoginData>({
@@ -101,6 +110,16 @@ const formState = reactive<LoginData>({
     captcha: '',
     checkKey: ''
 })
+const isPhoneLogin = computed(() => isPhone(formState.username) && [1, 3].includes(pageState.currentType))
+
+watch(
+    () => isPhoneLogin.value,
+    (newV) => {
+        if (newV) {
+            handleGetImage()
+        }
+    }
+)
 watch(
     () => propData.visible,
     (newV) => {
@@ -108,6 +127,7 @@ watch(
             pageState.currentType = 1
             nextTick(() => {
                 formRef.value?.resetFields()
+                formState.password = ''
                 usernameInput.value?.focus()
             })
         }
@@ -117,7 +137,9 @@ const handleGetParams = (): SmsData => {
     return {
         email: isEmail(formState.username) ? formState.username : '',
         mobile: isPhone(formState.username) ? formState.username : '',
-        smsmode: [1, 2].includes(pageState.currentType) ? 0 : 2
+        smsmode: [1, 2].includes(pageState.currentType) ? 0 : 2,
+        captcha: pageState.captcha,
+        checkKey: formState.checkKey
     }
 }
 const handleLogin = async () => {
@@ -159,10 +181,12 @@ const handleSendCode = async (): Promise<any> => {
 
 const changeBoxType = (type: number) => {
     pageState.currentType = type
+    formRef.value?.resetFields()
+    pageState.captcha = ''
+    formState.captcha = ''
     if (type === 2) {
         handleGetImage()
     }
-    formRef.value?.resetFields()
 }
 const handleGetImage = async () => {
     formState.checkKey = Date.now() + ''
@@ -171,6 +195,9 @@ const handleGetImage = async () => {
 }
 const hanldeGetCode = () => {
     formRef.value?.validate(['username']).then(() => {
+        if (isPhone(formState.username) && !pageState.captcha) {
+            return message.warn('请输入图形验证码')
+        }
         pageState.isSendBtnLoading = true
         handleSendCode()
     })

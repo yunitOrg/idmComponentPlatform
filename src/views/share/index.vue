@@ -27,6 +27,14 @@
                         <a-input v-model:value="pageData.form.username" class="border-input" :bordered="false" placeholder="请输入手机号/邮箱" />
                     </div>
                 </div>
+                <div v-if="isPhoneLogin" class="flex align-center form-item">
+                    <div class="star">*</div>
+                    <AInput v-model:value="pageData.captcha" style="border-bottom: 1px solid #ddd" :bordered="false" placeholder="图形验证码" @keyup.enter="handleSubmit">
+                        <template #suffix>
+                            <img v-if="pageData.randomImage" style="height: 25px" :src="pageData.randomImage" alt="点击刷新" class="randomImage" @click.stop="handleGetImage" />
+                        </template>
+                    </AInput>
+                </div>
                 <div class="flex align-center form-item">
                     <div class="star">*</div>
                     <a-input v-model:value="pageData.form.captcha" style="border-bottom: 1px solid #ddd" :bordered="false" placeholder="验证码">
@@ -50,8 +58,8 @@
                 授权该组织管理员可查看手机号
             </a-checkbox>
         </div>
-        <div class="flex justify-center align-center" style="margin: 10px 0;">
-            <a-image :src="yunitLogo" :width="100" style="opacity: .6;" :preview="false"></a-image>
+        <div class="flex justify-center align-center" style="margin: 10px 0">
+            <a-image :src="yunitLogo" :width="100" style="opacity: 0.6" :preview="false"></a-image>
             <span class="bottom-line"></span>
             <div class="bottom-website">{{ settings.website }}</div>
         </div>
@@ -60,7 +68,7 @@
 
 <script lang="ts" setup>
 import { shareCodeAes } from '@/utils/cipher'
-import { coreApi } from '@/apis'
+import { coreApi, useUserApi } from '@/apis'
 import { getImagePath } from '@/utils'
 import { yunitLogo } from '@/assets/images'
 import { useUserStore } from '@/store/modules/user'
@@ -90,7 +98,10 @@ const pageData = reactive({
         applyReason: '',
         shareMobile: 1
     },
-    shareMobile: true
+    captcha: '',
+    shareMobile: true,
+    randomImage: '',
+    checkKey: ''
 })
 
 if (!route.query.shareCode) {
@@ -98,6 +109,13 @@ if (!route.query.shareCode) {
 }
 
 const inviteCode = shareCodeAes.decryptByAES(decodeURIComponent(route.query.shareCode as string))
+
+const isPhoneLogin = computed(() => isPhone(pageData.form.username))
+const handleGetImage = async () => {
+    pageData.checkKey = Date.now() + ''
+    const res = await useUserApi.requestRandomImage(pageData.checkKey)
+    pageData.randomImage = res.result
+}
 
 const handleGetOrgInfo = () => {
     coreApi
@@ -130,6 +148,9 @@ const handleSubmit = async () => {
             })
         return
     }
+    if (isPhone(pageData.form.username) && !pageData.captcha) {
+        return message.warn('请输入图形验证码')
+    }
     if (isEmail(pageData.form.username) || isPhone(pageData.form.username)) {
         if (pageData.form.captcha) {
             pageData.isLoginLoading = true
@@ -154,6 +175,9 @@ const handleSubmit = async () => {
 }
 
 const handleGetCode = () => {
+    if (isPhone(pageData.form.username) && !pageData.captcha) {
+        return message.warn('请输入图形验证码')
+    }
     if (isEmail(pageData.form.username) || isPhone(pageData.form.username)) {
         pageData.isSendBtnLoading = true
         handleSendCode()
@@ -161,12 +185,22 @@ const handleGetCode = () => {
         message.warn('请输入正确的邮箱/手机号')
     }
 }
+watch(
+    () => isPhoneLogin.value,
+    (newV) => {
+        if (newV) {
+            handleGetImage()
+        }
+    }
+)
 const handleSendCode = async (): Promise<any> => {
     try {
         const res = await userStore.handleSendCode({
             email: isEmail(pageData.form.username) ? pageData.form.username : '',
             mobile: isPhone(pageData.form.username) ? pageData.form.username : '',
-            smsmode: 0
+            smsmode: 0,
+            captcha: pageData.captcha,
+            checkKey: pageData.checkKey
         })
         message[res.success ? 'success' : 'error'](res.message)
     } finally {
