@@ -8,14 +8,24 @@
                 <img v-else :src="getBgImageUrl('userphoto')" alt="">
                 <div class="person_header_button flex_center">
                     <a-upload name="file" :showUploadList="false" :beforeUpload="beforeUpload" @change="e => handleChange(e,'userphoto')">
+                        <div class="icon_box pointer"><camera-outlined /></div>
                         <div class="upload_button pointer">修改我的头像</div>
                     </a-upload>
                 </div>
             </div>
             <div class="upload_button_block">
                 <a-upload name="file" :showUploadList="false" :beforeUpload="beforeUpload" @change="e => handleChange(e,'centerBackground')">
-                    <div class="upload_button pointer">编辑封面图片</div>
+                    <div class="upload_button pointer flex_center">
+                        <camera-outlined />
+                        <span>编辑封面图片</span>
+                    </div>
                 </a-upload>
+            </div>
+        </div>
+        <div class="back_block flex_end">
+            <div class="pointer" @click="backHome()">
+                <span>返回首页</span>
+                <right-outlined />
             </div>
         </div>
         <div class="main">
@@ -38,7 +48,7 @@
                         <div v-for="(item,index) in FormState.residence" :key="index" class="input_box">
                             <AInput v-model:value="FormState.residence[index]" allowClear></AInput>
                             <div class="button_box">
-                                <a-button @click="deleteItem('residence',index)">删除</a-button>
+                                <minus-circle-outlined  @click="deleteItem('residence',index)"/>
                             </div>
                         </div>
                         <div class="button_box">
@@ -60,7 +70,7 @@
                         <div v-for="(item,index) in FormState.jobInfo" :key="index" class="input_box">
                             <AInput v-model:value="FormState.jobInfo[index]"></AInput>
                             <div class="button_box">
-                                <a-button @click="deleteItem('jobInfo',index)">删除</a-button>
+                                <minus-circle-outlined  @click="deleteItem('jobInfo',index)"/>
                             </div>
                         </div>
                         <div class="button_box">
@@ -74,7 +84,7 @@
                         <div v-for="(item,index) in FormState.schoolinfo" :key="index" class="input_box">
                             <AInput v-model:value="FormState.schoolinfo[index]"></AInput>
                             <div class="button_box">
-                                <a-button @click="deleteItem('schoolinfo',index)">删除</a-button>
+                                <minus-circle-outlined  @click="deleteItem('schoolinfo',index)"/>
                             </div>
                         </div>
                         <div class="button_box">
@@ -100,7 +110,11 @@ import { useUserApi } from '@/apis'
 import { message } from '@/plugins/globalComponents'
 import { useUserStore } from '@/store/modules/user'
 import { getImagePath } from '@/utils/index.js'
+import { toRefs, reactive } from 'vue'
+import { CameraOutlined, RightOutlined, MinusCircleOutlined } from '@ant-design/icons-vue'
+import { useRouter } from 'vue-router'
 const userStore = useUserStore()
+const router = useRouter()
 const { userInfo } = toRefs<any>(userStore)
 // interface FormStateInterface {
 //     nickname: string,
@@ -200,6 +214,14 @@ const beforeUpload = (e: any) => {
     console.log('beforeUpload', e)
     return false
 }
+const backHome = () => {
+    router.push({
+        name: 'indexPage',
+        params: {
+            userId: userInfo.value.id
+        }
+    })
+}
 getUserInfoData()
 getbusinessList()
 </script>
@@ -215,10 +237,10 @@ getbusinessList()
             object-fit: cover;
         }
         .person_header{
-            width: 190px;
-            height: 190px;
+            width: 160px;
+            height: 160px;
             position: absolute;
-            bottom: -95px;
+            bottom: -80px;
             left: 20px;
             border-radius: 50%;
             background-color: white;
@@ -231,14 +253,19 @@ getbusinessList()
             }
             .person_header_button{
                 position: absolute;
-                left: 20px;
-                top: 20px;
-                right: 20px;
-                bottom: 20px;
+                left: 15px;
+                top: 15px;
+                right: 15px;
+                bottom: 15px;
                 background-color: rgba(0,0,0,0.3);
                 border-radius: 50%;
                 .upload_button{
                     color: white;
+                }
+                .icon_box{
+                    text-align: center;
+                    color: white;
+                    font-size: 20px;
                 }
             }
         }
@@ -251,6 +278,10 @@ getbusinessList()
                 color: white;
                 border: 1px solid ghostwhite;
                 border-radius: 4px;
+                .anticon{
+                    font-size: 20px;
+                    margin-right: 5px;
+                }
             }
         }
     }
@@ -277,8 +308,9 @@ getbusinessList()
                         position: relative;
                         .button_box{
                             position: absolute;
-                            right: -80px;
-                            top: 0;
+                            right: -40px;
+                            top: 6px;
+                            color: #666;
                         }
                     }
                 }
@@ -292,6 +324,13 @@ getbusinessList()
         .form_button{
             margin-top: 50px;
         }
+    }
+    .back_block{
+        margin: 10px 0 20px 0;
+        padding: 0 20px 0 0;
+        text-align: right;
+        font-size: 14px;
+        color: #1890ff;
     }
 }
 </style>
