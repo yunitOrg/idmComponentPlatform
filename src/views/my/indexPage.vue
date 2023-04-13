@@ -2,8 +2,8 @@
     <div class="page-max-width my-page-container">
         <div class="my-index-page-top">
             <img :src="getImagePath(pageData.userInfo.centerBackground) || defaultBgImage" object-fit="cover" class="cover-bg" alt="封面加载失败" />
-            <a-upload v-if="isSelfPage" name="file" :showUploadList="false" :beforeUpload="() => false" @change="handleFileChange">
-                <div class="edit-btn cursor-pointer"><svg-icon iconClass="camera" style="margin: 0 3px -3px 0; font-size: 18px"></svg-icon> 编辑封面图片</div>
+            <a-upload v-if="isSelfPage" accept="image/*" :showUploadList="false" :beforeUpload="() => false" @change="handleFileChange">
+                <div class="edit-btn edit-background cursor-pointer"><svg-icon iconClass="camera" style="margin: 0 3px -3px 0; font-size: 18px"></svg-icon> 编辑封面图片</div>
             </a-upload>
         </div>
 
@@ -22,6 +22,9 @@
                 <div class="userinfo-line flex align-center">
                     <svg-icon iconClass="gongwen" style="margin: 0 0 0 2px" class="userinfo-icon"></svg-icon>
                     <span v-if="pageData.userInfo.businessName" class="intr-text">{{ pageData.userInfo.businessName }}</span>
+                    <span v-if="getItemValue(pageData.userInfo.businessId, pageData.jobList)" class="intr-text">{{
+                        getItemValue(pageData.userInfo.businessId, pageData.jobList)
+                    }}</span>
                     <span v-for="(job, index) in getArrData(pageData.userInfo.jobInfo)" :key="index" class="intr-text">{{ job }}</span>
                 </div>
                 <div class="userinfo-line flex align-center">
@@ -29,9 +32,18 @@
                     <span v-for="(school, index) in getArrData(pageData.userInfo.schoolinfo)" :key="index" class="intr-text">{{ school }}</span>
                     <img class="intr-text" style="padding: 0; margin: 0 0 0 10px; width: 16px" :preview="false" :src="pageData.userInfo.gender == 1 ? memberMale : memberfemale" />
                 </div>
-                <div class="userinfo-line flex align-center userinfo-icon cursor-pointer" style="margin-bottom: 10px">
-                    <DownOutlined style="margin: 0 7px 0 12px"></DownOutlined>
-                    <span>查看详细资料</span>
+                <div v-if="pageData.isShowMore && pageData.userInfo.introduce" class="userinfo-line flex align-center">
+                    <svg-icon iconClass="weizhi" style="font-size: 20px; margin: 0 -2px 0 0" class="userinfo-icon"></svg-icon>
+                    <span class="intr-text">{{ pageData.userInfo.introduce }}</span>
+                </div>
+                <div
+                    v-if="pageData.userInfo.introduce"
+                    class="userinfo-line flex align-center userinfo-icon cursor-pointer"
+                    style="margin-bottom: 10px"
+                    @click="pageData.isShowMore = !pageData.isShowMore">
+                    <DownOutlined :class="[pageData.isShowMore && 'arrow-revert']" style="margin: 0 7px 0 12px"></DownOutlined>
+                    <span v-if="pageData.isShowMore">收起</span>
+                    <span v-else>查看更多</span>
                 </div>
             </div>
             <ARow :gutter="[20, 20]">
@@ -144,7 +156,8 @@ const pageData = reactive<{ [x: string]: any }>({
         schoolinfo: '',
         gender: 1
     },
-    jobList: []
+    jobList: [],
+    isShowMore: false
 })
 const editPersonInfo = () => {
     router.push({
@@ -162,11 +175,11 @@ const getArrData = (dataStr: string) => {
     return arr
 }
 
-// const getItemValue = (id: string, arr: Array<any>) => {
-//     const item = arr.find(el => el.id === id)
-//     if (item) return item.itemValue
-//     return ''
-// }
+const getItemValue = (id: string, arr: Array<any>) => {
+    const item = arr.find((el) => el.id === id)
+    if (item) return item.itemValue
+    return ''
+}
 
 const currentTabList = computed(() => {
     if (!isSelfPage.value) {
@@ -209,7 +222,7 @@ const handleFileChange = async (e: any) => {
             centerBackground: filePath
         })
         if (!res1.success) message.error(res1.message || '修改背景图失败')
-        userStore.handleGetUserInfo()
+        pageData.userInfo.centerBackground = filePath
     }
 }
 const resetPagination = () => {
@@ -293,6 +306,10 @@ getListData()
         border-radius: 50px;
         padding: 5px 10px;
     }
+    .edit-background:hover {
+        color: #a5abb1;
+        border-color: #a5abb1;
+    }
 }
 .userinfo-container {
     position: relative;
@@ -325,6 +342,9 @@ getListData()
     .userinfo-line {
         margin: 10px 0 0 0;
 
+        .arrow-revert {
+            transform: rotate(180deg);
+        }
         .intr-text {
             padding: 0 10px;
             border-right: 1px solid #ddd;

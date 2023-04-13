@@ -168,6 +168,9 @@ const routes: Array<RouteRecordRaw> = [
             },
             {
                 path: ':pathMatch(.*)',
+                meta: {
+                    title: 'Page Not Found'
+                },
                 component: () => import('@/views/404/index.vue')
             }
         ]
