@@ -25,7 +25,7 @@
             <AFormItem v-if="isPhoneLogin" label="">
                 <AInput v-model:value="pageState.captcha" placeholder="图形验证码" @keyup.enter="handleLogin">
                     <template #suffix>
-                        <img v-if="pageState.randomImage" style="height: 25px" :src="pageState.randomImage" alt="点击刷新" class="randomImage" @click.stop="handleGetImage" />
+                        <img v-if="pageState.randomImage" style="height: 25px;width: 80px" :src="pageState.randomImage" alt="点击刷新" class="randomImage" @click.stop="handleGetImage" />
                     </template>
                 </AInput>
             </AFormItem>

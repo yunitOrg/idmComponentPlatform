@@ -9,7 +9,7 @@
             <div class="userinfo-container-left">
                 <AAvatar :size="160" class="user-avatar" :src="getImagePath(pageData.userInfo.userphoto) || defaultSettings.userphoto" alt="头像加载失败" />
                 <div class="text-center cursor-pointer" style="padding: 6px 0 0 0">
-                    <span v-if="isSelfPage" class="edit-btn">编辑个人资料</span>
+                    <span v-if="isSelfPage" class="edit-btn" @click="editPersonInfo()">编辑个人资料</span>
                 </div>
             </div>
             <div class="userinfo-base">
@@ -90,8 +90,10 @@ import { useUserStore } from '@/store/modules/user'
 import { DownOutlined } from '@ant-design/icons-vue'
 import { useUserApi, useOrgAboutApi } from '@/apis'
 import { getImagePath } from '@/utils'
+import { useRouter } from 'vue-router'
 const userStore = useUserStore()
 const route = useRoute()
+const router = useRouter()
 const propData = defineProps({
     userId: {
         type: String,
@@ -143,7 +145,11 @@ const pageData = reactive<{[x: string]: any}>({
         gender: 1
     }
 })
-
+const editPersonInfo = () => {
+    router.push({
+        name: 'PersonInfo'
+    })
+}
 const currentTabList = computed(() => {
     if (!isSelfPage.value) {
         return pageData.tabList.filter((item: any) => item.key !== 'org')

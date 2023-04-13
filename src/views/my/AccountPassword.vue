@@ -4,8 +4,10 @@
             <div class="title_left">
                 账号与密码
             </div>
-            <div class="title_right">
-                返回我的首页
+            <div class="title_right flex_end">
+                <div class="pointer" @click="backHome()">
+                    <span>返回首页</span>
+                </div>
             </div>
         </div>
         <div class="form">
@@ -19,14 +21,14 @@
             <div class="row flex_between">
                 <div class="row_left">手机</div>
                 <div class="row_right">
-                    <span>{{ userInfo ? userInfo.mobile : '' }}</span>
+                    <span>{{ encipher(userInfo ? userInfo.mobile : '') }}</span>
                     <span class="action_button pointer" @click="changeEmail(2)">修改手机</span>
                 </div>
             </div>
             <div class="row flex_between">
                 <div class="row_left">邮箱</div>
                 <div class="row_right">
-                    <span>{{ userInfo ? userInfo.email : '' }}</span>
+                    <span>{{ encipher(userInfo ? userInfo.email : '') }}</span>
                     <span class="action_button pointer" @click="changeEmail(1)">修改邮箱</span>
                 </div>
             </div>
@@ -66,8 +68,16 @@
         </div>
         <AModal v-model:visible="pageState.isChangeEmailPopShow" :afterClose="afterClose" :title="pageState.changeEmailMobileType == 1 ? '修改邮箱' : '修改手机号'" wrapClassName="changeEmailPop" :maskClosable="false" :footer="null" @ok="handleOk">
             <template v-if="pageState.formStatus == 1">
-                <div class="row">验证码将发送到{{ pageState.changeEmailMobileType == 1 ? userInfo.email : userInfo.mobile }}</div>
-                <div v-if="pageState.changeEmailMobileType == 1" class="notice">如果长时间未收到验证码，请检查垃圾箱</div>
+                <div class="row">验证码将发送到{{ encipher(pageState.validType == 1 ? userInfo.email : userInfo.mobile) }}</div>
+                <div v-if="pageState.validType == 1" class="notice">如果长时间未收到验证码，请检查垃圾箱</div>
+                <div v-if="pageState.validType == 2" class="row flex_start">
+                    <div class="label">图形验证码：</div>
+                    <AInput v-model:value="formState.checkKey" placeholder="图形验证码">
+                        <template #suffix>
+                            <img v-if="pageState.randomImage" style="height: 25px;width: 80px" :src="pageState.randomImage" alt="点击刷新" class="randomImage" @click.stop="handleGetImage" />
+                        </template>
+                    </AInput>
+                </div>
                 <div class="row flex_start">
                     <div class="label">填写验证码：</div>
                     <AInput v-model:value="formState.captcha" placeholder="请输入验证码">
@@ -79,13 +89,22 @@
                 <div class="button_block flex_center">
                     <AButton type="primary" @click="toNextType()">下一步</AButton>
                 </div>
-                <div class="link">邮箱不可用？可通过手机号修改</div>
+                <div v-if="pageState.validType === 1 && userInfo && userInfo.mobile" class="link" @click="changeValidType(2)">邮箱不可用？可通过手机号修改</div>
+                <div v-if="pageState.validType === 2 && userInfo && userInfo.email" class="link" @click="changeValidType(1)">手机号不可用？可通过邮箱修改</div>
             </template>
             <template v-else>
                 <div class="row flex_start">
                     <div class="label">{{ pageState.changeEmailMobileType == 1 ? '输入新邮箱：' : '输入手机号：' }}</div>
                     <AInput v-model:value="formState.newEmail" :placeholder="pageState.changeEmailMobileType == 1 ? '不建议使用QQ邮箱' : '请输入新手机号'">
                         <template #suffix>
+                        </template>
+                    </AInput>
+                </div>
+                <div v-if="pageState.changeEmailMobileType == 2 && isPhoneValid" class="row flex_start">
+                    <div class="label">图形验证码：</div>
+                    <AInput v-model:value="formState.checkKey" placeholder="图形验证码">
+                        <template #suffix>
+                            <img v-if="pageState.randomImage" style="height: 25px;width: 80px" :src="pageState.randomImage" alt="点击刷新" class="randomImage" @click.stop="handleGetImage" />
                         </template>
                     </AInput>
                 </div>
@@ -106,6 +125,13 @@
         <AModal v-model:visible="pageState.isChangePasswordPopShow" :afterClose="afterClose" :destroyOnClose="true" title="修改密码" wrapClassName="changePasswordPop" :maskClosable="false" :footer="null">
             <div class="row">
                 <AInput v-model:value="passwordFormState.username" placeholder="请输入手机号/邮箱">
+                </AInput>
+            </div>
+            <div v-if="isPhoneChangePassword" class="row">
+                <AInput v-model:value="formState.checkKey" placeholder="图形验证码">
+                    <template #suffix>
+                        <img v-if="pageState.randomImage" style="height: 25px;width: 80px" :src="pageState.randomImage" alt="点击刷新" class="randomImage" @click.stop="handleGetImage" />
+                    </template>
                 </AInput>
             </div>
             <div class="row">
@@ -130,39 +156,96 @@ import { useUserStore } from '@/store/modules/user'
 import { isEmail, isPhone } from '@/utils/is'
 import { message } from '@/plugins/globalComponents'
 import { useUserApi } from '@/apis'
+import { useRouter } from 'vue-router'
 import type { SmsData } from '@/apis/user'
-
+const router = useRouter()
 const userStore = useUserStore()
 const { userInfo } = toRefs<any>(userStore)
-
 const pageState = reactive({
     isChangeEmailPopShow: false,
     isSendBtnLoading: false,
     isSendBtnLoadingNew: false,
     isConfirmBtnLoading: false,
-    formStatus: 1,
     isChangePasswordPopShow: false,
     isSendBtnLoadingPassword: false,
     isChangePasswordConfirmBtnLoading: false,
-    changeEmailMobileType: 1 // 1表示邮箱，2表示手机号
+    changeEmailMobileType: 1, // 1表示邮箱，2表示手机号
+    formStatus: 1,
+    validType: 1, // 初次获取验证码校验方式-1表示邮箱，2表示手机号
+    randomImage: '',
+    checkKey: ''
 })
 const formState = reactive({
     captcha: '',
+    checkKey: '',
     newEmail: '',
-    newCaptcha: ''
+    newCaptcha: '',
+    newCheckKey: ''
 })
+const passwordFormState = reactive({
+    username: '',
+    password: '',
+    captcha: ''
+})
+const isPhoneValid:any = computed(() => isPhone(formState.newEmail))
+watch(
+    () => isPhoneValid.value,
+    (newV) => {
+        if (newV) {
+            handleGetImage()
+        }
+    }
+)
+const isPhoneChangePassword = computed(() => isPhone(passwordFormState.username))
+watch(
+    () => isPhoneChangePassword.value,
+    (newV) => {
+        if (newV) {
+            handleGetImage()
+        }
+    }
+)
+const encipher = (str: any) => {
+    if (!str) {
+        return ''
+    }
+    return str.substr(0, 3) + '****' + str.substr(7)
+}
+const handleGetImage = async () => {
+    pageState.checkKey = Date.now() + ''
+    const res = await useUserApi.requestRandomImage(pageState.checkKey)
+    pageState.randomImage = res.result
+}
+const changeValidType = (type: number) => {
+    if (pageState.validType === type) {
+        return
+    }
+    pageState.validType = type
+    if (type === 2) {
+        handleGetImage()
+    }
+}
 const handleOk = () => {
     pageState.isChangeEmailPopShow = false
 }
 const changeEmail = (type:number) => {
     pageState.changeEmailMobileType = type
+    pageState.formStatus = 1
+    if ((type === 1 && userInfo.value.email) || (type === 2 && !userInfo.value.mobile)) {
+        pageState.validType = 1
+    } else {
+        pageState.validType = 2
+        handleGetImage()
+    }
     pageState.isChangeEmailPopShow = true
 }
 const handleGetParams = (): SmsData => {
     return {
-        email: isEmail(userInfo.value?.email) ? userInfo.value.email : '',
-        mobile: isPhone(userInfo.value?.mobile) ? userInfo.value.mobile : '',
-        smsmode: 2
+        email: isEmail(userInfo.value?.email) && pageState.validType === 1 ? userInfo.value.email : '',
+        mobile: isPhone(userInfo.value?.mobile) && pageState.validType === 2 ? userInfo.value.mobile : '',
+        smsmode: 2,
+        captcha: formState.checkKey,
+        checkKey: pageState.checkKey
     }
 }
 const hanldeGetCode = () => {
@@ -181,9 +264,11 @@ const hanldeGetCode = () => {
 const hanldeGetCodeNew = () => {
     pageState.isSendBtnLoadingNew = true
     const data: SmsData = {
-        email: isEmail(formState.newEmail) ? formState.newEmail : '',
-        mobile: isPhone(formState.newEmail) ? formState.newEmail : '',
-        smsmode: 2
+        email: isEmail(formState.newEmail) && pageState.changeEmailMobileType === 1 ? formState.newEmail : '',
+        mobile: isPhone(formState.newEmail) && pageState.changeEmailMobileType === 2 ? formState.newEmail : '',
+        smsmode: 2,
+        captcha: formState.checkKey,
+        checkKey: pageState.checkKey
     }
     userStore.handleSendCode(data).then((res) => {
         pageState.isSendBtnLoadingNew = false
@@ -198,11 +283,15 @@ const hanldeGetCodeNew = () => {
 }
 const toNextType = () => {
     useUserApi.checkAccountCaptchaApi({
-        account: userInfo.value.email,
+        account: pageState.validType === 1 ? userInfo.value.email : userInfo.value.mobile,
         captcha: formState.captcha
+        // checkKey: formState.checkKey
     }).then((res) => {
         if (res.success) {
+            pageState.checkKey = ''
+            pageState.randomImage = ''
             pageState.formStatus = 2
+            formState.checkKey = ''
         } else {
             message.error(res.message)
         }
@@ -238,15 +327,11 @@ const afterClose = () => {
     formState.captcha = ''
     formState.newEmail = ''
     formState.newCaptcha = ''
+    formState.checkKey = ''
     passwordFormState.username = ''
     passwordFormState.password = ''
     passwordFormState.captcha = ''
 }
-const passwordFormState = reactive({
-    username: '',
-    password: '',
-    captcha: ''
-})
 const changePassword = () => {
     pageState.isChangePasswordPopShow = true
 }
@@ -255,7 +340,9 @@ const hanldeGetCodePassword = () => {
     const data: SmsData = {
         email: isEmail(passwordFormState.username) ? passwordFormState.username : '',
         mobile: isPhone(passwordFormState.username) ? passwordFormState.username : '',
-        smsmode: 2
+        smsmode: 2,
+        captcha: formState.checkKey,
+        checkKey: pageState.checkKey
     }
     userStore.handleSendCode(data).then((res) => {
         pageState.isSendBtnLoadingPassword = false
@@ -279,6 +366,7 @@ const changePasswordSubmit = () => {
         if (res.success) {
             message.success(res.message)
             pageState.isChangePasswordPopShow = false
+            userStore.handleUserLogout()
         } else {
             message.error(res.message)
         }
@@ -287,7 +375,14 @@ const changePasswordSubmit = () => {
         pageState.isChangePasswordConfirmBtnLoading = false
     })
 }
-
+const backHome = () => {
+    router.push({
+        name: 'indexPage',
+        params: {
+            userId: userInfo.value.id
+        }
+    })
+}
 </script>
 <style lang="scss" scoped>
 .AccountPassword_app{
@@ -299,6 +394,11 @@ const changePasswordSubmit = () => {
             font-size: 24px;
             font-weight: 600;
             color: #333;
+        }
+        .title_right{
+            text-align: right;
+            font-size: 14px;
+            color: #1890ff;
         }
     }
     .form{

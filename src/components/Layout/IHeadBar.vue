@@ -452,6 +452,11 @@ const handleClickActionBtn = (action: string) => {
                 }
             })
             break
+        case 'setting':
+            router.push({
+                name: 'AccountPassword'
+            })
+            break
     }
 }
 </script>
