@@ -165,6 +165,10 @@ const routes: Array<RouteRecordRaw> = [
                         component: () => import('@/views/message/list/index.vue')
                     }
                 ]
+            },
+            {
+                path: ':pathMatch(.*)',
+                component: () => import('@/views/404/index.vue')
             }
         ]
     },
