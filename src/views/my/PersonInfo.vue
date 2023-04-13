@@ -161,7 +161,7 @@ const save = () => {
         saying: FormState.saying,
         residence: FormState.residence && FormState.residence.length ? FormState.residence.join('|') : '',
         businessId: FormState.businessId,
-        jobInfo: JSON.stringify(FormState.jobInfo),
+        jobinfo: JSON.stringify(FormState.jobInfo),
         schoolinfo: JSON.stringify(FormState.schoolinfo),
         introduce: FormState.introduce,
         centerBackground: FormState.centerBackground,
