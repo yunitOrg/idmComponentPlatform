@@ -33,7 +33,7 @@
                     <img class="intr-text" style="padding: 0; margin: 0 0 0 10px; width: 16px" :preview="false" :src="pageData.userInfo.gender == 1 ? memberMale : memberfemale" />
                 </div>
                 <div v-if="pageData.isShowMore && pageData.userInfo.introduce" class="userinfo-line flex align-center">
-                    <svg-icon iconClass="weizhi" style="font-size: 20px; margin: 0 -2px 0 0" class="userinfo-icon"></svg-icon>
+                    <svg-icon iconClass="settings" style="font-size: 16px; margin: 0 -2px 0 2px" class="userinfo-icon"></svg-icon>
                     <span class="intr-text">{{ pageData.userInfo.introduce }}</span>
                 </div>
                 <div
@@ -165,6 +165,12 @@ const editPersonInfo = () => {
     })
 }
 
+const getItemValue = (id: string, arr: Array<any>) => {
+    const item = arr.find((el) => el.id === id)
+    if (item) return item.itemValue
+    return ''
+}
+
 const getArrData = (dataStr: string) => {
     let arr = []
     if (dataStr) {
@@ -175,11 +181,11 @@ const getArrData = (dataStr: string) => {
     return arr
 }
 
-const getItemValue = (id: string, arr: Array<any>) => {
-    const item = arr.find((el) => el.id === id)
-    if (item) return item.itemValue
-    return ''
-}
+// const getItemValue = (id: string, arr: Array<any>) => {
+//     const item = arr.find(el => el.id === id)
+//     if (item) return item.itemValue
+//     return ''
+// }
 
 const currentTabList = computed(() => {
     if (!isSelfPage.value) {
@@ -287,13 +293,14 @@ getListData()
 .my-index-page-top {
     position: relative;
     width: 100%;
-    height: 240px;
+    height: 260px;
     border-radius: 5px 5px 0 0;
     overflow: hidden;
     .cover-bg {
         position: absolute;
         width: 100%;
         height: 100%;
+        object-fit: cover;
     }
     .edit-btn {
         position: absolute;
