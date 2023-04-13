@@ -109,7 +109,8 @@ const routes: Array<RouteRecordRaw> = [
             {
                 path: 'AccountPassword',
                 meta: {
-                    title: '账号密码'
+                    title: '账号密码',
+                    needLogin: true
                 },
                 name: 'AccountPassword',
                 component: () => import('@/views/my/AccountPassword.vue')
@@ -117,7 +118,8 @@ const routes: Array<RouteRecordRaw> = [
             {
                 path: 'PersonInfo',
                 meta: {
-                    title: '个人资料'
+                    title: '个人资料',
+                    needLogin: true
                 },
                 name: 'PersonInfo',
                 component: () => import('@/views/my/PersonInfo.vue')
@@ -130,7 +132,8 @@ const routes: Array<RouteRecordRaw> = [
                         path: '',
                         name: 'index-creativeCenter',
                         meta: {
-                            title: '主页'
+                            title: '主页',
+                            needLogin: true
                         },
                         redirect: '/creativeCenter/componentPackageManageList'
                     },
@@ -138,7 +141,8 @@ const routes: Array<RouteRecordRaw> = [
                         path: 'componentPackageManageList',
                         name: 'index-creativeCenter-componentPackageManageList',
                         meta: {
-                            title: '组件包管理'
+                            title: '组件包管理',
+                            needLogin: true
                         },
                         component: () => import('@/views/creativeCenter/ComponentPackageManageList.vue')
                     },
@@ -146,7 +150,8 @@ const routes: Array<RouteRecordRaw> = [
                         path: 'componentManageList',
                         name: 'index-creativeCenter-componentManageList',
                         meta: {
-                            title: '组件管理'
+                            title: '组件管理',
+                            needLogin: true
                         },
                         component: () => import('@/views/creativeCenter/ComponentManageList.vue')
                     }
@@ -159,7 +164,8 @@ const routes: Array<RouteRecordRaw> = [
                     {
                         path: 'list',
                         meta: {
-                            title: '消息列表'
+                            title: '消息列表',
+                            needLogin: true
                         },
                         name: 'message-list',
                         component: () => import('@/views/message/list/index.vue')
@@ -193,11 +199,15 @@ const router = _createRouter({
         else return { top: 0 }
     }
 })
-router.beforeEach(async (from, to, next) => {
+router.beforeEach(async (to, from, next) => {
     // 用户没有登录，有token ，用token登录
     if (!userStore.isUserLogined && getToken() && !userStore.isRouterGetedUserInfo) {
         await userStore.handleGetUserInfo()
         userStore.isRouterGetedUserInfo = true
+    }
+    if (to.meta.needLogin && !userStore.isUserLogined) {
+        next({ name: 'index' })
+        return
     }
     next()
 })
