@@ -3,7 +3,7 @@
         <div class="header">
             <img v-if="!FormState.centerBackground" class="bg" src="@/assets/images/defaultBg.png" alt="">
             <img v-else class="bg" :src="getBgImageUrl('centerBackground')" alt="">
-            <div class="person_header">
+            <div class="person_header flex_center">
                 <img v-if="!FormState.userphoto" src="@/assets/images/logo1.png" alt="">
                 <img v-else :src="getBgImageUrl('userphoto')" alt="">
                 <div class="person_header_button flex_center">
@@ -16,7 +16,8 @@
             <div class="upload_button_block">
                 <a-upload name="file" :showUploadList="false" :beforeUpload="beforeUpload" @change="e => handleChange(e,'centerBackground')">
                     <div class="upload_button pointer flex_center">
-                        <camera-outlined />
+                        <!-- <camera-outlined /> -->
+                        <svg-icon iconClass="camera" style="margin: 1px 3px 0px 0; font-size: 18px"></svg-icon>
                         <span>编辑封面图片</span>
                     </div>
                 </a-upload>
@@ -154,7 +155,6 @@ const deleteItem = (key: any, index: number) => {
     FormState[key].splice(index, 1)
 }
 const save = () => {
-    console.log('FormState', FormState)
     pageState.isSaveLoading = true
     useUserApi.editUserInfoApi({
         nickname: FormState.nickname,
@@ -179,7 +179,6 @@ const save = () => {
     })
 }
 const getUserInfoData = () => {
-    console.log('userInfo', userInfo.value)
     FormState.nickname = userInfo.value.nickname
     FormState.saying = userInfo.value.saying
     FormState.businessId = userInfo.value.businessId
@@ -189,7 +188,6 @@ const getUserInfoData = () => {
     FormState.residence = userInfo.value.residence ? userInfo.value.residence.split('|') : []
     FormState.jobInfo = userInfo.value.jobInfo ? JSON.parse(userInfo.value.jobInfo) : []
     FormState.schoolinfo = userInfo.value.schoolinfo ? JSON.parse(userInfo.value.schoolinfo) : []
-    console.log('FormState', FormState)
 }
 const handleChange = (e: any, key: any) => {
     console.log('handleChange', e)
@@ -229,25 +227,25 @@ getbusinessList()
 .PersonInfo_app{
     background: white;
     .header{
-        height: 292px;
+        height: 260px;
         position: relative;
         .bg{
             width: 100%;
-            height: 292px;
+            height: 260px;
             object-fit: cover;
         }
         .person_header{
             width: 160px;
             height: 160px;
             position: absolute;
-            bottom: -80px;
-            left: 20px;
+            bottom: -85px;
+            left: 40px;
             border-radius: 50%;
             background-color: white;
             box-shadow: 0px 0px 20px 0px rgba(51,87,130,0.22);
             img{
-                width: 100%;
-                height: 100%;
+                width: 144px;
+                height: 144px;
                 object-fit: cover;
                 border-radius: 50%;
             }
@@ -271,13 +269,14 @@ getbusinessList()
         }
         .upload_button_block{
             position: absolute;
-            right: 20px;
-            top: 30px;
+            right: 10px;
+            top: 10px;
             .upload_button{
-                padding: 6px 15px;
-                color: white;
+                padding: 5px 10px;
+                color: rgba(255,255,255,0.8);
+                font-size: 12px;
                 border: 1px solid ghostwhite;
-                border-radius: 4px;
+                border-radius: 50px;
                 .anticon{
                     font-size: 20px;
                     margin-right: 5px;
@@ -327,7 +326,7 @@ getbusinessList()
     }
     .back_block{
         margin: 10px 0 20px 0;
-        padding: 0 20px 0 0;
+        padding: 0 40px 0 0;
         text-align: right;
         font-size: 14px;
         color: #1890ff;
