@@ -48,7 +48,7 @@
                         <div v-for="(item,index) in FormState.residence" :key="index" class="input_box">
                             <AInput v-model:value="FormState.residence[index]" allowClear></AInput>
                             <div class="button_box">
-                                <minus-circle-outlined  @click="deleteItem('residence',index)"/>
+                                <minus-circle-outlined @click="deleteItem('residence',index)" />
                             </div>
                         </div>
                         <div class="button_box">
@@ -70,7 +70,7 @@
                         <div v-for="(item,index) in FormState.jobInfo" :key="index" class="input_box">
                             <AInput v-model:value="FormState.jobInfo[index]"></AInput>
                             <div class="button_box">
-                                <minus-circle-outlined  @click="deleteItem('jobInfo',index)"/>
+                                <minus-circle-outlined @click="deleteItem('jobInfo',index)" />
                             </div>
                         </div>
                         <div class="button_box">
@@ -84,7 +84,7 @@
                         <div v-for="(item,index) in FormState.schoolinfo" :key="index" class="input_box">
                             <AInput v-model:value="FormState.schoolinfo[index]"></AInput>
                             <div class="button_box">
-                                <minus-circle-outlined  @click="deleteItem('schoolinfo',index)"/>
+                                <minus-circle-outlined @click="deleteItem('schoolinfo', index)" />
                             </div>
                         </div>
                         <div class="button_box">
