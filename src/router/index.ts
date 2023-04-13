@@ -165,6 +165,13 @@ const routes: Array<RouteRecordRaw> = [
                         component: () => import('@/views/message/list/index.vue')
                     }
                 ]
+            },
+            {
+                path: ':pathMatch(.*)',
+                meta: {
+                    title: 'Page Not Found'
+                },
+                component: () => import('@/views/404/index.vue')
             }
         ]
     },

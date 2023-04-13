@@ -2,7 +2,9 @@
     <div class="page-max-width my-page-container">
         <div class="my-index-page-top">
             <img :src="getImagePath(pageData.userInfo.centerBackground) || defaultBgImage" object-fit="cover" class="cover-bg" alt="封面加载失败" />
-            <div v-if="isSelfPage" class="edit-btn cursor-pointer"><svg-icon iconClass="camera" style="margin: 0 3px -3px 0; font-size: 18px"></svg-icon> 编辑封面图片</div>
+            <a-upload v-if="isSelfPage" accept="image/*" :showUploadList="false" :beforeUpload="() => false" @change="handleFileChange">
+                <div class="edit-btn edit-background cursor-pointer"><svg-icon iconClass="camera" style="margin: 0 3px -3px 0; font-size: 18px"></svg-icon> 编辑封面图片</div>
+            </a-upload>
         </div>
 
         <div class="userinfo-container">
@@ -20,16 +22,28 @@
                 <div class="userinfo-line flex align-center">
                     <svg-icon iconClass="gongwen" style="margin: 0 0 0 2px" class="userinfo-icon"></svg-icon>
                     <span v-if="pageData.userInfo.businessName" class="intr-text">{{ pageData.userInfo.businessName }}</span>
-                    <span v-if="pageData.userInfo.jobInfo" class="intr-text">{{ pageData.userInfo.jobInfo }}</span>
+                    <span v-if="getItemValue(pageData.userInfo.businessId, pageData.jobList)" class="intr-text">{{
+                        getItemValue(pageData.userInfo.businessId, pageData.jobList)
+                    }}</span>
+                    <span v-for="(job, index) in getArrData(pageData.userInfo.jobInfo)" :key="index" class="intr-text">{{ job }}</span>
                 </div>
                 <div class="userinfo-line flex align-center">
                     <svg-icon iconClass="school" style="font-size: 20px; margin: 0 -2px 0 0" class="userinfo-icon"></svg-icon>
-                    <span v-if="pageData.userInfo.schoolinfo" class="intr-text">{{ pageData.userInfo.schoolinfo }}</span>
+                    <span v-for="(school, index) in getArrData(pageData.userInfo.schoolinfo)" :key="index" class="intr-text">{{ school }}</span>
                     <img class="intr-text" style="padding: 0; margin: 0 0 0 10px; width: 16px" :preview="false" :src="pageData.userInfo.gender == 1 ? memberMale : memberfemale" />
                 </div>
-                <div class="userinfo-line flex align-center userinfo-icon cursor-pointer" style="margin-bottom: 10px">
-                    <DownOutlined style="margin: 0 7px 0 12px"></DownOutlined>
-                    <span>查看详细资料</span>
+                <div v-if="pageData.isShowMore && pageData.userInfo.introduce" class="userinfo-line flex align-center">
+                    <svg-icon iconClass="settings" style="font-size: 16px; margin: 0 -2px 0 2px" class="userinfo-icon"></svg-icon>
+                    <span class="intr-text">{{ pageData.userInfo.introduce }}</span>
+                </div>
+                <div
+                    v-if="pageData.userInfo.introduce"
+                    class="userinfo-line flex align-center userinfo-icon cursor-pointer"
+                    style="margin-bottom: 10px"
+                    @click="pageData.isShowMore = !pageData.isShowMore">
+                    <DownOutlined :class="[pageData.isShowMore && 'arrow-revert']" style="margin: 0 7px 0 12px"></DownOutlined>
+                    <span v-if="pageData.isShowMore">收起</span>
+                    <span v-else>查看更多</span>
                 </div>
             </div>
             <ARow :gutter="[20, 20]">
@@ -53,8 +67,7 @@
                                                 :show-join="false"
                                                 @handle-org-invite="handleModalBtnClick(orgItem, 'orgInviteModalVisible')"
                                                 @handle-member-manage="handleModalBtnClick(orgItem, 'orgMemberModalVisible')"
-                                                @handle-org-manage="handleModalBtnClick(orgItem, 'orgManageModalVisible')"
-                                            />
+                                                @handle-org-manage="handleModalBtnClick(orgItem, 'orgManageModalVisible')" />
                                         </div>
                                         <div v-if="item.pagination" style="text-align: center; margin: 20px 0">
                                             <a-pagination
@@ -88,7 +101,7 @@ import { message } from 'ant-design-vue'
 import { defaultSettings } from '@/settings/defaultSetting'
 import { useUserStore } from '@/store/modules/user'
 import { DownOutlined } from '@ant-design/icons-vue'
-import { useUserApi, useOrgAboutApi } from '@/apis'
+import { useUserApi, coreApi, useOrgAboutApi } from '@/apis'
 import { getImagePath } from '@/utils'
 import { useRouter } from 'vue-router'
 const userStore = useUserStore()
@@ -101,8 +114,7 @@ const propData = defineProps({
     }
 })
 const isSelfPage = computed(() => propData.userId === userStore.userInfo?.id)
-
-const pageData = reactive<{[x: string]: any}>({
+const pageData = reactive<{ [x: string]: any }>({
     activeKey: 'trends',
     tabList: [
         {
@@ -143,13 +155,38 @@ const pageData = reactive<{[x: string]: any}>({
         jobInfo: '',
         schoolinfo: '',
         gender: 1
-    }
+    },
+    jobList: [],
+    isShowMore: false
 })
 const editPersonInfo = () => {
     router.push({
         name: 'PersonInfo'
     })
 }
+
+const getItemValue = (id: string, arr: Array<any>) => {
+    const item = arr.find((el) => el.id === id)
+    if (item) return item.itemValue
+    return ''
+}
+
+const getArrData = (dataStr: string) => {
+    let arr = []
+    if (dataStr) {
+        try {
+            arr = JSON.parse(dataStr)
+        } catch (error) {}
+    }
+    return arr
+}
+
+// const getItemValue = (id: string, arr: Array<any>) => {
+//     const item = arr.find(el => el.id === id)
+//     if (item) return item.itemValue
+//     return ''
+// }
+
 const currentTabList = computed(() => {
     if (!isSelfPage.value) {
         return pageData.tabList.filter((item: any) => item.key !== 'org')
@@ -177,6 +214,23 @@ watch(
     },
     { immediate: true, deep: true }
 )
+const handleFileChange = async (e: any) => {
+    const res = await useUserApi.uploadFileApi({
+        file: e.file,
+        data: {
+            upFileType: 'image'
+        }
+    })
+    if (res.success) {
+        const { filePath } = res.result
+        console.log(filePath)
+        const res1 = await useUserApi.editUserInfoApi({
+            centerBackground: filePath
+        })
+        if (!res1.success) message.error(res1.message || '修改背景图失败')
+        pageData.userInfo.centerBackground = filePath
+    }
+}
 const resetPagination = () => {
     pageData.listData = []
     pageData.total = 0
@@ -224,6 +278,11 @@ const handleModalBtnClick = (itemData: any, key: string) => {
     pageData.orgItemData = itemData
     pageData[key] = true
 }
+coreApi.requestWebInfoListByGroup({ groupCd: 'job' }).then((res: any) => {
+    if (res.success) {
+        pageData.jobList = res.result
+    }
+})
 getListData()
 </script>
 
@@ -234,13 +293,14 @@ getListData()
 .my-index-page-top {
     position: relative;
     width: 100%;
-    height: 240px;
+    height: 260px;
     border-radius: 5px 5px 0 0;
     overflow: hidden;
     .cover-bg {
         position: absolute;
         width: 100%;
         height: 100%;
+        object-fit: cover;
     }
     .edit-btn {
         position: absolute;
@@ -252,6 +312,10 @@ getListData()
         border: 1px solid rgba($color: #fff, $alpha: 0.8);
         border-radius: 50px;
         padding: 5px 10px;
+    }
+    .edit-background:hover {
+        color: #a5abb1;
+        border-color: #a5abb1;
     }
 }
 .userinfo-container {
@@ -285,6 +349,9 @@ getListData()
     .userinfo-line {
         margin: 10px 0 0 0;
 
+        .arrow-revert {
+            transform: rotate(180deg);
+        }
         .intr-text {
             padding: 0 10px;
             border-right: 1px solid #ddd;
