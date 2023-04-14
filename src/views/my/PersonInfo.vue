@@ -132,7 +132,7 @@ const FormState:any = reactive({
     centerBackground: '',
     userphoto: ''
 })
-const pageState = reactive({
+const pageState: any = reactive({
     businessList: [],
     isSaveLoading: false
 })

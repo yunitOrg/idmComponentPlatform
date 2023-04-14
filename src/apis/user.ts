@@ -1,4 +1,5 @@
 import { http } from '@/plugins/axios'
+import { AxiosProgressEvent } from 'axios'
 enum Apis {
     // 发验证码
     coreSmsUrl = '/core/sms',
