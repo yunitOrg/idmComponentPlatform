@@ -170,6 +170,7 @@ const save = () => {
         pageState.isSaveLoading = false
         if (res.success) {
             message.success(res.message)
+            userStore.handleGetUserInfo()
         } else {
             message.error(res.message)
         }
