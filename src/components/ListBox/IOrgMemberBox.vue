@@ -5,8 +5,8 @@
             <div class="image">
                 <AImage style="border-radius: 50%;" :preview="false" :width="70" :height="70" :src="getImagePath(data.userphoto)"></AImage>
                 <div class="gender">
-                    <AImage v-if="data.gender === 1" :width="18" :preview="false" :src="memberMale"></AImage>
-                    <AImage v-else-if="data.gender === 0" :width="18" :preview="false" :src="memberfemale"></AImage>
+                    <AImage v-if="data.gender === 1" :width="18" :height="18" :preview="false" :src="memberMale"></AImage>
+                    <AImage v-else-if="data.gender === 0" :width="18" :height="18" :preview="false" :src="memberfemale"></AImage>
                 </div>
             </div>
             <div class="flex-1 item">
@@ -141,17 +141,23 @@ const handleChangeType = (type: number) => {
   border-bottom: 1px solid rgb(230, 230, 230);
   color: #999;
   .image {
-    padding: 0 10px;
+    display: flex;
+    padding: 5px 10px;
     position: relative;
-    .gender {
-      line-height: 1;
-      overflow: hidden;
-      border-radius: 50%;
-      position: absolute;
-      right: 8px;
-      bottom: 4px;
-      :deep(img) {
+    .ant-image-img {
+        height: 100%;
         display: block;
+    }
+    .gender {
+        height: 18px;
+        overflow: hidden;
+        border-radius: 50%;
+        position: absolute;
+        right: 8px;
+        bottom: 4px;
+      .ant-image-img {
+            height: 100%;
+            display: block;
       }
     }
   }
