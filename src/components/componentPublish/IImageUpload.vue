@@ -72,7 +72,7 @@ const handleUpload = async (data: any) => {
     const file = reactive({
         name: data.name,
         src: '',
-        url: '',
+        // url: '',
         width: null,
         height: null,
         size: null,
