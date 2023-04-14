@@ -188,25 +188,22 @@ const currentTabList = computed(() => {
     return pageData.tabList
 })
 
-onMounted(() => {
-    if (userStore.userInfo?.id === propData.userId) {
-        pageData.userInfo = userStore.userInfo
-    } else {
-        useUserApi
-            .requestGetUserInfo({
-                user_id: propData.userId
-            })
-            .then((res) => {
-                pageData.userInfo = res.result
-            })
-    }
-})
-
 watch(
-    () => route.query,
+    () => route,
     (newV) => {
-        if (newV.tab) {
-            pageData.activeKey = newV.tab as string
+        if (newV.query.tab) {
+            pageData.activeKey = newV.query.tab as string
+        }
+        if (userStore.userInfo?.id === propData.userId) {
+            pageData.userInfo = userStore.userInfo
+        } else {
+            useUserApi
+                .requestGetUserInfo({
+                    user_id: propData.userId
+                })
+                .then((res) => {
+                    pageData.userInfo = res.result
+                })
         }
     },
     { immediate: true, deep: true }
@@ -220,7 +217,6 @@ const handleFileChange = async (e: any) => {
     })
     if (res.success) {
         const { filePath } = res.result
-        console.log(filePath)
         const res1 = await useUserApi.editUserInfoApi({
             centerBackground: filePath
         })
