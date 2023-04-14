@@ -8,7 +8,7 @@
                     class="preview-image"
                     :width="220"
                     :height="120"
-                    :src="getImagePath(item.url)"
+                    :src="getImagePath(item.src)"
                     style="object-fit: cover"></a-image>
             </a-image-preview-group>
         </IScrollContainer>
