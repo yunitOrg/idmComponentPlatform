@@ -1,5 +1,5 @@
 <template>
-    <div v-if="!isIndexPage" class="head-bar-container" style="margin: 35px 0 20px 0"></div>
+    <div v-if="!isIndexPage" class="head-bar-container" style="margin: 55px 0 20px 0; padding: 0"></div>
     <div :style="{ top: pageData.isShowMenuLine ? '0' : '-55px' }" class="head-bar-container head-bar-container-fix" :class="[pageData.isShadow && 'head-bar-container-shadow']">
         <div class="flex justify-between align-center head-bar-container-main">
             <div class="flex align-center flex-1" :class="{ 'justify-between': !hiddenMenu }">
@@ -219,6 +219,7 @@ import { getImagePath } from '@/utils'
 import emitter from '@/utils/bus'
 import AllMessage from '@/views/message/list/AllMessage.vue'
 import { sendListMap, navBoxList, myActionList } from '@/settings/navbarSettings'
+import { throttle } from 'lodash-es'
 const userStore = useUserStore()
 const propData = defineProps({
     navList: {
@@ -281,13 +282,16 @@ const hiddenMenu: any = computed(() => {
 })
 
 const handleScroll = () => {
+    const scrollValue = document.documentElement.scrollTop
     if (!isIndexPage.value) {
         pageData.isShadow = true
         pageData.menuOpacity = 1
+        if (scrollValue < 160) {
+            pageData.isShowMenuLine = true
+        }
         return
     }
     // 334 210
-    const scrollValue = document.documentElement.scrollTop
     if (scrollValue > 334) {
         pageData.isShadow = true
         pageData.menuOpacity = 1
@@ -374,9 +378,9 @@ const scrollFunc = (event: any) => {
     }
 }
 nextTick(() => {
-    document?.addEventListener('scroll', handleScroll)
+    const thScroll = throttle(handleScroll, 200)
+    document?.addEventListener('scroll', thScroll)
     handleScroll()
-
     // 给页面绑定鼠标滚轮事件,针对火狐的非标准事件
     window.addEventListener('DOMMouseScroll', scrollFunc)
     // 给页面绑定鼠标滚轮事件，针对IE和Google
