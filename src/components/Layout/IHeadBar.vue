@@ -36,7 +36,7 @@
                             :size="24"
                             class="cursor-pointer header-avatar"
                             :src="getImagePath(userStore.userInfo && userStore.userInfo.userphoto) || defaultSettings.userphoto" />
-                        <AButton style="font-size: 16px" type="link" @click="router.push({ name: 'indexPage', params: { userId: userStore.userInfo && userStore.userInfo.id } })">
+                        <AButton style="font-size: 16px" type="link" @click="handleJumpIndexPage">
                             我的主页
                         </AButton>
                         <template #content>
@@ -376,6 +376,11 @@ const scrollFunc = (event: any) => {
             pageData.isShowMenuLine = false
         }
     }
+}
+const reload: any = inject('reload')
+const handleJumpIndexPage = async () => {
+    await router.push({ name: 'indexPage', params: { userId: userStore.userInfo && userStore.userInfo.id } })
+    reload()
 }
 nextTick(() => {
     const thScroll = throttle(handleScroll, 200)

@@ -132,7 +132,7 @@ const FormState:any = reactive({
     centerBackground: '',
     userphoto: ''
 })
-const pageState = reactive({
+const pageState: any = reactive({
     businessList: [],
     isSaveLoading: false
 })
@@ -170,6 +170,7 @@ const save = () => {
         pageState.isSaveLoading = false
         if (res.success) {
             message.success(res.message)
+            userStore.handleGetUserInfo()
         } else {
             message.error(res.message)
         }

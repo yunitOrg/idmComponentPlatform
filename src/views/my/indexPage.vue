@@ -130,7 +130,7 @@ const pageData = reactive<{ [x: string]: any }>({
         {
             text: '收藏',
             key: 'collect',
-            num: 12
+            num: 0
         },
         {
             key: 'follow',
@@ -181,12 +181,6 @@ const getArrData = (dataStr: string) => {
     return arr
 }
 
-// const getItemValue = (id: string, arr: Array<any>) => {
-//     const item = arr.find(el => el.id === id)
-//     if (item) return item.itemValue
-//     return ''
-// }
-
 const currentTabList = computed(() => {
     if (!isSelfPage.value) {
         return pageData.tabList.filter((item: any) => item.key !== 'org')
@@ -194,22 +188,22 @@ const currentTabList = computed(() => {
     return pageData.tabList
 })
 
-if (userStore.userInfo?.id === propData.userId) {
-    pageData.userInfo = userStore.userInfo
-} else {
-    useUserApi
-        .requestGetUserInfo({
-            user_id: propData.userId
-        })
-        .then((res) => {
-            pageData.userInfo = res.result
-        })
-}
 watch(
-    () => route.query,
+    () => route,
     (newV) => {
-        if (newV.tab) {
-            pageData.activeKey = newV.tab as string
+        if (newV.query.tab) {
+            pageData.activeKey = newV.query.tab as string
+        }
+        if (userStore.userInfo?.id === propData.userId) {
+            pageData.userInfo = userStore.userInfo
+        } else {
+            useUserApi
+                .requestGetUserInfo({
+                    user_id: propData.userId
+                })
+                .then((res) => {
+                    pageData.userInfo = res.result
+                })
         }
     },
     { immediate: true, deep: true }
@@ -223,7 +217,6 @@ const handleFileChange = async (e: any) => {
     })
     if (res.success) {
         const { filePath } = res.result
-        console.log(filePath)
         const res1 = await useUserApi.editUserInfoApi({
             centerBackground: filePath
         })
