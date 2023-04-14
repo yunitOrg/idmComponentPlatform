@@ -59,7 +59,9 @@ const replaceUrl = (str: string): string => {
     str = str.replace(reg, (str: string) => {
         str = str.replace(/\(.*\)/gi, (str1: string) => {
             let url = str1.replace('(', '').replace(')', '')
-            const prefix = componentPublishApi.componentStaticUrl + propData.codePackageProp.currentCodePath
+            if (!propData.codePackageProp.currentCodePath) return str1
+            const codePathArr = propData.codePackageProp.currentCodePath.split('/').filter((el: any) => el !== '')
+            const prefix = componentPublishApi.componentStaticUrl + `/${codePathArr[0]}/${codePathArr[1]}`
             if (url.startsWith('./idm_modules')) {
                 url = '(' + prefix + url.replace('./idm_modules', '') + ')'
             }
