@@ -5,7 +5,7 @@
         </div>
         <div class="component-list-content common-scrollbar_style">
             <div v-for="(item, index) in componentList" :key="index" class="component-box flex align-center" :class="[index + 1 > pageData.limit && 'dis-n']">
-                <AImage :preview="false" :width="80" :height="50" :src="getImagePath(item.coverPath) || componentMarketDetault"></AImage>
+                <AImage :preview="false" :width="80" :height="50" style="height: 100%" :src="getImagePath(item.coverPath) || componentMarketDetault"></AImage>
                 <div class="flex-1 cursor-pointer" style="margin: 0 0 0 15px" @click="handleClickItem(item)">
                     <div class="component-text">{{ item.comTitle }}</div>
                     <div class="component-class">
@@ -92,7 +92,7 @@ const handleClickItem = (item: any) => {
         a {
             display: none;
         }
-        &:hover a{
+        &:hover a {
             display: inline-block;
         }
     }

@@ -219,15 +219,15 @@ handleGetRightOrgList()
         padding: 12px;
         border-bottom: 1px solid #f1f1f1;
     }
+    .apply-button {
+        font-size: 12px;
+    }
     .org-right-list-box {
         padding: 12px;
     }
     .create-time {
         font-size: 12px;
         color: #999;
-    }
-    .apply-button {
-        font-size: 12px;
     }
 }
 </style>
