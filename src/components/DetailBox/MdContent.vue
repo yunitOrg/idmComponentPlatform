@@ -1,6 +1,6 @@
 <template>
     <div class="md-content-container idm-component-common-box">
-        <div class="md-content-container-title cursor-pointer flex align-center">
+        <div class="md-content-container-title cursor-pointer flex align-center" :style="{ top: mdTitleTop }">
             <a-popover placement="bottomLeft" overlayClassName="md-tip-pop">
                 <template #title>
                     <div style="margin: 10px 0; font-size: 16px; font-weight: 600">目录</div>
@@ -26,7 +26,11 @@
 </template>
 
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import { componentPublishApi } from '@/apis'
+import { useDetailLayoutStore } from '@/store/modules/detailLayout'
+const detailLayoutStore = useDetailLayoutStore()
+const { mdTitleTop } = storeToRefs(detailLayoutStore)
 const propData = defineProps({
     title: {
         type: String,
