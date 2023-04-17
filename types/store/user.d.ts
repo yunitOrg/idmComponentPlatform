@@ -42,4 +42,5 @@ interface YunitUser {
     messageCount: number
     businessName: string
     jobInfo: string
+    focusThis: number
 }

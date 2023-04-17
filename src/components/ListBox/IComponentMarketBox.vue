@@ -21,7 +21,7 @@
                 <a-avatar :size="15" :src="getImagePath(componentProps.userPhoto)" />
                 <span class="ml-6 nowrap">{{ componentProps.userNickname }}</span>
             </div>
-            <div class="text-o-e text-right" style="margin: 0 0 0 10px">
+            <div class="text-o-e text-right" style="margin: 0 0 0 10px" :title="componentProps.updateTime || componentProps.createTime">
                 {{ componentProps.updateTime || componentProps.createTime }}
             </div>
         </div>

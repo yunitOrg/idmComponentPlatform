@@ -17,6 +17,7 @@
                 </div>
                 <a v-if="item.version !== currentLookVersion && item.codepackageVersion !== currentLookVersion" @click="handleLookVersion(item)">查看</a>
             </div>
+            <div v-if="!pageData.isFirst && versionList.length === 0" class="empty-text text-center">暂无</div>
             <div v-if="versionList.length > pageData.limit" class="look-more text-center cursor-pointer" @click="handleLookMore">查看更多 <span>></span>></div>
         </div>
     </div>
@@ -42,13 +43,20 @@ const propData = defineProps({
     }
 })
 const pageData = reactive({
-    limit: 5
+    limit: 5,
+    isFirst: true
 })
 const router = useRouter()
 const currentLookVersion = computed(() => {
     if (route.query.version) return route.query.version
     return propData.codePackageProp.currentVersion
 })
+watch(
+    () => propData.versionList,
+    () => {
+        pageData.isFirst = false
+    }
+)
 const handleLookVersion = async (item: any) => {
     let paramsObj = {}
     if (propData.type === 'component') {

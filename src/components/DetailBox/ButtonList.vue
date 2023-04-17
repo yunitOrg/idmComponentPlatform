@@ -141,7 +141,7 @@ const handleClickComment = () => {
         color: #fff;
     }
     .btn-active {
-        color: #1890ff;
+        color: #1890ff !important;
     }
     .idm-button-list-text {
         font-size: 12px;

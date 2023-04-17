@@ -14,13 +14,13 @@
                 </div>
                 <div style="margin: 15px 0 0 0">
                     <a-row>
-                        <a-col class="flex align-center" :span="5">
-                            <AImage style="margin-top: -4px;" :width="20" :preview="false" :src="orgIcon"></AImage>
-                            <span class="text-o-e" style="margin: 0 0 0 5px;">{{ componentProps.companyName }}</span>
+                        <a-col class="flex align-center info-item" style="display: flex;" :span="5">
+                            <AImage :width="20" :preview="false" :src="orgIcon"></AImage>
+                            <span class="text-o-e text" style="margin: 0 10px 0 5px;">{{ componentProps.companyName }}</span>
                         </a-col>
-                        <a-col class="flex align-center" :span="10">
-                            <AImage style="margin-top: -4px;" :width="20" :preview="false" :src="orgUser"></AImage>
-                            <span class="text-o-e" style="margin: 0 0 0 5px;">{{ componentProps.userInfoModels.map((el: any) => el.nickname).join(',') }}</span>
+                        <a-col class="flex align-center info-item" style="display: flex;" :span="10">
+                            <AImage :width="20" :preview="false" :src="orgUser"></AImage>
+                            <span class="text-o-e text" style="margin: 0 10px 0 5px;">{{ componentProps.userInfoModels.map((el: any) => el.nickname).join(',') }}</span>
                         </a-col>
                     </a-row>
                 </div>
@@ -168,6 +168,7 @@ const emits = defineEmits(['handleApplyOrg', 'handleOrgHome', 'handleOrgManage',
         color: #333333;
     }
     .apply-btn {
+        opacity: 0;
         border-radius: 5px;
         border: 1px solid #40a9ff;
         padding: 0 10px 2px 10px;
@@ -177,6 +178,21 @@ const emits = defineEmits(['handleApplyOrg', 'handleOrgHome', 'handleOrgManage',
         }
         &:not(:last-child) {
             margin-right: 10px;
+        }
+    }
+    &:hover .apply-btn {
+        opacity: 1;
+    }
+
+    .info-item {
+        .text {
+            width: auto;
+            flex: 1;
+        }
+        :deep(.ant-image) {
+            img {
+                display: block;
+            }
         }
     }
 }

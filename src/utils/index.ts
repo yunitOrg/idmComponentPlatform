@@ -61,3 +61,14 @@ export function transformSize(limit?: number): string {
     }
     return size
 }
+
+// 获取文件url
+export function createObjectURL(blob: any) {
+    if (window.URL) {
+        return window.URL.createObjectURL(blob)
+    } else if (window.webkitURL) {
+        return window.webkitURL.createObjectURL(blob)
+    } else {
+        return ''
+    }
+}

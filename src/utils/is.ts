@@ -116,3 +116,17 @@ export function isEmail(path: string): boolean {
     const reg = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/
     return reg.test(path)
 }
+
+/**
+ * 判断是否是图片类型
+ * @param filePath
+ * @returns
+ */
+export function isImage(filePath: string) {
+    const type = ['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg']
+    // 获取最后一个.的位置
+    const index = filePath.lastIndexOf('.')
+    // 获取后缀
+    const suffix = filePath.substring(index + 1)
+    return type.indexOf(suffix.toLowerCase()) !== -1
+}

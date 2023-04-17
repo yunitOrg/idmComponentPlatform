@@ -15,8 +15,8 @@
         "paths": {
             "@/*": ["./src/*"]
         },
-        "types": ["vite/client"]
+        "types": ["vite/client", "unplugin-vue-define-options/macros-global", "unplugin-vue-define-options/macros"]
     },
-    "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "types/**/*.d.ts"],
+    "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "types/**/*.d.ts", "auto-imports.d.ts", "components.d.ts"],
     "references": [{ "path": "./tsconfig.node.json" }]
 }

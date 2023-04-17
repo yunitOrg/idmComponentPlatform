@@ -15,17 +15,17 @@
         </div>
         <div class="bottom-line">
             <a-row :gutter="[16, 0]">
-                <a-col :span="10">
+                <a-col :span="8">
                     <div class="package-class-time text-o-e">{{ componentProps.updateTime }}</div>
                 </a-col>
                 <a-col :span="5">
                     <div class="package-class-language text-o-e">{{ componentProps.codeLangue }}</div>
                 </a-col>
-                <a-col :span="4">
+                <a-col :span="3">
                     <div class="package-class-like text-o-e"><svg-icon iconClass="xin" class="idm-component-package-icon"></svg-icon>{{ componentProps.praiseNumber }}</div>
                 </a-col>
-                <a-col :span="5">
-                    <div class="package-class-team text-o-e">
+                <a-col :span="8">
+                    <div class="package-class-team text-o-e" :title="componentProps.publishRangeName || defaultSettings.yunitName">
                         <svg-icon iconClass="renqun" class="idm-component-package-icon"></svg-icon>{{ componentProps.publishRangeName || defaultSettings.yunitName }}
                     </div>
                 </a-col>

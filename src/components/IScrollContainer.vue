@@ -38,7 +38,7 @@ const props = defineProps({
 })
 
 const leftClick = () => {
-    if (props.listLength < props.limitLength) return
+    if (props.listLength <= props.limitLength) return
     const dom: any = document.querySelector(`.${props.id}`)
     if (dom!.offsetLeft >= -props.moveWidth) {
         dom.style.left = '0px'
@@ -47,7 +47,7 @@ const leftClick = () => {
     }
 }
 const rightClick = () => {
-    if (props.listLength < props.limitLength) return
+    if (props.listLength <= props.limitLength) return
     const dom: any = document.querySelector(`.${props.id}`)
     const domWrap: any = document.querySelector('.switch-tab-wrap')
     if (dom.scrollWidth + dom.offsetLeft - props.moveWidth <= domWrap.offsetWidth) {

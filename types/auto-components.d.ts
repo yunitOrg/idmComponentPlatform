@@ -64,6 +64,7 @@ declare module '@vue/runtime-core' {
     IPagenationContainer: typeof import('./../src/components/Layout/IPagenationContainer.vue')['default']
     ISchoolBox: typeof import('./../src/components/ListBox/ISchoolBox.vue')['default']
     IScrollContainer: typeof import('./../src/components/IScrollContainer.vue')['default']
+    IVueCropper: typeof import('./../src/components/IVueCropper.vue')['default']
     IYunQuanBox: typeof import('./../src/components/ListBox/IYunQuanBox.vue')['default']
     LoginAndRegModal: typeof import('./../src/components/Modals/loginAndRegModal.vue')['default']
     ManageListCard: typeof import('./../src/components/creativeCenter/ManageListCard.vue')['default']

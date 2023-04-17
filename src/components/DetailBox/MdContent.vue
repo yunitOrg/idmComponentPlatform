@@ -1,6 +1,6 @@
 <template>
     <div class="md-content-container idm-component-common-box">
-        <div class="md-content-container-title cursor-pointer flex align-center">
+        <div class="md-content-container-title cursor-pointer flex align-center" :style="{ top: mdTitleTop }">
             <a-popover placement="bottomLeft" overlayClassName="md-tip-pop">
                 <template #title>
                     <div style="margin: 10px 0; font-size: 16px; font-weight: 600">目录</div>
@@ -26,7 +26,11 @@
 </template>
 
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import { componentPublishApi } from '@/apis'
+import { useDetailLayoutStore } from '@/store/modules/detailLayout'
+const detailLayoutStore = useDetailLayoutStore()
+const { mdTitleTop } = storeToRefs(detailLayoutStore)
 const propData = defineProps({
     title: {
         type: String,
@@ -59,7 +63,9 @@ const replaceUrl = (str: string): string => {
     str = str.replace(reg, (str: string) => {
         str = str.replace(/\(.*\)/gi, (str1: string) => {
             let url = str1.replace('(', '').replace(')', '')
-            const prefix = componentPublishApi.componentStaticUrl + propData.codePackageProp.currentCodePath
+            if (!propData.codePackageProp.currentCodePath) return str1
+            const codePathArr = propData.codePackageProp.currentCodePath.split('/').filter((el: any) => el !== '')
+            const prefix = componentPublishApi.componentStaticUrl + `/${codePathArr[0]}/${codePathArr[1]}`
             if (url.startsWith('./idm_modules')) {
                 url = '(' + prefix + url.replace('./idm_modules', '') + ')'
             }

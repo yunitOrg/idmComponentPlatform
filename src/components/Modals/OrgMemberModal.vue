@@ -7,6 +7,7 @@
         :mask-closable="false"
         :body-style="{padding: '14px'}"
         title="成员管理"
+        @cancel="handleClose"
     >
         <template #default>
             <div class="flex" style="margin-bottom: 10px;">

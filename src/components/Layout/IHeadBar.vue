@@ -1,5 +1,5 @@
 <template>
-    <div v-if="!isIndexPage && pageData.isShowMenuLine" class="head-bar-container" style="margin: 35px 0 20px 0"></div>
+    <div v-if="!isIndexPage" class="head-bar-container" style="margin: 55px 0 20px 0; padding: 0"></div>
     <div :style="{ top: pageData.isShowMenuLine ? '0' : '-55px' }" class="head-bar-container head-bar-container-fix" :class="[pageData.isShadow && 'head-bar-container-shadow']">
         <div class="flex justify-between align-center head-bar-container-main">
             <div class="flex align-center flex-1" :class="{ 'justify-between': !hiddenMenu }">
@@ -36,10 +36,7 @@
                             :size="24"
                             class="cursor-pointer header-avatar"
                             :src="getImagePath(userStore.userInfo && userStore.userInfo.userphoto) || defaultSettings.userphoto" />
-
-                        <AButton style="font-size: 16px" type="link" @click="router.push({ name: 'indexPage', params: { userId: userStore.userInfo && userStore.userInfo.id } })">
-                            我的主页
-                        </AButton>
+                        <AButton style="font-size: 16px" type="link" @click="handleJumpIndexPage"> 我的主页 </AButton>
                         <template #content>
                             <div class="navbar-avatar-popover-top">
                                 <div class="flex align-end">
@@ -52,15 +49,15 @@
                                 <div class="flex justify-around">
                                     <div class="flex flex-direction-column align-center">
                                         <span class="number">{{ (userStore.userInfo && userStore.userInfo.likeTotal) || '0' }}</span>
-                                        <div class="title">赞</div>
-                                    </div>
-                                    <div class="flex flex-direction-column align-center">
-                                        <span class="number">{{ (userStore.userInfo && userStore.userInfo.componentTotal) || '0' }}</span>
-                                        <div class="title">组件</div>
+                                        <div class="title">获赞</div>
                                     </div>
                                     <div class="flex flex-direction-column align-center">
                                         <span class="number">{{ (userStore.userInfo && userStore.userInfo.fansTotal) || '0' }}</span>
                                         <div class="title">粉丝</div>
+                                    </div>
+                                    <div class="flex flex-direction-column align-center">
+                                        <span class="number">{{ (userStore.userInfo && userStore.userInfo.componentTotal) || '0' }}</span>
+                                        <div class="title">组件</div>
                                     </div>
                                 </div>
                             </div>
@@ -214,12 +211,16 @@ import type { MenuProps } from 'ant-design-vue'
 import IOrgBox from '@/components/ListBox/IOrgBox.vue'
 import { SearchOutlined, RightOutlined } from '@ant-design/icons-vue'
 import { useUserStore } from '@/store/modules/user'
+import { useDetailLayoutStore } from '@/store/modules/detailLayout'
+
 import { isUrl } from '@/utils/is'
 import { useHomeCoreApi, useUserApi } from '@/apis'
 import { getImagePath } from '@/utils'
 import emitter from '@/utils/bus'
 import AllMessage from '@/views/message/list/AllMessage.vue'
 import { sendListMap, navBoxList, myActionList } from '@/settings/navbarSettings'
+import { throttle } from 'lodash-es'
+const detailLayoutStore = useDetailLayoutStore()
 const userStore = useUserStore()
 const propData = defineProps({
     navList: {
@@ -281,19 +282,51 @@ const hiddenMenu: any = computed(() => {
     return selectedKeys.value.some((key: string) => hiddenKeys.indexOf(key) !== -1)
 })
 
+const isIndexPage = computed(() => {
+    return route.name === 'index'
+})
+const isDetailPage = computed(() => {
+    const routerName = route.name as string
+    return routerName.indexOf('detail') > -1
+})
+let beforeScrollTop = document.documentElement.scrollTop
 const handleScroll = () => {
+    const afterScrollTop = document.documentElement.scrollTop
+    // 菜单显示
+    handleMenuShow(afterScrollTop)
+    // 导航显示
+    handleNavbarShow(afterScrollTop)
+}
+const handleNavbarShow = (afterScrollTop: number) => {
+    const upDown = afterScrollTop - beforeScrollTop
+    if (upDown === 0) return false
+    beforeScrollTop = afterScrollTop
+    const isUpDown = upDown > 0 ? 'down' : 'up' // 判断往上还是往下
+    if (afterScrollTop >= 300 && isDetailPage.value) {
+        if (isUpDown === 'down') {
+            pageData.isShowMenuLine = false
+            detailLayoutStore.setMdTitleTop('0px')
+        } else {
+            pageData.isShowMenuLine = true
+            detailLayoutStore.setMdTitleTop('55px')
+        }
+    }
+}
+const handleMenuShow = (afterScrollTop: number) => {
     if (!isIndexPage.value) {
         pageData.isShadow = true
         pageData.menuOpacity = 1
+        if (afterScrollTop < 160) {
+            pageData.isShowMenuLine = true
+        }
         return
     }
     // 334 210
-    const scrollValue = document.documentElement.scrollTop
-    if (scrollValue > 334) {
+    if (afterScrollTop > 334) {
         pageData.isShadow = true
         pageData.menuOpacity = 1
-    } else if (scrollValue <= 354 && scrollValue >= 160) {
-        pageData.menuOpacity = (scrollValue - 210) / (354 - 160)
+    } else if (afterScrollTop <= 354 && afterScrollTop >= 160) {
+        pageData.menuOpacity = (afterScrollTop - 210) / (354 - 160)
         pageData.isShadow = false
     } else {
         pageData.menuOpacity = 0
@@ -354,34 +387,15 @@ watch(
     }
 )
 
-const isIndexPage = computed(() => {
-    return route.name === 'index'
-})
-const isDetailPage = computed(() => {
-    const routerName = route.name as string
-    return routerName.indexOf('detail') > -1
-})
-const scrollFunc = (event: any) => {
-    if (!isIndexPage.value && isDetailPage.value) {
-        const scrollValue = document.documentElement.scrollTop
-        if (event.wheelDelta > 0) {
-            // 向上 显示
-            pageData.isShowMenuLine = true
-        }
-        if (event.wheelDelta < 0 && scrollValue > 200) {
-            // 向下 隐藏
-            pageData.isShowMenuLine = false
-        }
-    }
+const reload: any = inject('reload')
+const handleJumpIndexPage = async () => {
+    await router.push({ name: 'indexPage', params: { userId: userStore.userInfo && userStore.userInfo.id } })
+    reload()
 }
 nextTick(() => {
-    document?.addEventListener('scroll', handleScroll)
+    const thScroll = throttle(handleScroll, 200)
+    document?.addEventListener('scroll', thScroll)
     handleScroll()
-
-    // 给页面绑定鼠标滚轮事件,针对火狐的非标准事件
-    window.addEventListener('DOMMouseScroll', scrollFunc)
-    // 给页面绑定鼠标滚轮事件，针对IE和Google
-    window.addEventListener('wheel', scrollFunc)
 })
 
 const handleCreateOrg = () => {
@@ -430,7 +444,6 @@ useHomeCoreApi.requestCoreMyOrgList().then((res) => {
         pageData.orgList = res.result
     }
 })
-
 useHomeCoreApi.requestCoreAllUserTotal().then((res) => {
     yunitOrg.userCount = res.result
 })
@@ -452,6 +465,16 @@ const handleClickActionBtn = (action: string) => {
                 query: {
                     tab: 'org'
                 }
+            })
+            break
+        case 'setting':
+            router.push({
+                name: 'AccountPassword'
+            })
+            break
+        case 'personInfo':
+            router.push({
+                name: 'PersonInfo'
             })
             break
     }
@@ -487,7 +510,7 @@ const handleClickActionBtn = (action: string) => {
         padding: 0 15px !important;
     }
     ::v-deep(.ant-menu-item::after) {
-        bottom: 33.5px !important;
+        bottom: 34px !important;
     }
     .input-bgcolor {
         background-color: rgb(243, 245, 246);
@@ -530,7 +553,7 @@ const handleClickActionBtn = (action: string) => {
 .head-bar-container-fix {
     position: fixed;
     width: 100%;
-    z-index: 1600;
+    z-index: 600;
     top: 0;
     box-shadow: none;
     transition: all 0.3s;

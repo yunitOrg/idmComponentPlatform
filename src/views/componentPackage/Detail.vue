@@ -1,5 +1,5 @@
 <template>
-    <div v-if="pageData.hasPermission && !pageData.isFirst" class="page-max-width package-page flex">
+    <div v-show="pageData.hasPermission && !pageData.isFirst" class="page-max-width package-page flex">
         <div style="padding: 50px 30px 0 0">
             <ButtonList
                 :componentProp="pageData.packageDetail.codepackageInfo"
@@ -32,7 +32,9 @@
             </ACol>
         </ARow>
     </div>
-    <INoPermission v-if="!pageData.hasPermission && !pageData.isFirst" :text="pageData.errText"></INoPermission>
+    <div v-show="!pageData.hasPermission && !pageData.isFirst">
+        <INoPermission :text="pageData.errText"></INoPermission>
+    </div>
 </template>
 
 <script lang="ts" setup>
@@ -55,12 +57,12 @@ const pageData = reactive({
     isFirst: true
 })
 const handleFetchPageData = () => {
-    pageData.isFirst = false
     useHomePageApi
         .requestHomeGetCodepackageDetail({
             ...route.query
         })
         .then((res) => {
+            pageData.isFirst = false
             if (res.success) {
                 pageData.packageDetail = res.result
                 pageData.contentUrl = res.result.codepackageInfo.currentCodePath + '/static/doc/index.md'

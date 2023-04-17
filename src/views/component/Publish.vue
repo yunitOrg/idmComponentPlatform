@@ -292,7 +292,7 @@ const getDistinfo = async (comId: string, index: number) => {
             ...res.result,
             ...res.result.component,
             tags: res.result.component.tags ? res.result.component.tags.split(',') : [],
-            coverPath: res.result.component.coverPath ? [{ url: import.meta.env.VITE_BASE_URL + componentPublishApi.componentStaticUrl + res.result.component.coverPath, src: res.result.component.coverPath }] : [],
+            coverPath: res.result.component.coverPath ? [{ src: res.result.component.coverPath }] : [],
             comPreviewImgJson: res.result.component.comPreviewImgJson ? JSON.parse(res.result.component.comPreviewImgJson) : [],
             cooperationUserIds: res.result.cooperationUserList?.map((item: any) => ({ value: item.id, label: item.nickname })) || [],
             historyHidden: false,

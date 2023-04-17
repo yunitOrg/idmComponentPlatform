@@ -5,7 +5,7 @@
         </div>
         <div class="component-list-content common-scrollbar_style">
             <div v-for="(item, index) in componentList" :key="index" class="component-box flex align-center" :class="[index + 1 > pageData.limit && 'dis-n']">
-                <AImage :preview="false" :width="80" :height="50" :src="getImagePath(item.coverPath) || componentMarketDetault"></AImage>
+                <AImage :preview="false" :width="80" :height="50" style="height: 100%" :src="getImagePath(item.coverPath) || componentMarketDetault"></AImage>
                 <div class="flex-1 cursor-pointer" style="margin: 0 0 0 15px" @click="handleClickItem(item)">
                     <div class="component-text">{{ item.comTitle }}</div>
                     <div class="component-class">
@@ -14,6 +14,7 @@
                 </div>
                 <a @click="handlePreview(item)">预览</a>
             </div>
+            <div v-if="!pageData.isFirst && componentList.length === 0" class="empty-text text-center">暂无</div>
             <div v-if="componentList.length > pageData.limit" class="look-more text-center cursor-pointer" @click="handleLookMore">查看更多 <span>></span></div>
         </div>
     </div>
@@ -39,7 +40,8 @@ const propData = defineProps({
     }
 })
 const pageData = reactive({
-    limit: 5
+    limit: 5,
+    isFirst: true
 })
 const handlePreview = (item: any) => {
     if (item.currentCodePath || propData.codePackageProp.currentCodePath) {
@@ -50,6 +52,12 @@ const handlePreview = (item: any) => {
 const handleLookMore = () => {
     pageData.limit = 99
 }
+watch(
+    () => propData.componentList,
+    () => {
+        pageData.isFirst = false
+    }
+)
 const handleClickItem = (item: any) => {
     const { href } = router.resolve({
         name: 'index-componentMarket-detail',
@@ -81,6 +89,12 @@ const handleClickItem = (item: any) => {
     }
     .component-box {
         margin: 0 0 15px 0;
+        a {
+            display: none;
+        }
+        &:hover a {
+            display: inline-block;
+        }
     }
     .latest {
         border: 1px solid #40a9ff;
@@ -106,6 +120,10 @@ const handleClickItem = (item: any) => {
         padding: 10px 0 0 0;
         color: #666;
         font-size: 12px;
+    }
+    .empty-text {
+        color: #666;
+        padding: 10px 0;
     }
 }
 </style>

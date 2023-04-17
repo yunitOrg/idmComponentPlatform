@@ -1,4 +1,5 @@
 import { http } from '@/plugins/axios'
+import { AxiosProgressEvent } from 'axios'
 enum Apis {
     // 发验证码
     coreSmsUrl = '/core/sms',
@@ -27,11 +28,23 @@ enum Apis {
     // 我的消息列表查询
     getMyMessageList = '/core/user/getMyMessageList',
     // 设置消息为已读
-    setMyMessageRead = '/core/user/setMyMessageRead'
+    setMyMessageRead = '/core/user/setMyMessageRead',
+    // 校验手机号-邮箱的验证码
+    checkAccountCaptcha = '/core/user/checkAccountCaptcha',
+    // 修改手机号-邮箱
+    resetAccountInfo = '/core/user/resetAccountInfo',
+    // 获取用户职业列表
+    getbusinessList = '/core/webinfo/listByGroup?groupCd=job',
+    // 编辑个人资料
+    editUserInfo = '/core/user/editUserInfo',
+    // 上传背景图
+    uploadFileUrl = '/publish/component/upload'
 }
 export interface SmsData {
     mobile?: string
     email?: string
+    checkKey?: string
+    captcha?: string
     smsmode?: 0 | 1 | 2
 }
 
@@ -72,5 +85,12 @@ export default {
     requestFollowUser: (data: any) => http.postForm({ url: Apis.followUser, data }),
     requestUnFollowUser: (data: any) => http.postForm({ url: Apis.unFollowUser, data }),
     requestMyMessageList: (params: any) => http.get({ url: Apis.getMyMessageList, params }),
-    requestSetMyMessageRead: (data: any) => http.postForm({ url: Apis.setMyMessageRead, data })
+    requestSetMyMessageRead: (data: any) => http.postForm({ url: Apis.setMyMessageRead, data }),
+    checkAccountCaptchaApi: (data: any) => http.postForm({ url: Apis.checkAccountCaptcha, data }),
+    resetAccountInfoApi: (data: any) => http.postForm({ url: Apis.resetAccountInfo, data }),
+    getbusinessListApi: (key: string) => http.get({ url: Apis.getbusinessList + key }),
+    editUserInfoApi: (data: any) => http.post({ url: Apis.editUserInfo, data }),
+    uploadFileApi(data: any, onProgress?: (progressEvent: AxiosProgressEvent) => void, signal?: any) {
+        return http.uploadFile({ url: Apis.uploadFileUrl, onUploadProgress: onProgress, signal }, data, { isReturnResponse: true })
+    }
 }

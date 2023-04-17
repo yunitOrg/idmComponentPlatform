@@ -1,7 +1,7 @@
 <template>
     <!-- 组织滑动列表 -->
     <div class="flex org-box cursor-pointer">
-        <AImage :preview="false" :width="60" :height="60" :src="getImagePath(componentProps.orgphoto)"></AImage>
+        <AImage :preview="false" :width="60" :height="60" :src=" componentProps.id === '' ? componentProps.orgphoto : getImagePath(componentProps.orgphoto)"></AImage>
         <div style="margin: 0 0 0 15px" class="flex flex-direction-column justify-between flex-1">
             <div class="text-o-e-1 org-title">{{ componentProps.orgname }}</div>
             <div class="flex justify-between org-box-bottom align-center">

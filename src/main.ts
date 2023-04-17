@@ -4,6 +4,7 @@ import { setupStore } from './store'
 import { registerGlobComp } from '@/plugins/globalComponents'
 import { registerMdEditor } from '@/plugins/v-md-editor'
 import { registUndrawUI } from '@/plugins/undraw-ui'
+import { useDirectives } from '@/directives'
 import App from './App.vue'
 
 async function setupApp() {
@@ -23,6 +24,8 @@ async function setupApp() {
 
     // 评论
     registUndrawUI(app)
+
+    useDirectives(app)
 
     app.mount('#app')
 }

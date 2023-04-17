@@ -1,5 +1,5 @@
 <template>
-    <div v-if="pageData.hasPermission && !pageData.isFirst" class="page-max-width package-page flex">
+    <div v-show="pageData.hasPermission && !pageData.isFirst" class="page-max-width package-page flex">
         <div style="padding: 50px 30px 0 0">
             <ButtonList
                 :componentProp="pageData.packageDetail.componentInfo"
@@ -37,7 +37,9 @@
             </ACol>
         </ARow>
     </div>
-    <INoPermission v-if="!pageData.hasPermission && !pageData.isFirst" :text="pageData.errText"></INoPermission>
+    <div v-show="!pageData.hasPermission && !pageData.isFirst">
+        <INoPermission :text="pageData.errText"></INoPermission>
+    </div>
 </template>
 <script lang="ts" setup>
 import { useHomePageApi, useUserApi, useHomeActionApi } from '@/apis'
@@ -65,13 +67,13 @@ const componentInfoList = computed(() => {
 })
 
 const handleFetchPageData = () => {
-    pageData.isFirst = false
     useHomePageApi
         .requestHomeGetComponentDetail({
             componentId: route.query.componentId,
             version: route.query.version
         })
         .then((res) => {
+            pageData.isFirst = false
             if (res.success) {
                 pageData.packageDetail = res.result
                 pageData.contentUrl = res.result.codepackageInfo.currentCodePath + `/static/doc/components/${res.result.componentInfo.comClassname}.md`
@@ -84,7 +86,6 @@ const handleFetchPageData = () => {
 const comPreviewImgJson = computed(() => {
     if (pageData.packageDetail?.componentInfo?.comPreviewImgJson?.length > 0) {
         try {
-            console.log(JSON.parse(pageData.packageDetail.componentInfo.comPreviewImgJson))
             return JSON.parse(pageData.packageDetail.componentInfo.comPreviewImgJson)
         } catch (error) {
             return []
