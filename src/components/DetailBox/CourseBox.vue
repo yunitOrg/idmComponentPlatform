@@ -5,9 +5,9 @@
             <div class="header-change"><button @click="reset"><svg-icon iconClass="reset"></svg-icon>换一换</button></div>
         </div>
         <div class="course-box-list">
-            <div v-for="(item, index) in pageData.listData" :key="index" class="list-item flex justify-between align-center">
+            <div v-for="(item, index) in courseOptions" :key="index" class="list-item flex justify-between align-center">
                 <div class="list-item-left flex align-center">
-                    <div class="item-icon flex align-center justify-center"><img :src="getImagePath(item.icon) || defaultCourse"></div>
+                    <div class="item-icon flex align-center justify-center"><img :src="getImagePath(item.icon) || defaultCourse" alt="图片加载失败"></div>
                     <div class="item-name">{{ item.name }}</div>
                 </div>
                 <div class="list-item-right">
@@ -20,38 +20,13 @@
 <script lang="ts" setup>
 import { defaultCourse } from '@/assets/images'
 import { getImagePath } from '@/utils'
+import { courseOptions } from './mock/mockData'
 // const propData = defineProps({
 
 // })
-const pageData = reactive({
-    listData: [
-        {
-            icon: '',
-            name: 'Android开发',
-            id: '101'
-        },
-        {
-            icon: '',
-            name: '开放平台',
-            id: '102'
-        },
-        {
-            icon: '',
-            name: '数据库',
-            id: '103'
-        },
-        {
-            icon: '',
-            name: '开发工具',
-            id: '104'
-        },
-        {
-            icon: '',
-            name: '服务器',
-            id: '105'
-        }
-    ]
-})
+// const pageData = reactive({
+//     listData: []
+// })
 /**
  * 换一换按钮回调
  */

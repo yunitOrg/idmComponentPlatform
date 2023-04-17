@@ -13,11 +13,16 @@
         </div>
         <ARow :gutter="[20, 20]" class="flex-1">
             <ACol :span="17">
+                <DocTitleInfo type="imageText" :codePackageProp="pageData.docDetail.docInfo"></DocTitleInfo>
+                <div class="detail-md-outer">
+                    <v-md-preview ref="preview" :text="pageData.content"></v-md-preview>
+                </div>
                 <CommentBox commentTypeId="docId" articleType="3"></CommentBox>
+                <RecommendBox style="margin-bottom: 16px"></RecommendBox>
             </ACol>
             <ACol :span="7">
                 <UserInfoBox :userInfoProp="pageData.docDetail.docUserInfo" @onDoFollow="onDoFollow"></UserInfoBox>
-                <MdContent :contentUrl="pageData.contentUrl"></MdContent>
+                <CatalogueBox :docContentRef="preview"></CatalogueBox>
                 <CourseBox></CourseBox>
             </ACol>
         </ARow>
@@ -31,8 +36,11 @@ const pageData = reactive({
         isCollect: false, // 是否收藏
         isPraise: false // 是否点赞
     },
+    content: '## 一、修饰符是什么 \n  \n 在程序世界里，修饰符是用于限定类型以及类型成员的声明的一种符号 \n  \n 在Vue中，修饰符处理了许多DOM事件的细节，让我们不再需要花大量的时间去处理这些烦恼的事情，而能有更多的精力专注于程序的逻辑处理 \n  \n vue中修饰符分为以下五种： \n 表单修饰符 \n 事件修饰符 \n 鼠标按键修饰符 \n 键值修饰符 \n v-bind修饰符 \n ## 二、修饰符的作用 \n ### 表单修饰符 \n \n 在我们填写表单的时候用得最多的是input标签，指令用得最多的是v-model',
     contentUrl: '' // 目录链接
 })
+// 文档内容元素
+const preview = ref()
 /**
  * 文档操作按钮点击回调
  * @param type number
@@ -74,3 +82,8 @@ const onDoFollow = () => {
     pageData.docDetail.docUserInfo.focusThis = pageData.docDetail.docUserInfo.focusThis === 1 ? 0 : 1
 }
 </script>
+<style scoped lang="scss">
+.detail-md-outer {
+    background-color: #fff;
+}
+</style>

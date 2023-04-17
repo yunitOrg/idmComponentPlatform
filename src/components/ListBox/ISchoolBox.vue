@@ -32,7 +32,7 @@ defineProps({
 })
 const handleItemClick = () => {
     router.push({
-        name: 'index-iSchool-imageTextDetail',
+        name: 'index-iSchool-eBookDetail',
         query: {
             docId: '123'
         }
@@ -86,6 +86,7 @@ const handleItemClick = () => {
     }
 
     .school-box-title {
+        min-height: 48px;
         color: #000;
         padding: 5px 10px;
         font-size: 12px;

@@ -82,6 +82,14 @@ const routes: Array<RouteRecordRaw> = [
                 component: () => import('@/views/iSchool/detail/ImageText.vue')
             },
             {
+                path: 'eBookDetail',
+                meta: {
+                    title: '电子书详情'
+                },
+                name: 'index-iSchool-eBookDetail',
+                component: () => import('@/views/iSchool/detail/eBook.vue')
+            },
+            {
                 path: 'yunquan',
                 meta: {
                     title: '云圈'
