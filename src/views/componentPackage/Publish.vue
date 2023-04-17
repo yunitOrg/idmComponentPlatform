@@ -271,7 +271,7 @@
                                         </div>
                                         <a-form-item :wrapper-col="{ span: 24, offset: state.queryId ? 8 : 10 }" :style="{ padding: '20px 0' }">
                                             <a-button type="primary" html-type="submit" @click="() => formData.status = 1">保存并发布</a-button>
-                                            <a-button html-type="submit" :style="{ marginLeft: '20px' }" @click="() => formData.status = undefined">保存组件</a-button>
+                                            <a-button html-type="submit" :style="{ marginLeft: '20px' }" @click="() => formData.status = undefined">保存组件包</a-button>
                                             <a-button v-if="state.queryId" :style="{ marginLeft: '20px' }" @click="handlePublishCancel()">取消发布</a-button>
                                         </a-form-item>
                                     </AForm>
