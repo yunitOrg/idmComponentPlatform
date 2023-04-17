@@ -93,6 +93,7 @@
     <OrgInviteModal v-model:visible="pageData.orgInviteModalVisible" :itemData="pageData.orgItemData" />
     <OrgMemberModal v-model:visible="pageData.orgMemberModalVisible" :itemData="pageData.orgItemData" />
     <OrgManageModal v-model:visible="pageData.orgManageModalVisible" :itemData="pageData.orgItemData" />
+    <IVueCropper v-if="pageData.isCropperImageShow" :isCropperImageShow="pageData.isCropperImageShow" :file="pageData.fileData" @closeCropper="closeCropper"></IVueCropper>
 </template>
 
 <script lang="ts" setup>
@@ -157,14 +158,35 @@ const pageData = reactive<{ [x: string]: any }>({
         gender: 1
     },
     jobList: [],
-    isShowMore: false
+    isShowMore: false,
+    isCropperImageShow: false,
+    fileData: null
 })
 const editPersonInfo = () => {
     router.push({
         name: 'PersonInfo'
     })
 }
-
+const closeCropper = async (e: any) => {
+    console.log('关闭', e)
+    pageData.isCropperImageShow = false
+    if (e.type === 1) {
+        const res = await useUserApi.uploadFileApi({
+            file: e.file,
+            data: {
+                upFileType: 'image'
+            }
+        })
+        if (res.success) {
+            const { filePath } = res.result
+            const res1 = await useUserApi.editUserInfoApi({
+                centerBackground: filePath
+            })
+            if (!res1.success) message.error(res1.message || '修改背景图失败')
+            pageData.userInfo.centerBackground = filePath
+        }
+    }
+}
 const getItemValue = (id: string, arr: Array<any>) => {
     const item = arr.find((el) => el.id === id)
     if (item) return item.itemValue
@@ -209,20 +231,8 @@ watch(
     { immediate: true, deep: true }
 )
 const handleFileChange = async (e: any) => {
-    const res = await useUserApi.uploadFileApi({
-        file: e.file,
-        data: {
-            upFileType: 'image'
-        }
-    })
-    if (res.success) {
-        const { filePath } = res.result
-        const res1 = await useUserApi.editUserInfoApi({
-            centerBackground: filePath
-        })
-        if (!res1.success) message.error(res1.message || '修改背景图失败')
-        pageData.userInfo.centerBackground = filePath
-    }
+    pageData.fileData = e.file
+    pageData.isCropperImageShow = true
 }
 const resetPagination = () => {
     pageData.listData = []
