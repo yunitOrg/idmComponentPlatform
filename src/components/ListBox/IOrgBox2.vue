@@ -168,6 +168,7 @@ const emits = defineEmits(['handleApplyOrg', 'handleOrgHome', 'handleOrgManage',
         color: #333333;
     }
     .apply-btn {
+        opacity: 0;
         border-radius: 5px;
         border: 1px solid #40a9ff;
         padding: 0 10px 2px 10px;
@@ -178,6 +179,9 @@ const emits = defineEmits(['handleApplyOrg', 'handleOrgHome', 'handleOrgManage',
         &:not(:last-child) {
             margin-right: 10px;
         }
+    }
+    &:hover .apply-btn {
+        opacity: 1;
     }
 
     .info-item {

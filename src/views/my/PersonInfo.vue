@@ -104,6 +104,7 @@
                 <a-button type="primary" :loading="pageState.isSaveLoading" size="large" :block="true" @click="save">保存</a-button>
             </div>
         </div>
+        <i-vue-cropper v-if="pageState.isCropperImageShow" :isCropperImageShow="pageState.isCropperImageShow" :file="pageState.fileData" @closeCropper="closeCropper"></i-vue-cropper>
     </div>
 </template>
 <script lang="ts" setup>
@@ -134,7 +135,10 @@ const FormState:any = reactive({
 })
 const pageState: any = reactive({
     businessList: [],
-    isSaveLoading: false
+    isSaveLoading: false,
+    isCropperImageShow: false,
+    cropperType: '',
+    fileData: null
 })
 const getBgImageUrl = (key: string) => {
     return getImagePath(FormState[key])
@@ -192,8 +196,31 @@ const getUserInfoData = () => {
 }
 const handleChange = (e: any, key: any) => {
     console.log('handleChange', e)
+    console.log('handleChange', key)
+    pageState.cropperType = key
+    pageState.fileData = e.file
+    pageState.isCropperImageShow = true
+    // return
+    // const params = {
+    //     file: e.file,
+    //     data: {
+    //         upFileType: 'image'
+    //     }
+    // }
+    // useUserApi.uploadFileApi(params).then((res) => {
+    //     if (res.success) {
+    //         message.success(res.message)
+    //         FormState[key] = res.result.filePath
+    //     } else {
+    //         message.error(res.message)
+    //     }
+    // }).catch((err) => {
+    //     console.log(err)
+    // })
+}
+const uploadFileSubmit = (file: any) => {
     const params = {
-        file: e.file,
+        file,
         data: {
             upFileType: 'image'
         }
@@ -201,7 +228,7 @@ const handleChange = (e: any, key: any) => {
     useUserApi.uploadFileApi(params).then((res) => {
         if (res.success) {
             message.success(res.message)
-            FormState[key] = res.result.filePath
+            FormState[pageState.cropperType] = res.result.filePath
         } else {
             message.error(res.message)
         }
@@ -212,6 +239,13 @@ const handleChange = (e: any, key: any) => {
 const beforeUpload = (e: any) => {
     console.log('beforeUpload', e)
     return false
+}
+const closeCropper = (e: any) => {
+    console.log('关闭', e)
+    pageState.isCropperImageShow = false
+    if (e.type === 1) {
+        uploadFileSubmit(e.file)
+    }
 }
 const backHome = () => {
     router.push({

@@ -472,6 +472,11 @@ const handleClickActionBtn = (action: string) => {
                 name: 'AccountPassword'
             })
             break
+        case 'personInfo':
+            router.push({
+                name: 'PersonInfo'
+            })
+            break
     }
 }
 </script>

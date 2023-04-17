@@ -64,7 +64,11 @@ const handleOk = () => {
         rolePublic: state.data.rolePublic,
         roleInvitation: state.data.roleInvitation,
         roleTopic: state.data.roleTopic,
-        joinCheck: state.data.joinCheck
+        joinCheck: state.data.joinCheck,
+        orgphoto: state.data.orgphoto,
+        orgname: state.data.orgname,
+        introduce: state.data.introduce,
+        companyName: state.data.companyName
     }
     useOrgAboutApi.requestSaveOrgInfo({ ...data }).then((res: any) => {
         state.btnLoading = false

@@ -276,7 +276,10 @@ coreApi.requestWebInfoListByGroup({ groupCd: 'job' }).then((res: any) => {
         pageData.jobList = res.result
     }
 })
-getListData()
+
+onUpdated(() => {
+    getListData()
+})
 </script>
 
 <style lang="scss" scoped>
