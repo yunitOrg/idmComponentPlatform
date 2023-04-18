@@ -74,6 +74,7 @@ const handleItemClick = () => {
     }
 
     .package-class-describe {
+        height: 38px;
         color: #555;
         font-size: 12px;
         margin: 10px 0;
