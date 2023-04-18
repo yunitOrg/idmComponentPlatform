@@ -29,7 +29,7 @@
 </template>
 <script lang="ts" setup>
 import { IComponentMarketData } from './mock/mockData'
-import { useHomePageApi } from '@/apis'
+import { baseURL } from '@/plugins/axios'
 import { getImagePath } from '@/utils'
 const router = useRouter()
 const propData = defineProps({
@@ -41,8 +41,16 @@ const propData = defineProps({
 
 const handlePreview = () => {
     if (propData.componentProps.codePath) {
-        const url = propData.componentProps.codePath + '/index.html?className=' + propData.componentProps.comClassname
-        useHomePageApi.handlePreviewComponent(url)
+        const url = baseURL + propData.componentProps.codePath + '/index.html?className=' + propData.componentProps.comClassname
+        const { href } = router.resolve({
+            name: 'previewComponent',
+            query: {
+                previewSrc: url,
+                componentName: propData.componentProps.comTitle,
+                adaptiveType: propData.componentProps.adaptiveType
+            }
+        })
+        window.open(href, '_blank')
     }
 }
 const handleItemClick = () => {

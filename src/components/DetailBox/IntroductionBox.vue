@@ -27,10 +27,11 @@
 </template>
 
 <script lang="ts" setup>
+import { baseURL } from '@/plugins/axios'
 import { githubImage, giteeImage } from '@/assets/images'
 import { defaultSettings } from '@/settings/defaultSetting'
 import { transformSize } from '@/utils'
-import { componentPublishApi, useHomePageApi } from '@/apis'
+import { componentPublishApi } from '@/apis'
 const propData = defineProps({
     title: {
         type: String,
@@ -62,10 +63,20 @@ const currentLookVersion = computed(() => {
     if (route.query.version) return route.query.version
     return propData.codePackageProp.currentVersion
 })
+const router = useRouter()
 const handlePreviewComponent = () => {
-    if (propData.codePackageVersionInfoProp?.codePath) {
-        const url = propData.codePackageVersionInfoProp.codePath + '/index.html?className=' + propData.componentProp.comClassname
-        useHomePageApi.handlePreviewComponent(url)
+    const filePath = propData.codePackageVersionInfoProp?.codePath || propData.codePackageProp?.currentCodePath
+    if (filePath) {
+        const url = baseURL + filePath + '/index.html?className=' + propData.componentProp.comClassname
+        const { href } = router.resolve({
+            name: 'previewComponent',
+            query: {
+                previewSrc: url,
+                componentName: propData.componentProp.comTitle,
+                adaptiveType: propData.componentProp.adaptiveType
+            }
+        })
+        window.open(href, '_blank')
     }
 }
 const handleDownLoad = async (type: number) => {

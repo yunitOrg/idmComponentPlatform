@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useHomePageApi } from '@/apis'
+import { baseURL } from '@/plugins/axios'
 import { componentMarketDetault } from '@/assets/images'
 import { getImagePath } from '@/utils'
 const router = useRouter()
@@ -45,8 +45,16 @@ const pageData = reactive({
 })
 const handlePreview = (item: any) => {
     if (item.currentCodePath || propData.codePackageProp.currentCodePath) {
-        const url = propData.codePackageProp.currentCodePath + '/index.html?className=' + item.comClassname
-        useHomePageApi.handlePreviewComponent(url)
+        const url = baseURL + propData.codePackageProp.currentCodePath + '/index.html?className=' + item.comClassname
+        const { href } = router.resolve({
+            name: 'previewComponent',
+            query: {
+                previewSrc: url,
+                componentName: item.comTitle,
+                adaptiveType: item.adaptiveType
+            }
+        })
+        window.open(href, '_blank')
     }
 }
 const handleLookMore = () => {

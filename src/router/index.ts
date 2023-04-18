@@ -196,6 +196,14 @@ const routes: Array<RouteRecordRaw> = [
             title: '组织邀请'
         },
         component: () => import('@/views/share/index.vue')
+    },
+    {
+        path: '/previewComponent',
+        name: 'previewComponent',
+        meta: {
+            title: '预览组件'
+        },
+        component: () => import('@/views/previewComponent/index.vue')
     }
 ]
 
