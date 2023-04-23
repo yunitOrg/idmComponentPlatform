@@ -42,7 +42,7 @@
                         <a-pagination
                             v-model:current="state.pageNo"
                             v-model:page-size="state.pageSize"
-                            show-quick-jumper
+                            show-size-changer
                             :total="state.total"
                             @change="handlePageChange"
                         />

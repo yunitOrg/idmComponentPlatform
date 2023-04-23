@@ -59,6 +59,8 @@
                                             style="width: 100%"
                                             allow-clear
                                             show-arrow
+                                            show-search
+                                            :filterOption="handleCodepackageFilterOption"
                                             placeholder="请选择"
                                             :options="state.codepackageClassList"
                                         />
@@ -265,7 +267,7 @@ onMounted(() => {
         state.selectedKey = 'create'
         state.formDataList = [{
             comId: 'create',
-            codepackageId: '',
+            codepackageId: null,
             adaptiveType: 0,
             formLoading: false
         }]
@@ -370,7 +372,7 @@ const onFinish = async (data: any, i?: any) => {
             } else {
                 state.formDataList = [{
                     comId: 'create',
-                    codepackageId: '',
+                    codepackageId: null,
                     adaptiveType: 0,
                     formLoading: false
                 }]
@@ -525,6 +527,10 @@ const getTagsList = async () => {
 }
 const getCooperationUserList = async (text: string) => {
     return await useHomeCoreApi.requestSearchUser({ searchTxt: text })
+}
+const handleCodepackageFilterOption = (inputValue: string, option: any) => {
+    const label = option.label.toUpperCase()
+    return label.includes(inputValue.toUpperCase())
 }
 const showConfirm = (title: string, content: string, icon: any, iconColor?: string, okText?: string, cancelText?: string) => {
     return new Promise((resolve) => {
