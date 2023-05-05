@@ -510,7 +510,7 @@ const handleClickActionBtn = (action: string) => {
         padding: 0 15px !important;
     }
     ::v-deep(.ant-menu-item::after) {
-        bottom: 34px !important;
+        bottom: 35px !important;
     }
     .input-bgcolor {
         background-color: rgb(243, 245, 246);
