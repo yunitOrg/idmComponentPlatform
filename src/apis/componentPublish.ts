@@ -26,7 +26,9 @@ enum Apis {
     // 组件包删除
     requestDeleteChangeUrl = '/publish/component/deleteChange',
     // 组件删除
-    requestDeleteChangeComponentUrl = '/publish/component/deleteChangeComponent'
+    requestDeleteChangeComponentUrl = '/publish/component/deleteChangeComponent',
+    // 获取指定组件包的所有已经注册的组件
+    requestCodePackageAllComponentListUrl = '/publish/component/getCodePackageAllComponentList'
 }
 
 export default {
@@ -52,6 +54,7 @@ export default {
     requestChangeStatus: (data: object) => http.postForm({ url: Apis.requestChangeStatusUrl, data }),
     requestDeleteChange: (data: object) => http.postForm({ url: Apis.requestDeleteChangeUrl, data }),
     requestDeleteChangeComponent: (data: object) => http.postForm({ url: Apis.requestDeleteChangeComponentUrl, data }),
+    requestCodePackageAllComponentList: (params: object) => http.get({ url: Apis.requestCodePackageAllComponentListUrl, params }),
 
     componentStaticUrl: baseURL + Apis.componentStaticUrl
 }

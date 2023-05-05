@@ -1,6 +1,6 @@
 <template>
     <a-select
-        v-model:value="state.value"
+        :value="state.value"
         style="width: 100%"
         allow-clear
         show-arrow
@@ -13,14 +13,15 @@
         @search="(value: string) => asyncSearch && getOptions(value)"
         @change="handleChange"
     >
-        <template v-if="state.loading" #notFoundContent>
-            <a-spin size="small" />
+        <template v-if="state.loading || !state.text" #notFoundContent>
+            <a-spin v-if="state.loading" size="small" />
+            <div v-else>请输入文字查询</div>
         </template>
     </a-select>
 </template>
 <script lang="ts" setup>
 import { debounce } from 'lodash-es'
-import { selectProps, SelectValue } from 'ant-design-vue/es/select'
+import { selectProps } from 'ant-design-vue/es/select'
 const props = defineProps({
     ...selectProps(),
     asyncSearch: {
@@ -40,10 +41,11 @@ const props = defineProps({
         }
     }
 })
-const state = reactive({
+const state = reactive<{[x: string]: any}>({
     data: [],
-    value: undefined as SelectValue,
-    loading: false
+    value: undefined,
+    loading: false,
+    text: ''
 })
 const emit = defineEmits(['update:value'])
 watch(() => props.value, () => {
@@ -54,6 +56,7 @@ onMounted(() => {
 })
 
 const getOptions = debounce(async (text: string) => {
+    state.text = text
     if (!props.request) return
     state.data = []
     state.loading = true

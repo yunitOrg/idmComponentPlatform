@@ -26,7 +26,7 @@ const getIPAdress = function () {
         const iface = interfaces[devName]
         for (let i = 0; i < iface.length; i++) {
             const alias = iface[i]
-            if (['IPv4', 'IPv6'].includes(alias.family) && alias.address !== '127.0.0.1' && !alias.internal && alias.address.indexOf('::') === -1) {
+            if (['IPv4', 'IPv6'].includes(alias.family) && alias.address !== '127.0.0.1' && !alias.internal && alias.address.length < 20) {
                 ips.push(alias.address)
             }
         }

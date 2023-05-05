@@ -59,6 +59,8 @@
                                             style="width: 100%"
                                             allow-clear
                                             show-arrow
+                                            show-search
+                                            :filterOption="handleCodepackageFilterOption"
                                             placeholder="请选择"
                                             :options="state.codepackageClassList"
                                         />
@@ -116,6 +118,13 @@
                                         :rules="[{ required: true, message: '必填!' }]"
                                     >
                                         <a-radio-group v-model:value="formData.comLangue" :options="state.codeLangueList" />
+                                    </a-form-item>
+                                    <a-form-item
+                                        name="adaptiveType"
+                                        label="组件适配类型"
+                                        :rules="[{ required: true, message: '必填!' }]"
+                                    >
+                                        <a-radio-group v-model:value="formData.adaptiveType" :options="state.adaptiveTypeList" />
                                     </a-form-item>
                                     <a-form-item name="comIconfont" label="字体图标">
                                         <IIconSelect v-model:value="formData.comIconfont" />
@@ -230,6 +239,7 @@ const state = reactive<any>({
     saveAllLoading: false,
     formDataList: [],
     codeLangueList: [],
+    adaptiveTypeList: [{ label: '通用', value: 0 }, { label: 'PC', value: 1 }, { label: '移动', value: 2 }],
     codepackageClassList: [],
     queryId: route.query?.componentIds
 })
@@ -245,6 +255,7 @@ onMounted(() => {
         comIds.forEach((comId: string, index: number) => {
             state.formDataList.push({
                 comId,
+                adaptiveType: 0,
                 formLoading: false
             })
             promiseArr.push(getDistinfo(comId, index))
@@ -254,14 +265,16 @@ onMounted(() => {
         })
     } else {
         state.selectedKey = 'create'
-        state.formDataList.push({
+        state.formDataList = [{
             comId: 'create',
-            formLoading: false,
-            codepackageId: ''
-        })
+            codepackageId: null,
+            adaptiveType: 0,
+            formLoading: false
+        }]
         getAllCodepackageClass()
         watch(() => state.formDataList[currentIndex.value].codepackageId, (newValue, oldValue) => {
             if (newValue && newValue !== oldValue) {
+                getExistCodePackage()
                 getCodePackageVersionList()
                 setCodepackageClassname()
                 state.formDataList[currentIndex.value].codepackageVersion = null
@@ -357,7 +370,13 @@ const onFinish = async (data: any, i?: any) => {
             if (answer) {
                 window.location.replace(`/componentMarketDetail?componentId=${res.result}`)
             } else {
-                window.location.reload()
+                state.formDataList = [{
+                    comId: 'create',
+                    codepackageId: null,
+                    adaptiveType: 0,
+                    formLoading: false
+                }]
+                window.scrollTo(0, 0)
             }
         } else {
             if (data.status) {
@@ -447,6 +466,15 @@ const getAllCodepackageClass = async () => {
         state.codepackageClassList = arr
     }
 }
+const getExistCodePackage = async () => {
+    const index = currentIndex.value
+    const codepackageId = state.formDataList[index].codepackageId
+    const res = await componentPublishApi.requestCodePackageAllComponentList({ codepackageId })
+    if (res.success) {
+        const arr = res.result
+        state.formDataList[index].existCodePackageList = arr
+    }
+}
 const getCodePackageVersionList = async () => {
     const index = currentIndex.value
     const codepackageId = state.formDataList[index].codepackageId
@@ -464,12 +492,14 @@ const getCodePackageVersionList = async () => {
 const getComClassList = async () => {
     const index = currentIndex.value
     const codepackageVersion = state.formDataList[index].codepackageVersion
+    const existCodePackageList = state.formDataList[index].existCodePackageList
     const versionItem = state.formDataList[index].currentCodepackageversionList.find((item: any) => item.version === codepackageVersion)
     state.formDataList[index].currentComClassList = versionItem
         ? versionItem.configText.module.map((item: any) => ({
             ...item,
             label: item.className,
-            value: item.className
+            value: item.className,
+            disabled: existCodePackageList && existCodePackageList.some((i:any) => i.comClassname === item.className)
         }))
         : []
 }
@@ -497,6 +527,10 @@ const getTagsList = async () => {
 }
 const getCooperationUserList = async (text: string) => {
     return await useHomeCoreApi.requestSearchUser({ searchTxt: text })
+}
+const handleCodepackageFilterOption = (inputValue: string, option: any) => {
+    const label = option.label.toUpperCase()
+    return label.includes(inputValue.toUpperCase())
 }
 const showConfirm = (title: string, content: string, icon: any, iconColor?: string, okText?: string, cancelText?: string) => {
     return new Promise((resolve) => {
