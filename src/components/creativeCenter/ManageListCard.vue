@@ -2,7 +2,7 @@
     <div class="manage-list-card">
         <div v-if="props.imageName" class="image-wapper">
             <div class="preview-tag cursor-pointer" @click.stop="props.onPreviewComponentClick">预览</div>
-            <img object-fit alt="图片加载失败" class="image" :src="getImagePath(props.image)" />
+            <img object-fit alt="图片加载失败" class="image" :src="getImagePath(props.image) || componentMarketDetault" />
             <div class="package-bar">组件包：{{ props.imageName }}</div>
         </div>
         <div class="items">
@@ -52,6 +52,7 @@
 <script lang="ts" setup>
 import { TeamOutlined, EllipsisOutlined, CloudOutlined } from '@ant-design/icons-vue'
 import { getImagePath } from '@/utils'
+import { componentMarketDetault } from '@/assets/images'
 const colorMap: any = {
     Vue: {
         color: '#389e0d',
@@ -214,11 +215,14 @@ const handleVersionCountClick = async (visible: boolean) => {
   padding: 20px 5px;
   border-bottom: 1px solid rgb(230, 230, 230);
   display: flex;
+  align-items: center;
   .image-wapper{
     position: relative;
     border-radius: 5px;
     overflow: hidden;
     margin-right: 20px;
+    flex-shrink: 1;
+    width: 210px;
     .preview-tag {
         position: absolute;
         top: 6px;
@@ -250,9 +254,9 @@ const handleVersionCountClick = async (visible: boolean) => {
     .image {
         display: block;
         overflow: hidden;
-        width: 200px;
-        height: 100%;
-        object-fit: fill;
+        width: 100%;
+        height: 118px;
+        object-fit: cover;
     }
     &:hover {
         .preview-tag {

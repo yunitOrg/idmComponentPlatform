@@ -23,7 +23,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
     const envData = loadEnv(mode, root) as unknown as VITE_ENV_CONFIG
 
     return {
-        base: './',
+        base: '/',
         plugins: [
             vue(),
             DefineOptions(),

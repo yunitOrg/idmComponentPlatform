@@ -54,7 +54,7 @@
                             v-model:current="state.pageNo"
                             v-model:page-size="state.pageSize"
                             size="small"
-                            show-quick-jumper
+                            show-size-changer
                             :total="state.total"
                             @change="handlePageChange"
                         />

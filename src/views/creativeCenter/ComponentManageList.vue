@@ -42,7 +42,7 @@
                         <a-pagination
                             v-model:current="state.pageNo"
                             v-model:page-size="state.pageSize"
-                            show-quick-jumper
+                            show-size-changer
                             :total="state.total"
                             @change="handlePageChange"
                         />
@@ -60,6 +60,8 @@ import { copyToBoard } from '@/utils/copy'
 import { useHomePageApi, componentPublishApi } from '@/apis'
 import { message, Modal } from 'ant-design-vue'
 import { ExclamationCircleOutlined } from '@ant-design/icons-vue'
+import { baseURL } from '@/plugins/axios'
+const router = useRouter()
 const state = reactive<any>({
     list: [],
     loading: false,
@@ -156,8 +158,16 @@ const handleDeleteClick = async (data: any) => {
 }
 const handlePreviewComponent = (data: any) => {
     if (data.codePath) {
-        const url = data.codePath + '/index.html?className=' + data.comClassname
-        useHomePageApi.handlePreviewComponent(url)
+        const url = `${baseURL + data.codePath}index.html?className=${data.comClassname}`
+        const { href } = router.resolve({
+            name: 'previewComponent',
+            query: {
+                previewSrc: url,
+                componentName: data.comTitle,
+                adaptiveType: data.adaptiveType
+            }
+        })
+        window.open(href, '_blank')
     }
 }
 const showConfirm = (title: string, content: string) => {
