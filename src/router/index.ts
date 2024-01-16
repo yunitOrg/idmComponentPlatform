@@ -90,6 +90,14 @@ const routes: Array<RouteRecordRaw> = [
                 component: () => import('@/views/iSchool/detail/eBook.vue')
             },
             {
+                path: 'videoDetail',
+                meta: {
+                    title: '视频详情'
+                },
+                name: 'index-iSchool-videoDetail',
+                component: () => import('@/views/iSchool/detail/video.vue')
+            },
+            {
                 path: 'yunquan',
                 meta: {
                     title: '云圈'

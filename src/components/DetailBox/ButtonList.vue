@@ -1,5 +1,5 @@
 <template>
-    <div class="idm-button-list-container">
+    <div class="idm-button-list-container" :class="{'horizontal':alignType === 'horizontal'}">
         <div class="idm-button-list-box">
             <div :class="['idm-button-list-icon', 'cursor-pointer', 'flex', 'justify-center', 'align-center', isPraise && 'btn-active']" @click="handlePraise">
                 <svg-icon iconClass="dianzan" style="font-size: 19px"></svg-icon>
@@ -66,6 +66,10 @@ const propData = defineProps({
     sourceId: {
         type: String,
         default: ''
+    },
+    alignType: {
+        type: String,
+        default: 'vertical'
     }
 })
 const emits = defineEmits(['handleClickButtonList', 'cancelCollect', 'collectSuccess'])
@@ -111,6 +115,14 @@ const handleClickComment = () => {
 .idm-button-list-container {
     position: sticky;
     top: 130px;
+    &.horizontal {
+        display: flex;
+        justify-content: space-around;
+        padding: 0 20%;
+        .idm-button-list-box {
+            margin: 0;
+        }
+    }
     .idm-button-list-box {
         margin: 0 0 20px 0;
     }
