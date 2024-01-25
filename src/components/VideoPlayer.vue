@@ -9,49 +9,55 @@
 import { reactive, ref, onMounted } from 'vue'
 import Video from 'video.js'
 import 'video.js/dist/video-js.min.css'
+// 加载中文
+import zhcn from 'video.js/dist/lang/zh-CN.json'
+// 使用中文
+Video.addLanguage('zh-CN', zhcn)
 
 reactive({
     player: null,
     options: null
 })
+
+const props = defineProps({
+    videoId: {
+        type: String,
+        default: ''
+    }
+})
+console.log(props.videoId)
 const pageData = reactive<{ player: Object; options: Object }>({
     player: () => {},
     options: {
         controls: true, // 是否显示底部控制栏
         preload: 'auto', // 加载<video>标签后是否加载视频
-        autoplay: 'muted', // 静音播放
-        // playbackRates: [0.5, 1, 1.5, 2],// 倍速播放
+        autoplay: false, // 静音播放muted
+        playbackRates: [0.5, 1, 1.5, 2, 2.5],
         // width: '',
         height: '600',
+        language: 'zh-CN',
+        durationDisplay: true, // 总时间
         controlBar: {
-            // 自定义按钮的位置
+            // 设置控制条组件
+            /* 使用children的形式可以控制每一个控件的位置，以及显示与否 */
             children: [
+                { name: 'playToggle' }, // 播放按钮
+                { name: 'currentTimeDisplay' }, // 当前已播放时间
+                { name: 'progressControl' }, // 播放进度条
+                { name: 'durationDisplay' }, // 总时间
                 {
-                    name: 'playToggle'
+                    // 倍数播放
+                    name: 'playbackRateMenuButton',
+                    playbackRates: [0.5, 1, 1.5, 2, 2.5]
                 },
                 {
-                    name: 'progressControl'
+                    name: 'pictureInPictureToggle' // 画中画
                 },
                 {
-                    name: 'currentTimeDisplay'
+                    name: 'volumePanel', // 音量控制
+                    inline: false // 不使用水平方式
                 },
-                {
-                    name: 'timeDivider'
-                },
-                {
-                    name: 'durationDisplay'
-                },
-
-                {
-                    name: 'volumePanel', // 音量调整方式横线条变为竖线条
-                    inline: false
-                },
-                {
-                    name: 'pictureInPictureToggle'
-                },
-                {
-                    name: 'fullscreenToggle'
-                }
+                { name: 'FullscreenToggle' } // 全屏
             ]
         }
     }
@@ -65,3 +71,13 @@ onMounted(() => {
     })
 })
 </script>
+<style scoped lang="scss">
+::v-deep .video-js {
+    .vjs-control-bar {
+        .vjs-current-time,
+        .vjs-duration {
+            display: block;
+        }
+    }
+}
+</style>

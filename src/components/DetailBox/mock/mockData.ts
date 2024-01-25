@@ -80,4 +80,19 @@ export const docTitleInfoOptions = {
         }
     ]
 }
+
+export const videoTitleInfoOptions = {
+    breadcrumbs: [{
+        title: '首页',
+        herf: 'aaa'
+    },
+    {
+        title: '教程',
+        herf: 'bbb'
+    },
+    {
+        title: '实用数据分析：数据分析师从小白到精通',
+        herf: 'ccc'
+    }]
+}
 export default {}
