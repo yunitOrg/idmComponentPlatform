@@ -32,7 +32,9 @@ defineProps({
 })
 const handleItemClick = () => {
     router.push({
-        name: 'index-iSchool-videoDetail',
+        // name: 'index-iSchool-videoDetail',
+        name: 'index-iSchool-eBookDetail',
+        // name: 'index-iSchool-imageTextDetail',
         query: {
             docId: '123'
         }

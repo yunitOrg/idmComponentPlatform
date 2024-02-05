@@ -25,7 +25,7 @@ const reset = () => {
     console.log('换一换')
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .recommend-box {
     margin-top: 16px;
 

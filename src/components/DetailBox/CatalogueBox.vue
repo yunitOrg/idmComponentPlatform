@@ -1,6 +1,6 @@
 <template>
-    <div class="idm-component-common-box recommend-box">
-        <div class="recommend-box-header flex justify-between">
+    <div class="idm-component-common-box catalogue-box">
+        <div class="catalogue-box-header flex justify-between">
             <div class="header-title">目录</div>
         </div>
         <div class="anchor-container common-scrollbar_style">
@@ -65,25 +65,34 @@ const handleAnchorClick = (anchor: any) => {
     }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
+.catalogue-box {
+    margin-top: 16px;
+
+    .catalogue-box-header {
+        padding: 10px 15px;
+        font-size: 16px;
+    }
+}
 .anchor-container {
-        max-height: 500px;
-        overflow: auto;
+    max-height: 500px;
+    overflow: auto;
+}
+.ant-popover-inner-content {
+    padding: {
+        left: 0;
+        right: 0;
     }
-    .ant-popover-inner-content {
-        padding: {
-            left: 0;
-            right: 0;
-        }
+}
+.anchor-line {
+    margin: 0 0 2px 0;
+    font-size: 14px;
+    transition: all 0;
+    color: #333333;
+    padding: 6px 0;
+    &:hover {
+        background-color: rgb(245, 245, 250);
+        color: rgb(252, 85, 59);
     }
-    .anchor-line {
-        margin: 0 0 10px 0;
-        font-size: 14px;
-        transition: all 0;
-        color: #333333;
-        &:hover {
-            background-color: rgb(245, 245, 250);
-            color: rgb(252, 85, 59);
-        }
-    }
+}
 </style>

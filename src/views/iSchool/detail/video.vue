@@ -41,7 +41,8 @@
                 </ACol>
                 <ACol :span="7">
                     <UserInfoBox style="margin-top: 16px" :userInfoProp="pageData.docDetail.docUserInfo" @onDoFollow="onDoFollow"></UserInfoBox>
-                    <CourseBox></CourseBox>
+                    <AttachmentBox :userInfoProp="pageData.docDetail.docUserInfo"></AttachmentBox>
+                    <RelatedComponent :userInfoProp="pageData.docDetail.docUserInfo" style="margin-bottom: 20px;"></RelatedComponent>
                 </ACol>
             </ARow>
         </div>
