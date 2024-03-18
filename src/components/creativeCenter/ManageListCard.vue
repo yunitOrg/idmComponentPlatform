@@ -1,15 +1,16 @@
 <template>
     <div class="manage-list-card">
-        <div v-if="props.imageName" class="image-wapper">
-            <div class="preview-tag cursor-pointer" @click.stop="props.onPreviewComponentClick">预览</div>
+        <div v-if="props.imageName || props.typeText" class="image-wapper">
+            <div v-if="props.onPreviewComponentClick" class="preview-tag cursor-pointer" @click.stop="props.onPreviewComponentClick">预览</div>
             <img object-fit alt="图片加载失败" class="image" :src="getImagePath(props.image) || componentMarketDetault" />
-            <div class="package-bar">组件包：{{ props.imageName }}</div>
+            <div v-if="props.imageName" class="package-bar">组件包：{{ props.imageName }}</div>
+            <div v-if="props.typeText" class="type-text">{{ props.typeText }}</div>
         </div>
         <div class="items">
             <div class="title-wapper">
-                <div class="title" @click="props.onClick">{{ props.title }} / {{ props.class }}</div>
-                <div class="codeLangue" :style="colorMap[props.codeLangue]">{{ props.codeLangue }}</div>
-                <div class="version">{{ props.version }}</div>
+                <div class="title" @click="props.onClick">{{ props.title }} <template v-if="props.class"> / {{ props.class }}</template></div>
+                <div v-if="props.codeLangue" class="codeLangue" :style="colorMap[props.codeLangue]">{{ props.codeLangue }}</div>
+                <div v-if="props.version" class="version">{{ props.version }}</div>
                 <div v-if="!props.open" class="org-tag range"><team-outlined />{{ props.range }}</div>
                 <div v-else class="org-tag open"><cloud-outlined />公开</div>
             </div>
@@ -23,7 +24,7 @@
                     <template #content>
                         <div v-for="item, index in versionList" :key="item.id" :style="{ cursor: 'pointer', padding: '0 5px', 'margin-bottom': index !== versionList.length -1 ? '10px' : '' }" @click.stop="props.onVersionClick(item)">{{ item.version || item.codepackageVersion }}</div>
                     </template>
-                    <a class="versionCount">共有 {{ props.versionCount }} 个版本</a>
+                    <a v-if="props.versionCount" class="versionCount">共有 {{ props.versionCount }} 个版本</a>
                 </a-popover>
                 <div v-if="props.type" class="type">{{ props.type }}</div>
                 <div class="tags">
@@ -35,6 +36,7 @@
                     <div class="item" @click.stop="props.onEditClick">编辑</div>
                     <div class="item" @click.stop="props.onViewClick">浏览</div>
                     <div v-if="props.onPreviewComponentClick" class="item" @click.stop="props.onPreviewComponentClick">预览组件</div>
+                    <div v-if="props.onUploadVideoClick" class="item" @click.stop="props.onUploadVideoClick">上传视频</div>
                     <div class="item">
                         <a-popover trigger="click" overlayClassName="manage-list-card-popover-content" placement="bottom">
                             <template #content>
@@ -141,6 +143,10 @@ const props = defineProps({
         type: String,
         default: ''
     },
+    typeText: {
+        type: String,
+        default: ''
+    },
     tags: {
         type: String,
         default: ''
@@ -192,6 +198,10 @@ const props = defineProps({
         }
     },
     onPreviewComponentClick: {
+        type: Function,
+        default: undefined
+    },
+    onUploadVideoClick: {
         type: Function,
         default: undefined
     }
@@ -250,6 +260,17 @@ const handleVersionCountClick = async (visible: boolean) => {
         //         rgba(255, 255, 255, 0.4),
         //         rgba(150, 150, 150, 0.3));
         background: rgba($color: #000000, $alpha: 0.3);
+    }
+    .type-text {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        background: rgba($color: #000000, $alpha: 0.3);
+        color: #fff;
+        font-size: 12px;
+        line-height: 25px;
+        padding: 0 10px;
+        border-radius: 5px 0 0 0;
     }
     .image {
         display: block;

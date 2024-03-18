@@ -21,6 +21,10 @@ export default {
                 {
                     title: '传组件包',
                     routeName: '/componentPackagePublish'
+                },
+                {
+                    title: '发教程',
+                    routeName: '/coursePublish'
                 }
             ]
         },
@@ -36,6 +40,10 @@ export default {
                 {
                     title: '组件管理',
                     routeName: 'index-creativeCenter-componentManageList'
+                },
+                {
+                    title: '教程管理',
+                    routeName: 'index-creativeCenter-courseManageList'
                 }
             ]
         }

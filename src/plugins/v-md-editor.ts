@@ -29,6 +29,8 @@ import 'codemirror/addon/scroll/simplescrollbars'
 import 'codemirror/addon/scroll/simplescrollbars.css'
 // style
 import 'codemirror/lib/codemirror.css'
+// 自定义图标
+import '@/assets/iconfont/iconfont.css'
 
 VMdEditor.Codemirror = Codemirror
 VMdEditor.use(githubTheme, {

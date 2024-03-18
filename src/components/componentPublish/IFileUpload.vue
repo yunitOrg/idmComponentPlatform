@@ -1,12 +1,15 @@
 <template>
     <AUpload
-        v-show="!state.fileList || !state.fileList.length"
-        accept=".zip,.rar"
+        v-show="props.multiple || !state.fileList || !state.fileList.length"
+        :accept="props.accept"
+        :multiple="props.multiple"
         :disabled="loading"
         :show-upload-list="false"
         :before-upload="handleUpload"
     >
-        <AButton :disabled="loading"><upload-outlined />上传文件</AButton>
+        <slot>
+            <AButton :disabled="loading"><upload-outlined />上传文件</AButton>
+        </slot>
     </AUpload>
     <div v-show="state.fileList && state.fileList.length">
         <div v-for="item, index in state.fileList" :key="index" class="file-item">
@@ -40,15 +43,15 @@ const props = defineProps({
     multiple: {
         type: Boolean,
         default: false
-    }
+    },
     // maxCount: {
     //     type: Number,
     //     default: 1
     // },
-    // accept: {
-    //     type: String,
-    //     default: '.zip,.rar'
-    // }
+    accept: {
+        type: String,
+        default: '.zip,.rar'
+    }
 })
 const state = reactive<any>({
     fileList: []
@@ -66,7 +69,7 @@ const handleUpload = async (data: any) => {
         data: props.paramsData
     }
     loading.value = true
-    const file = reactive({ name: data.name, url: '', loading: true })
+    const file = reactive({ name: data.name, url: '', loading: true, size: 0 })
     if (props.multiple) {
         state.fileList = [...state.fileList, file]
     } else {
@@ -82,6 +85,7 @@ const handleUpload = async (data: any) => {
     file.loading = false
     if (res.success) {
         file.url = res.result.filePath
+        file.size = res.result.fileSize
         emit('update:value', state.fileList)
     } else {
         message.error('上传失败！')

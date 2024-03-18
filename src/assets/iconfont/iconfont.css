@@ -1,0 +1,27 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 4464386 */
+  src: url('iconfont.woff2?t=1710295973845') format('woff2'),
+       url('iconfont.woff?t=1710295973845') format('woff'),
+       url('iconfont.ttf?t=1710295973845') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-daoru:before {
+  content: "\e639";
+}
+
+.icon-daochu:before {
+  content: "\e638";
+}
+
+.icon-moban:before {
+  content: "\e603";
+}
+

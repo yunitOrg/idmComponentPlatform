@@ -50,6 +50,41 @@ const routes: Array<RouteRecordRaw> = [
                 component: () => import('@/views/component/Publish.vue')
             },
             {
+                path: 'coursePublish',
+                name: 'index-coursePublish',
+                meta: {
+                    title: '教程发布'
+                },
+                component: () => import('@/views/course/index.vue')
+            },
+            {
+                path: 'videoCoursePublish',
+                name: 'index-coursePublish-video',
+                meta: {
+                    title: '视频教程发布',
+                    needLogin: true
+                },
+                component: () => import('@/views/course/publish/video.vue')
+            },
+            {
+                path: 'imageTextCoursePublish',
+                name: 'index-coursePublish-imageText',
+                meta: {
+                    title: '图文教程发布',
+                    needLogin: true
+                },
+                component: () => import('@/views/course/publish/imageText.vue')
+            },
+            {
+                path: 'ebookCoursePublish',
+                name: 'index-coursePublish-ebook',
+                meta: {
+                    title: '上传电子书',
+                    needLogin: true
+                },
+                component: () => import('@/views/course/publish/ebook.vue')
+            },
+            {
                 path: 'componentMarket',
                 meta: {
                     title: '组件市场'
@@ -170,6 +205,15 @@ const routes: Array<RouteRecordRaw> = [
                             needLogin: true
                         },
                         component: () => import('@/views/creativeCenter/ComponentManageList.vue')
+                    },
+                    {
+                        path: 'courseManageList',
+                        name: 'index-creativeCenter-courseManageList',
+                        meta: {
+                            title: '教程',
+                            needLogin: true
+                        },
+                        component: () => import('@/views/creativeCenter/CourseManageList.vue')
                     }
                 ]
             },
@@ -212,6 +256,15 @@ const routes: Array<RouteRecordRaw> = [
             title: '预览组件'
         },
         component: () => import('@/views/previewComponent/index.vue')
+    },
+    {
+        path: '/imageTextMdEdit',
+        name: 'imageTextMdEdit',
+        meta: {
+            title: '教程管理',
+            needLogin: true
+        },
+        component: () => import('@/views/course/publish/imageTextMdEdit.vue')
     }
 ]
 

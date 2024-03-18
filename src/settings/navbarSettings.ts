@@ -26,7 +26,8 @@ export const sendListMap = [
         text: '发教程',
         icon: 'tushu',
         iconSize: 16,
-        url: ''
+        type: 'window',
+        url: '/coursePublish'
     },
     {
         text: '建组织',

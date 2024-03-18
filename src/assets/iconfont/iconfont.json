@@ -1,0 +1,30 @@
+{
+  "id": "4464386",
+  "name": "md编辑器自定义图标",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "2077524",
+      "name": "导入",
+      "font_class": "daoru",
+      "unicode": "e639",
+      "unicode_decimal": 58937
+    },
+    {
+      "icon_id": "2077528",
+      "name": "导出",
+      "font_class": "daochu",
+      "unicode": "e638",
+      "unicode_decimal": 58936
+    },
+    {
+      "icon_id": "12704442",
+      "name": "模板",
+      "font_class": "moban",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    }
+  ]
+}
