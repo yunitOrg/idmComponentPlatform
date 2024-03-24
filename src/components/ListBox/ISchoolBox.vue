@@ -2,8 +2,10 @@
     <a-card hoverable :bordered="false" class="school-box" @click="handleItemClick">
         <template #cover>
             <div class="school-box-top">
-                <img alt="图片加载失败" class="school-box-top-image" :src="componentProps.cover" />
-                <div class="school-box-top-sort">视频</div>
+                <img alt="图片加载失败" class="school-box-top-image" :src="getImagePath(componentProps.coverUrl || componentMarketDetault)" />
+                <div class="school-box-top-number">{{ !componentProps.type ? `${componentProps.readNumber || 0}人学习` : `${componentProps.collectNumber || 0}人收藏` }}</div>
+                <div class="school-box-top-sort">{{ componentProps.type === 0 ? '视频' : componentProps.type === 1 ? '图文' : '电子书' }}</div>
+                <div v-if="componentProps.type === 0" class="school-box-top-video-mask"><PlayCircleOutlined /></div>
             </div>
         </template>
         <div class="school-box-title">
@@ -11,20 +13,26 @@
                 {{ componentProps.title }}
             </span>
         </div>
-        <div class="school-box-team"><svg-icon icon-class="renqun" class-name="school-box-icon"></svg-icon>{{ componentProps.team }}</div>
+        <div class="school-box-team">
+            <svg-icon iconClass="renqun" class="school-box-icon"></svg-icon>{{ componentProps.publishRangeName || defaultSettings.yunitName }}
+        </div>
         <div class="flex justify-between align-center school-box-bottom">
             <div class="flex align-center">
-                <a-avatar :size="15" :src="componentProps.originAvatar" />
-                <span class="ml-6 text-o-e">{{ componentProps.origin }}</span>
+                <a-avatar :size="15" :src="getImagePath(componentProps.userPhoto)" />
+                <span class="ml-6 nowrap">{{ componentProps.userNickname }}</span>
             </div>
-            <span class="text-o-e school-box-count" style="width: auto">{{ componentProps.count }}</span>
+            <span class="text-o-e school-box-count" style="width: auto">{{ componentProps.readNumber }}</span>
         </div>
     </a-card>
 </template>
 <script lang="ts" setup>
 import { ISchoolData } from './mock/mockData'
+import { getImagePath } from '@/utils'
+import { componentMarketDetault } from '@/assets/images'
+import { defaultSettings } from '@/settings/defaultSetting'
+import { PlayCircleOutlined } from '@ant-design/icons-vue'
 const router = useRouter()
-defineProps({
+const porps = defineProps({
     componentProps: {
         type: Object,
         default: () => ISchoolData
@@ -32,11 +40,9 @@ defineProps({
 })
 const handleItemClick = () => {
     router.push({
-        // name: 'index-iSchool-videoDetail',
-        name: 'index-iSchool-eBookDetail',
-        // name: 'index-iSchool-imageTextDetail',
+        name: `index-iSchool-${porps.componentProps.type === 0 ? 'video' : porps.componentProps.type === 1 ? 'imageText' : 'eBook'}Detail`,
         query: {
-            docId: '123'
+            courseId: porps.componentProps.id
         }
     })
 }
@@ -56,6 +62,17 @@ const handleItemClick = () => {
         position: relative;
         overflow: hidden;
 
+        .school-box-top-number {
+            position: absolute;
+            bottom: -2px;
+            left: -2px;
+            padding: 1px 7px;
+            font-size: 12px;
+            transform: scale(0.92);
+            color: #fff;
+            z-index: 1;
+        }
+
         .school-box-top-sort {
             position: absolute;
             bottom: -2px;
@@ -65,12 +82,29 @@ const handleItemClick = () => {
             font-size: 12px;
             background: rgb(232, 233, 240);
             transform: scale(0.92);
+            z-index: 1;
+        }
+
+        .school-box-top-video-mask {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba($color: #000000, $alpha: .5);
+            color: #fff;
+            font-size: 40px;
+            text-align: center;
+            line-height: 110px;
         }
     }
 
     .school-box-top-image {
         width: 100%;
-        border: 0;
+        height: 118px;
+        object-fit: cover;
+        border-radius: 0;
     }
 
     .school-box-team {
@@ -112,6 +146,9 @@ const handleItemClick = () => {
     &:hover {
         .school-box-title {
             color: rgb(24, 144, 255);
+        }
+        .school-box-top-video-mask {
+            display: block;
         }
     }
 }

@@ -44,6 +44,10 @@ export default {
                 {
                     title: '教程管理',
                     routeName: 'index-creativeCenter-courseManageList'
+                },
+                {
+                    title: '文章教程模板管理',
+                    routeName: 'index-creativeCenter-templateManageList'
                 }
             ]
         }

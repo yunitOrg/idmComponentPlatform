@@ -2,72 +2,59 @@
     <div class="idm-component-common-box related-component">
         <div class="related-component-header flex justify-between">
             <div class="header-title">
-                相关组件<span>({{ list.length }})</span>
+                相关组件<span>({{ propData.list.length }})</span>
             </div>
         </div>
         <div class="component-container">
-            <div v-for="(item, index) in list.slice(0, 5)" :key="index" class="component-item">
-                <img :src="getImagePath(item.imgUrl) || defaultClassify" alt="图片加载失败" />
+            <div v-for="(item, index) in propData.list.slice(0, state.isMore ? propData.list.length : 5)" :key="index" class="component-item">
+                <img :src="getImagePath(item.coverPath) || defaultClassify" alt="图片加载失败" />
                 <div class="component-item-left">
-                    <div class="component-name">{{ item.name }}</div>
+                    <div class="component-name">{{ item.comTitle }}</div>
                     <div class="component-class">
-                        类名：<span>{{ item.cls }}</span>
+                        类名：<span>{{ item.comClassname }}</span>
                     </div>
                 </div>
-                <div class="component-item-right"><a :href="item.previewUrl">预览</a></div>
+                <div class="component-item-right"><a @click="handlePreview(item)">预览</a></div>
             </div>
         </div>
-        <div v-if="list.length > 5" class="preview-more">查看更多 ></div>
+        <div v-if="list.length > 5 && !state.isMore" class="preview-more" @click="() => state.isMore = true">查看更多 ></div>
     </div>
 </template>
 <script setup lang="ts">
 import { defaultClassify } from '@/assets/images'
 import { getImagePath } from '@/utils'
-import { ref } from 'vue'
-const list = ref([
-    {
-        name: '附件1',
-        previewUrl: 'https://www.baidu.com',
-        cls: 'IStatisticsCard',
-        imgUrl: ''
-    },
-    {
-        name: '附件2',
-        previewUrl: 'https://www.baidu.com',
-        cls: 'IStatisticsCard',
-        imgUrl: ''
-    },
-    {
-        name: '附件1',
-        previewUrl: 'https://www.baidu.com',
-        cls: 'IStatisticsCard',
-        imgUrl: ''
-    },
-    {
-        name: '附件2',
-        previewUrl: 'https://www.baidu.com',
-        cls: 'IStatisticsCard',
-        imgUrl: ''
-    },
-    {
-        name: '附件1',
-        previewUrl: 'https://www.baidu.com',
-        cls: 'IStatisticsCard',
-        imgUrl: ''
-    },
-    {
-        name: '附件2',
-        previewUrl: 'https://www.baidu.com',
-        cls: 'IStatisticsCard',
-        imgUrl: ''
+import { baseURL } from '@/plugins/axios'
+const router = useRouter()
+const propData = defineProps({
+    list: {
+        type: Array<{ coverPath: string; comTitle: string; comClassname: string }>,
+        default: () => [
+            {
+                aaa: '附件1',
+                coverPath: 'https://www.baidu.com',
+                comClassname: 'IStatisticsCard',
+                comTitle: ''
+            }
+        ]
     }
-])
-// const propData = defineProps({
-//     userInfoProp: {
-//         type: Object,
-//         default: () => {}
-//     }
-// })
+})
+const state = reactive({
+    isMore: false
+})
+const handlePreview = (item: any) => {
+    if (item.codePath) {
+        const url = baseURL + item.codePath + '/index.html?className=' + item.comClassname
+        const { href } = router.resolve({
+            name: 'previewComponent',
+            query: {
+                previewSrc: url,
+                componentName: item.comTitle,
+                adaptiveType: item.adaptiveType
+            }
+        })
+        window.open(href, '_blank')
+    }
+}
 </script>
 <style lang="scss">
 .related-component {
@@ -85,12 +72,18 @@ const list = ref([
     .component-container {
         padding: 14px;
         border-bottom: 1px solid #eee;
+        border-top: 1px solid #eee;
 
         .component-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 6px 0;
+            &:hover {
+                .component-item-right a {
+                    display: block;
+                }
+            }
 
             img {
                 width: 80px;
@@ -103,6 +96,9 @@ const list = ref([
             .component-item-right {
                 flex-shrink: 0;
                 width: 30px;
+                a {
+                    display: none;
+                }
             }
             .component-name {
                 font-weight: 600;
@@ -122,9 +118,10 @@ const list = ref([
         }
     }
     .preview-more {
-      text-align: center;
-      padding: 14px 0;
-      color: #999;
+        text-align: center;
+        padding: 10px 0;
+        color: #999;
+        font-size: 12px;
     }
 }
 </style>

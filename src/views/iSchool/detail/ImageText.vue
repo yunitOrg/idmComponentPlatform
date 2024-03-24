@@ -1,48 +1,86 @@
 <template>
-    <div class="page-max-width flex">
+    <div v-show="pageData.hasPermission && !pageData.isFirst" class="page-max-width flex">
         <div style="padding: 50px 30px 0 0">
             <ButtonList
-                :componentProp="pageData.docDetail.docInfo"
+                :componentProp="pageData.docDetail.courseInfo"
                 :isPraise="pageData.docDetail.isPraise"
                 :isCollect="pageData.docDetail.isCollect"
-                sourceType="1"
-                :sourceId="pageData.docDetail.docInfo.id"
+                sourceType="3"
+                :sourceId="pageData.docDetail.courseInfo.id"
                 @handleClickButtonList="handleClickButtonList"
                 @collectSuccess="collectSuccess"
                 @cancelCollect="cancelCollect"></ButtonList>
         </div>
         <ARow :gutter="[20, 20]" class="flex-1">
             <ACol :span="17">
-                <DocTitleInfo type="imageText" :codePackageProp="pageData.docDetail.docInfo"></DocTitleInfo>
+                <DocTitleInfo type="imageText" :docProp="pageData.docDetail.courseInfo"></DocTitleInfo>
                 <div class="detail-md-outer">
-                    <v-md-preview ref="preview" :text="pageData.content"></v-md-preview>
+                    <v-md-preview v-if="pageData.docDetail.courseInfo.articleContent" ref="preview" :text="pageData.docDetail.courseInfo.articleContent"></v-md-preview>
                 </div>
-                <CommentBox commentTypeId="docId" articleType="3"></CommentBox>
-                <RecommendBox style="margin-bottom: 16px"></RecommendBox>
+                <CommentBox commentTypeId="courseId" articleType="3" style="margin-bottom: 20px"></CommentBox>
+                <!-- <RecommendBox style="margin-bottom: 16px"></RecommendBox> -->
             </ACol>
             <ACol :span="7">
-                <UserInfoBox :userInfoProp="pageData.docDetail.docUserInfo" @onDoFollow="onDoFollow"></UserInfoBox>
-                <AttachmentBox :userInfoProp="pageData.docDetail.docUserInfo"></AttachmentBox>
+                <UserInfoBox :userInfoProp="pageData.docDetail.courseUserInfo" @onDoFollow="onDoFollow"></UserInfoBox>
+                <AttachmentBox :list="pageData.docDetail.courseInfo.attachment"></AttachmentBox>
                 <CatalogueBox :docContentRef="preview"></CatalogueBox>
-                <RelatedComponent :userInfoProp="pageData.docDetail.docUserInfo"></RelatedComponent>
+                <RelatedComponent :list="pageData.docDetail.componentInfoList" style="margin-bottom: 20px"></RelatedComponent>
                 <!-- <CourseBox style="margin-bottom: 20px;"></CourseBox> -->
             </ACol>
         </ARow>
     </div>
+    <div v-show="!pageData.hasPermission && !pageData.isFirst">
+        <INoPermission :text="pageData.errText"></INoPermission>
+    </div>
 </template>
 <script setup lang="ts">
+import { useCourseApi } from '@/apis'
+import { message } from '@/plugins/globalComponents'
+const route = useRoute()
 const pageData = reactive({
     docDetail: {
-        docInfo: { id: '', collectNumber: 0, praiseNumber: 0 }, // 文档信息
-        docUserInfo: { focusThis: 0 }, // 文档用户信息
+        componentInfoList: [], // 相关组件
+        courseInfo: {
+            // 教程详情
+            id: '',
+            collectNumber: 0,
+            praiseNumber: 0,
+            attachment: [],
+            articleContent: ''
+        },
+        courseUserInfo: {
+            // 文档用户信息
+            focusThis: 0
+        },
         isCollect: false, // 是否收藏
         isPraise: false // 是否点赞
     },
-    content: '## 一、修饰符是什么 \n  \n 在程序世界里，修饰符是用于限定类型以及类型成员的声明的一种符号 \n  \n 在Vue中，修饰符处理了许多DOM事件的细节，让我们不再需要花大量的时间去处理这些烦恼的事情，而能有更多的精力专注于程序的逻辑处理 \n  \n vue中修饰符分为以下五种： \n 表单修饰符 \n 事件修饰符 \n 鼠标按键修饰符 \n 键值修饰符 \n v-bind修饰符 \n ## 二、修饰符的作用 \n ### 表单修饰符 \n \n 在我们填写表单的时候用得最多的是input标签，指令用得最多的是v-model',
-    contentUrl: '' // 目录链接
+    content: '',
+    contentUrl: '', // 目录链接
+    hasPermission: true,
+    errText: '',
+    isFirst: true
 })
 // 文档内容元素
 const preview = ref()
+const handleFetchPageData = () => {
+    useCourseApi
+        .requestGetCourseDetail({
+            ...route.query
+        })
+        .then((res) => {
+            pageData.isFirst = false
+            if (res.success) {
+                res.result.courseInfo.attachment = res.result.courseInfo.attachment ? JSON.parse(res.result.courseInfo.attachment) : []
+                pageData.docDetail = res.result
+            } else {
+                pageData.hasPermission = false
+                pageData.errText = res.message
+            }
+        })
+}
+handleFetchPageData()
+
 /**
  * 文档操作按钮点击回调
  * @param type number
@@ -51,7 +89,7 @@ const handleClickButtonList = (type: number) => {
     console.log(type)
     switch (type) {
         case 1: // 点赞
-            // handlePraise()
+            handlePraise()
             break
         case 2: // 打赏
             break
@@ -63,25 +101,39 @@ const handleClickButtonList = (type: number) => {
             break
     }
 }
+// 点赞
+const handlePraise = () => {
+    useCourseApi[pageData.docDetail.isPraise ? 'requestUnpraiseCourse' : 'requestPraiseCourse']({
+        courseId: pageData.docDetail.courseInfo.id
+    }).then((res) => {
+        if (res.success) {
+            pageData.docDetail.isPraise = !pageData.docDetail.isPraise
+            if (pageData.docDetail.isPraise) pageData.docDetail.courseInfo.praiseNumber += 1
+            else pageData.docDetail.courseInfo.praiseNumber -= 1
+        } else {
+            message.error(res.message)
+        }
+    })
+}
 /**
  * 收藏回调
  */
 const collectSuccess = () => {
     pageData.docDetail.isCollect = true
-    pageData.docDetail.docInfo.collectNumber += 1
+    pageData.docDetail.courseInfo.collectNumber += 1
 }
 /**
  * 取消收藏成功回调
  */
 const cancelCollect = () => {
     pageData.docDetail.isCollect = false
-    pageData.docDetail.docInfo.collectNumber -= 1
+    pageData.docDetail.courseInfo.collectNumber -= 1
 }
 /**
  * 关注用户回调
  */
 const onDoFollow = () => {
-    pageData.docDetail.docUserInfo.focusThis = pageData.docDetail.docUserInfo.focusThis === 1 ? 0 : 1
+    pageData.docDetail.courseUserInfo.focusThis = pageData.docDetail.courseUserInfo.focusThis === 1 ? 0 : 1
 }
 </script>
 <style scoped lang="scss">

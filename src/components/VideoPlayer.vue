@@ -1,33 +1,40 @@
 <template>
     <div class="video_box">
-        <video ref="videoPlayer" class="video-js vjs-16-9" poster="../assets/images/component-market-default.jpg">
-            <source :src="`static/video/demo.mp4`" type="video/mp4" />
+        <video ref="videoPlayer" class="video-js vjs-16-9">
+            <!-- <source :src="`static/video/demo.mp4`" type="video/mp4" /> -->
         </video>
     </div>
 </template>
 <script setup lang="ts">
+import { componentPublishApi } from '@/apis'
 import { reactive, ref, onMounted } from 'vue'
 import Video from 'video.js'
 import 'video.js/dist/video-js.min.css'
 // 加载中文
 import zhcn from 'video.js/dist/lang/zh-CN.json'
+
 // 使用中文
 Video.addLanguage('zh-CN', zhcn)
 
-reactive({
-    player: null,
-    options: null
-})
+// reactive({
+//     player: null,
+//     options: null
+// })
 
 const props = defineProps({
-    videoId: {
-        type: String,
-        default: ''
+    videoInfo: {
+        type: Object,
+        default: () => {}
     }
 })
-console.log(props.videoId)
-const pageData = reactive<{ player: Object; options: Object }>({
-    player: () => {},
+watch(
+    () => props.videoInfo,
+    () => {
+        switchVideo(componentPublishApi.componentStaticUrl + props.videoInfo.filePath)
+    }
+)
+const pageData = reactive<{ player:any; options: Object }>({
+    player: null,
     options: {
         controls: true, // 是否显示底部控制栏
         preload: 'auto', // 加载<video>标签后是否加载视频
@@ -65,10 +72,13 @@ const pageData = reactive<{ player: Object; options: Object }>({
 
 const videoPlayer = ref()
 
+const switchVideo = (newSources: string) => {
+    pageData.player.src(newSources)
+    pageData.player.load()
+}
+
 onMounted(() => {
-    pageData.player = Video(videoPlayer.value, pageData.options, function onPlayerReady() {
-        // console.log('onPlayerReady', this)
-    })
+    pageData.player = Video(videoPlayer.value, pageData.options, function onPlayerReady() {})
 })
 </script>
 <style scoped lang="scss">

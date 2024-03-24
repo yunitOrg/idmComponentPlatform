@@ -3,7 +3,7 @@
         <div class="date">
             <a-date-picker v-model:value="state.date" placeholder="请选择年 - 月" picker="month" />
         </div>
-        <div class="range">
+        <div v-if="props.showRange" class="range">
             <AsyncSelect
                 v-model:value="state.range"
                 placeholder="请选择发布范围"
@@ -23,6 +23,10 @@
 <script lang="ts" setup>
 import { useHomeCoreApi } from '@/apis'
 const props = defineProps({
+    showRange: {
+        type: Boolean,
+        default: true
+    },
     onSearch: {
         type: Function,
         default() {

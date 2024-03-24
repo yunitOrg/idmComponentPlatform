@@ -25,6 +25,7 @@
 </template>
 <script lang="ts" setup>
 import { componentPublishApi } from '@/apis'
+import { timestampToTime } from '@/utils'
 import { UploadOutlined, LoadingOutlined, PaperClipOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons-vue'
 import { message, UploadFile } from 'ant-design-vue'
 const props = defineProps({
@@ -69,7 +70,7 @@ const handleUpload = async (data: any) => {
         data: props.paramsData
     }
     loading.value = true
-    const file = reactive({ name: data.name, url: '', loading: true, size: 0 })
+    const file = reactive({ name: data.name, url: '', loading: true, size: 0, time: '' })
     if (props.multiple) {
         state.fileList = [...state.fileList, file]
     } else {
@@ -86,6 +87,7 @@ const handleUpload = async (data: any) => {
     if (res.success) {
         file.url = res.result.filePath
         file.size = res.result.fileSize
+        file.time = timestampToTime(res.timestamp)
         emit('update:value', state.fileList)
     } else {
         message.error('上传失败！')

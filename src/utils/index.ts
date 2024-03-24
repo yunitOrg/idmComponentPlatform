@@ -72,3 +72,28 @@ export function createObjectURL(blob: any) {
         return ''
     }
 }
+
+// file:文件流(一般指后端返回的流)； fileType:文件类型/MIME类型；fileName:文件名称
+export function downloadFile(file: any, fileName: string) {
+    const url = window.URL.createObjectURL(file)
+    const a = document.createElement('a')
+    a.style.display = 'none'
+    a.href = url
+    a.setAttribute('download', fileName)
+    document.body.appendChild(a)
+    a.click() // 执行下载
+    window.URL.revokeObjectURL(a.href)
+    document.body.removeChild(a)
+}
+
+// file:文件流(一般指后端返回的流)； fileType:文件类型/MIME类型；fileName:文件名称
+export function timestampToTime(timestamp: number) {
+    const date = new Date(timestamp)
+    const year = date.getFullYear()
+    const month = ('0' + (date.getMonth() + 1)).slice(-2)
+    const day = ('0' + date.getDate()).slice(-2)
+    const hours = ('0' + date.getHours()).slice(-2)
+    const minutes = ('0' + date.getMinutes()).slice(-2)
+    const seconds = ('0' + date.getSeconds()).slice(-2)
+    return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds
+}

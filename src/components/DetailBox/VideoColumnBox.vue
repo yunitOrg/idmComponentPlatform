@@ -3,8 +3,13 @@
         <a-tabs v-model:activeKey="pageData.activeKey">
             <a-tab-pane key="1" tab="目录">
                 <a-collapse v-model:activeKey="pageData.collapseActiveKey" expandIconPosition="right">
-                    <a-collapse-panel v-for="(item, index) in column" :key="index" :header="item.title">
-                        <div v-for="(child, i) in item.children" :key="i" class="colunm-item" @click="colunmClick(child.id)">
+                    <a-collapse-panel v-for="item in pageData.courseVedioList" :key="item.id" :header="item.title">
+                        <div
+                            v-for="(child, i) in item.vedioModelList"
+                            :key="i"
+                            class="colunm-item"
+                            :class="{ active: child.id === pageData.playingId }"
+                            @click="colunmClick(child)">
                             <div class="colunm-item-icon">
                                 <svg-icon v-if="child.id === pageData.playingId" iconClass="playing"></svg-icon>
                                 <svg-icon v-else iconClass="play"></svg-icon>
@@ -15,17 +20,25 @@
                 </a-collapse>
             </a-tab-pane>
             <a-tab-pane key="2" tab="简介">
-                <div v-for="(item, index) in introduc" :key="index" class="introduc-item">
-                    <div class="introduc-item-title">{{ item.title }}</div>
-                    <div class="introduc-item-desc" v-html="item.desc"></div>
+                <div class="introduc-item">
+                    <div class="introduc-item-title">适合人群</div>
+                    <div class="introduc-item-desc" v-text="props.courseInfo.personRange"></div>
+                </div>
+                <div class="introduc-item">
+                    <div class="introduc-item-title">你将收获</div>
+                    <div class="introduc-item-desc" v-text="props.courseInfo.reapContent"></div>
+                </div>
+                <div class="introduc-item">
+                    <div class="introduc-item-title">教程介绍</div>
+                    <div class="introduc-item-desc" v-text="props.courseInfo.introduction"></div>
                 </div>
             </a-tab-pane>
             <a-tab-pane key="3" tab="作者教程">
-                <div v-for="(item, index) in course" :key="index" class="course-item">
-                    <img class="course-item-img" :src="getImagePath(item.cover) || componentMarketDetault" />
+                <div v-for="(item, index) in pageData.courseList" :key="index" class="course-item" @click="hanldeCourseClick(item.id)">
+                    <img class="course-item-img" :src="getImagePath(item.coverUrl) || componentMarketDetault" />
                     <div class="course-item-right">
                         <div class="course-item-title">{{ item.title }}</div>
-                        <div class="course-item-desc">{{ item.section }}节课 · {{ item.view }}人学习</div>
+                        <div class="course-item-desc">{{ item.vedioNumber }}节课 · {{ item.readNumber }}人学习</div>
                     </div>
                 </div>
             </a-tab-pane>
@@ -36,51 +49,92 @@
 <script lang="ts" setup>
 import { getImagePath } from '@/utils'
 import { componentMarketDetault } from '@/assets/images'
-import { docTitleInfoOptions } from './mock/mockData'
+import { useCourseApi } from '@/apis'
 const props = defineProps({
-    type: {
-        type: String,
-        default: 'imageText'
-    },
-    docProp: {
+    courseInfo: {
         type: Object,
-        default: () => docTitleInfoOptions
+        default: () => {}
     },
-    introduc: {
-        type: Array<{ title: string; desc: string }>,
-        default: () => {
-            return []
-        }
+    courseVedioList: {
+        type: Array,
+        default: () => []
     },
-    course: {
-        type: Array<{ title: string; section: number; view: number; cover: string }>,
-        default: () => {
-            return []
-        }
-    },
-    column: {
-        type: Array<{ title: string; children: Array<{ id: string; title: string }> }>,
-        default: () => {
-            return []
-        }
+    courseUserInfo: {
+        type: Object,
+        default: () => {}
     }
 })
+watch(
+    () => props.courseVedioList,
+    (newV) => {
+        if (newV.length > 0) {
+            setUpVideoData(props.courseVedioList)
+            pageData.collapseActiveKey = pageData.courseVedioList?.[0]?.id
+            pageData.playingId = pageData.courseVedioList?.[0]?.vedioModelList?.[0]?.id
+            emit('columnChange', pageData.courseVedioList?.[0]?.vedioModelList?.[0])
+        }
+    }
+)
+watch(
+    () => props.courseUserInfo,
+    (newV) => {
+        if (newV.id) {
+            handleFetchAuthorData()
+        }
+    }
+)
 const pageData = reactive({
     activeKey: '1',
     collapseActiveKey: 0,
-    playingId: ''
+    playingId: '',
+    courseVedioList: [] as any,
+    courseList: [] as any
 })
 const emit = defineEmits(['columnChange'])
-const colunmClick = (columnId: string) => {
-    pageData.playingId = columnId
-    emit('columnChange', pageData.playingId)
+const colunmClick = (videoInfo: any) => {
+    pageData.playingId = videoInfo.id
+    emit('columnChange', videoInfo)
 }
-onMounted(() => {
-    if (props.column?.[0]?.children?.[0]?.id) {
-        pageData.playingId = props.column?.[0]?.children?.[0]?.id
-        emit('columnChange', pageData.playingId)
-    }
-})
+const setUpVideoData = (data: any) => {
+    const courseVedioList: any[] = []
+    // 先拿出有无fid的，一级章节
+    data.forEach((item: any) => {
+        if (!item.fid) {
+            courseVedioList.push({
+                ...item,
+                vedioModelList: []
+            })
+        }
+    })
+    data.forEach((item: any) => {
+        if (item.fid) {
+            courseVedioList.forEach((section: any) => {
+                if (item.fid === section.id) {
+                    section.vedioModelList.push(item)
+                }
+            })
+        }
+    })
+    pageData.courseVedioList = courseVedioList
+}
+const handleFetchAuthorData = () => {
+    useCourseApi
+        .requestGetCourseList({
+            pageNo: 1,
+            pageSize: 10,
+            userId: props.courseUserInfo.id,
+            type: 0
+        })
+        .then((res) => {
+            if (res.success) {
+                pageData.courseList = res.result.records
+            }
+        })
+}
+const hanldeCourseClick = (id:string) => {
+    window.open(`/videoDetail?courseId=${id}`, '_blank')
+}
+onMounted(() => {})
 </script>
 
 <style lang="scss" scoped>
@@ -105,7 +159,7 @@ onMounted(() => {
         }
         .ant-tabs-content-holder {
             height: calc(100% - 62px);
-            padding: 0 20px 20px 20px;
+            padding: 0 20px 20px 30px;
             .ant-tabs-content {
                 height: 100%;
                 overflow: auto;
@@ -159,6 +213,7 @@ onMounted(() => {
         color: #ccc;
         padding-bottom: 10px;
         display: flex;
+        cursor: pointer;
 
         .course-item-img {
             width: 100px;
@@ -203,7 +258,9 @@ onMounted(() => {
             }
         }
         .ant-collapse-content-box {
-            padding: 10px 16px;
+            padding: 10px 0;
+            border: 1px solid rgb(77, 77, 77);
+            border-top: none;
         }
     }
     .colunm-item {
@@ -211,13 +268,18 @@ onMounted(() => {
         color: #b9b8b8;
         line-height: 24px;
         margin-bottom: 6px;
+        padding: 4px 6px;
         cursor: pointer;
         &:last-child {
             margin-bottom: 0;
         }
         .colunm-item-icon {
             font-size: 24px;
-            margin-left: 6px;
+            margin: 0 6px;
+        }
+        &.active {
+            background-color: rgb(77, 77, 77);
+            color: #fff;
         }
     }
 }

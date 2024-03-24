@@ -67,6 +67,15 @@ const routes: Array<RouteRecordRaw> = [
                 component: () => import('@/views/course/publish/video.vue')
             },
             {
+                path: 'videoCourseEdit',
+                name: 'index-coursePublish-video-edit',
+                meta: {
+                    title: '视频教程视频编辑',
+                    needLogin: true
+                },
+                component: () => import('@/views/course/publish/videoEdit.vue')
+            },
+            {
                 path: 'imageTextCoursePublish',
                 name: 'index-coursePublish-imageText',
                 meta: {
@@ -214,6 +223,15 @@ const routes: Array<RouteRecordRaw> = [
                             needLogin: true
                         },
                         component: () => import('@/views/creativeCenter/CourseManageList.vue')
+                    },
+                    {
+                        path: 'templateManageList',
+                        name: 'index-creativeCenter-templateManageList',
+                        meta: {
+                            title: '图文教程模板',
+                            needLogin: true
+                        },
+                        component: () => import('@/views/creativeCenter/TemplateManageList.vue')
                     }
                 ]
             },
@@ -265,6 +283,15 @@ const routes: Array<RouteRecordRaw> = [
             needLogin: true
         },
         component: () => import('@/views/course/publish/imageTextMdEdit.vue')
+    },
+    {
+        path: '/imageTextTemplateEdit',
+        name: 'imageTextTemplateEdit',
+        meta: {
+            title: '新增模板',
+            needLogin: true
+        },
+        component: () => import('@/views/course/templateEdit.vue')
     }
 ]
 

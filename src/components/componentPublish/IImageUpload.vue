@@ -4,6 +4,7 @@
             :file-list="computedFileList"
             accept=".png,.jpg,.jpeg,.gif"
             list-type="picture-card"
+            :disabled="props.disabled"
             :before-upload="handleUpload"
             :max-count="multiple ? undefined : 1"
             @preview="handlePreview"
@@ -38,6 +39,10 @@ const props = defineProps({
         }
     },
     multiple: {
+        type: Boolean,
+        default: false
+    },
+    disabled: {
         type: Boolean,
         default: false
     }

@@ -22,7 +22,7 @@
                             <ManageListCard
                                 :image="item.coverUrl"
                                 :imageName="item.codepackageClassname"
-                                :typeText="item.type === 0 ? '视频课' : state.activeTab === 1 ? '文章' : '电子书'"
+                                :typeText="item.type === 0 ? '视频课' : item.type === 1 ? '图文' : '电子书'"
                                 :title="item.title"
                                 :open="item.publishOpen"
                                 :range="item.publishRangeName"
@@ -38,7 +38,9 @@
                                 :on-copy-click="() => handleCopyClick(item)"
                                 :on-view-click="() => handleViewClick(item)"
                                 :on-delete-click="() => handleDeleteClick(item)"
-                                :on-upload-video-click="item.type === 0 ? () => handleUploadVideo(item) : undefined" />
+                                :on-upload-video-click="item.type === 0 ? () => handleUploadVideo(item) : undefined"
+                                :on-edit-markdown-click="item.type === 1 ? () => handleEditMarkDown(item) : undefined"
+                            />
                         </template>
                     </div>
                     <div style="text-align: center; margin: 20px 0">
@@ -58,9 +60,9 @@ import { useCourseApi } from '@/apis'
 import { message, Modal } from 'ant-design-vue'
 import { ExclamationCircleOutlined } from '@ant-design/icons-vue'
 import { useUserStore } from '@/store/modules/user'
-// const router = useRouter()
+const route = useRoute()
 const state = reactive<any>({
-    activeTab: '0',
+    activeTab: route.query?.type || '0',
     list: [],
     loading: false,
     pageNo: 1,
@@ -72,6 +74,7 @@ const state = reactive<any>({
 const btnText = computed(() => {
     return state.activeTab === '0' ? '上传视频教程' : state.activeTab === '1' ? '发布图文教程' : '发布电子书'
 })
+
 onMounted(() => {
     getList()
 })
@@ -85,6 +88,7 @@ const getList = () => {
         pageSize: state.pageSize,
         userId: userInfo.id,
         type: Number(state.activeTab),
+        myData: 1,
         ...state.searchParams
     }
     useCourseApi
@@ -182,7 +186,10 @@ const onBtnClick = () => {
     window.open(`/${state.activeTab === '0' ? 'video' : state.activeTab === '1' ? 'imageText' : 'eBook'}CoursePublish`)
 }
 const handleUploadVideo = (data: any) => {
-    window.open(`/${getTypeText(data.type)}CoursePublish?courseId=${data.id}&sectionService=true`)
+    window.open(`/videoCourseEdit?courseId=${data.id}`)
+}
+const handleEditMarkDown = (data: any) => {
+    window.open(`/imageTextMdEdit?courseId=${data.id}`)
 }
 const handleTabChange = () => {
     getList()

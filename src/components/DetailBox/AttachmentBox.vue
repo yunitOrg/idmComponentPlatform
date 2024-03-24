@@ -4,36 +4,39 @@
             <div class="header-title">相关附件</div>
         </div>
         <div class="attachment-container">
-            <div v-for="(item, index) in list" :key="index" class="attachment-item">
+            <div v-for="(item, index) in propData.list" :key="index" class="attachment-item">
                 <div class="attachment-item-left">
-                    <div class="attachment-name">{{ item.name }}</div>
-                    <div class="attachment-time">{{ item.time }}</div>
+                    <div class="attachment-name" :title="item.name">{{ item.name }}</div>
+                    <div class="attachment-time">{{ item.size < 1024 ? `${item.size}KB` : `${(item.size / 1024).toFixed(2)}MB` }}</div>
                 </div>
-                <div class="attachment-item-right"><a :href="item.downloadUrl">下载</a></div>
+                <div class="attachment-item-right"><a href="" @click="handleDownload(item)">下载</a></div>
             </div>
         </div>
     </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue'
-const list = ref([
-    {
-        name: '附件1',
-        downloadUrl: 'https://www.baidu.com',
-        time: '2022-4-3 16:55:59'
-    },
-    {
-        name: '附件2',
-        downloadUrl: 'https://www.baidu.com',
-        time: '2022-4-3 16:55:59'
+import { componentPublishApi } from '@/apis'
+const propData = defineProps({
+    list: {
+        type: Array<{ name: string; size: number; downloadUrl: string }>,
+        default: () => [
+            {
+                name: '附件1',
+                downloadUrl: 'https://www.baidu.com',
+                time: '2022-4-3 16:55:59'
+            },
+            {
+                name: '附件2',
+                downloadUrl: 'https://www.baidu.com',
+                time: '2022-4-3 16:55:59'
+            }
+        ]
     }
-])
-// const propData = defineProps({
-//     userInfoProp: {
-//         type: Object,
-//         default: () => {}
-//     }
-// })
+})
+
+const handleDownload = (item: any) => {
+    componentPublishApi.downloadStaticFile(item.url)
+}
 </script>
 <style lang="scss">
 .attachment-box {
@@ -45,32 +48,40 @@ const list = ref([
         border-bottom: 1px solid #eee;
     }
     .attachment-container {
-      padding: 14px;
-      .attachment-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 6px 0;
-        .attachment-item-left {
-          width: calc(100% - 40px);
+        padding: 14px;
+        .attachment-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+            &:hover {
+                .attachment-item-right a {
+                    display: block;
+                }
+            }
+            .attachment-item-left {
+                width: calc(100% - 40px);
+            }
+            .attachment-item-right {
+                flex-shrink: 0;
+                width: 30px;
+                a {
+                    display: none;
+                }
+            }
+            .attachment-name {
+                font-weight: 600;
+                font-size: 14px;
+                color: #666;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            .attachment-time {
+                font-size: 12px;
+                color: #939393;
+            }
         }
-        .attachment-item-right {
-          flex-shrink: 0;
-          width: 30px;
-        }
-        .attachment-name {
-          font-weight: 600;
-          font-size: 14px;
-          color: #666;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        }
-        .attachment-time {
-          font-size: 12px;
-          color: #939393;
-        }
-      }
     }
 }
 </style>

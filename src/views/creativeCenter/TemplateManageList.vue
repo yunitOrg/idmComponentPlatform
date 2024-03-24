@@ -1,35 +1,23 @@
 <template>
     <div class="component-package-manage-list">
-        <ManageListHeader title="组件包管理" btn-text="上传组件包" :on-btn-click="handleHeaderBtnClick" />
+        <ManageListHeader title="文章教程模板管理" btn-text="新增模板" :on-btn-click="handleHeaderBtnClick" />
         <div class="content">
             <div class="search-bar">
-                <ManageListSearch :on-search="handleSearchBarSearch" :on-reset="handleSearchBarReset" />
+                <ManageListSearch :showRange="false" :on-search="handleSearchBarSearch" :on-reset="handleSearchBarReset" />
             </div>
             <a-spin :spinning="state.loading">
                 <template v-if="state.list && state.list.length">
                     <div class="list">
                         <template v-for="item, index in state.list" :key="index">
                             <ManageListCard
+                                :image="item.coverUrl"
+                                :imageName="item.codepackageClassname"
+                                :open="item.isopen"
                                 :title="item.title"
-                                :showCoverImg="false"
-                                :class="item.classname"
-                                :codeLangue="item.codeLangue"
-                                :version="item.currentVersion"
-                                :open="item.publishOpen"
-                                :range="item.publishRangeName"
-                                :content="item.currentRemark"
                                 :time="item.updateTime || item.createTime"
-                                :readNumber="item.readNumber"
-                                :praiseNumber="item.praiseNumber"
-                                :commentNumber="item.commentNumber"
-                                :collectNumber="item.collectNumber"
-                                :versionCount="item.versionCount"
-                                :tags="item.tags"
+                                :showStatistics="false"
                                 :on-click="() => handleCardClick(item)"
-                                :get-version-list="() =>getVersionList(item)"
-                                :on-version-click="handleVersionClick"
                                 :on-edit-click="() => handleEditClick(item)"
-                                :on-copy-click="() => handleCopyClick(item)"
                                 :on-view-click="() => handleViewClick(item)"
                                 :on-delete-click="() => handleDeleteClick(item)"
                             />
@@ -53,7 +41,7 @@
 
 <script lang="ts" setup>
 import { createVNode } from 'vue'
-import { useHomePageApi, componentPublishApi } from '@/apis'
+import { useCourseApi } from '@/apis'
 import { message, Modal } from 'ant-design-vue'
 import { ExclamationCircleOutlined } from '@ant-design/icons-vue'
 const state = reactive<any>({
@@ -72,11 +60,12 @@ onMounted(() => {
 const getList = () => {
     state.loading = true
     const params = {
+        mydata: 1,
         pageNo: state.pageNo,
         pageSize: state.pageSize,
         ...state.searchParams
     }
-    useHomePageApi.requestMyCodePackageList(params).then((res: any) => {
+    useCourseApi.requestGetCourseTemplateList(params).then((res: any) => {
         if (res.success) {
             state.total = res.result.total
             state.list = res.result.records
@@ -90,7 +79,7 @@ const getList = () => {
     })
 }
 const handleHeaderBtnClick = () => {
-    window.open('/componentPackagePublish')
+    window.open('/imageTextTemplateEdit')
 }
 const handleSearchBarSearch = (params: any) => {
     const month = params.date ? params.date.month() + 1 + '' : ''
@@ -111,38 +100,21 @@ const handlePageChange = () => {
     getList()
 }
 const handleCardClick = (data: any) => {
-    window.open(`/componentPackageDetail?codepackageId=${data.id}&version=${data.currentVersion}`)
-}
-const getVersionList = (data: any) => {
-    return componentPublishApi.requestCodePackageVersionList({ codepackageId: data.id })
-}
-const handleVersionClick = (data: any) => {
-    window.open(`/componentPackageDetail?codepackageId=${data.codepackageId}&version=${data.version}`)
+    window.open(`/componentMarketDetail?componentId=${data.id}&version=${data.codepackageVersion}`)
 }
 const handleEditClick = (data: any) => {
-    window.open(`/componentPackagePublish?codePackageId=${data.id}`)
-}
-const handleCopyClick = (data: any) => {
-    console.log('copy', data)
-    const url = `/componentPackageDetail?codepackageId=${data.id}&version=${data.currentVersion}`
-    const el = document.createElement('input')
-    el.setAttribute('value', url)
-    document.body.appendChild(el)
-    el.select()
-    document.execCommand('copy')
-    document.body.removeChild(el)
-    message.success('复制成功！')
+    window.open(`/imageTextTemplateEdit?templateId=${data.id}`)
 }
 const handleViewClick = (data: any) => {
-    window.open(`/componentPackageDetail?codepackageId=${data.id}&version=${data.currentVersion}`)
+    window.open(`/imageTextTemplateEdit?templateId=${data.id}&isPreview=true`)
 }
 const handleDeleteClick = async (data: any) => {
-    const title = '确定要删除当前组件包吗？'
-    const content = '该组件包下的所有组件也将同时删除！'
+    const title = '确定要删除当前模板吗？'
+    const content = ''
     const answer = await showConfirm(title, content)
     if (answer) {
         state.loading = true
-        componentPublishApi.requestDeleteChange({ codepackageId: data.id }).then((res) => {
+        useCourseApi.requestDeleteCourseTemp({ ids: data.id }).then((res:any) => {
             if (res.success) {
                 message.success('删除成功！')
                 getList()

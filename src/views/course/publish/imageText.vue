@@ -2,7 +2,7 @@
     <div class="cp-upload" :style="{ width: '960px', 'min-height': '500px' }">
         <div class="cp-upload-title">
             <div class="title-left">
-                <div class="name">发布图文教程</div>
+                <div class="name">{{ !state.courseId ? '发布图文教程' : '编辑图文教程' }}</div>
             </div>
         </div>
         <div class="cp-upload-content">
@@ -22,8 +22,8 @@
                         @finish-failed="onFinishFailed">
                         <a-form-item name="id" hidden />
                         <a-form-item name="status" hidden />
-                        <a-form-item name="coverPath" label="封面">
-                            <IImageUpload v-model:value="state.formData.coverPath" :paramsData="{ upFileType: 'image' }" />
+                        <a-form-item name="coverUrl" label="封面">
+                            <IImageUpload v-model:value="state.formData.coverUrl" :paramsData="{ upFileType: 'image' }" />
                         </a-form-item>
                         <a-form-item name="tags" label="教程标签">
                             <AsyncSelect
@@ -52,22 +52,24 @@
                                 :fieldNames="{ label: 'orgname', value: 'id' }"
                                 :request="getPublishRangeList" />
                         </a-form-item>
-                        <a-form-item name="relateComponent" label="关联组件" help="选择教程中所提到的相关组件进行关联，方便组件快速查看相关教程">
+                        <a-form-item name="relationComponentIds" label="关联组件" help="选择教程中所提到的相关组件进行关联，方便组件快速查看相关教程">
                             <AsyncSelect
-                                v-model:value="state.formData.relateComponent"
+                                v-model:value="state.formData.relationComponentIds"
                                 asyncSearch
                                 labelInValue
                                 mode="multiple"
-                                :fieldNames="{ label: 'nickname', value: 'id' }"
+                                :fieldNames="{ label: 'comTitle', value: 'id' }"
                                 placeholder="请查询后选择"
-                                :request="getCooperationUserList" />
+                                :request="getComponentList" />
                         </a-form-item>
-                        <a-form-item name="attachment" extra="支持文件后缀：.rar .zip" label="相关附件">
-                            <IFileUpload v-model:value="state.formData.attachment" :paramsData="{ upFileType: 'runCode' }" />
+                        <a-form-item name="attachment" label="相关附件">
+                            <IFileUpload v-model:value="state.formData.attachment" accept="" multiple :paramsData="{ upFileType: 'other' }" />
                         </a-form-item>
                         <a-form-item :wrapper-col="{ span: 24, offset: 8 }" :style="{ padding: '20px 0' }">
-                            <a-button type="primary" html-type="submit" @click="() => (state.formData.status = 1)">发布教程</a-button>
-                            <a-button :style="{ marginLeft: '20px' }" @click="handlePublishCancel()">取消</a-button>
+                            <a-button type="primary" html-type="submit" shape="round" @click="() => (state.formData.status = 1)">
+                                {{ !state.courseId ? '发布教程，去编辑图文' : '重新发布教程，去编辑图文' }}
+                            </a-button>
+                            <a-button :style="{ marginLeft: '20px' }" shape="round" @click="handlePublishCancel()">取消</a-button>
                         </a-form-item>
                     </AForm>
                 </ASpin>
@@ -78,11 +80,11 @@
 
 <script lang="ts" setup>
 import { reactive, createVNode } from 'vue'
-import { componentPublishApi, coreApi, useHomeCoreApi } from '@/apis'
+import { coreApi, useHomeCoreApi, useCourseApi } from '@/apis'
 import { Modal, message } from 'ant-design-vue'
-// import { ExclamationCircleOutlined, CheckCircleOutlined } from '@ant-design/icons-vue'
 import { ExclamationCircleOutlined } from '@ant-design/icons-vue'
 const route = useRoute()
+const router = useRouter()
 const formRef = ref()
 const state = reactive<any>({
     distList: [],
@@ -91,205 +93,109 @@ const state = reactive<any>({
     saveAllLoading: false,
     formDataList: [],
     codeLangueList: [],
-    queryId: route.query?.codePackageId,
+    courseId: route.query?.courseId,
     formData: {
         formLoading: false,
-        id: '',
-        coverPath: [], // 封面
+        coverUrl: [], // 封面
         status: '',
+        title: '',
         tags: [],
         publishOpen: 1,
         publishRange: [],
-        relateComponent: [],
+        relationComponentIds: [],
         attachment: []
     },
     mdContent: ''
 })
-const currentIndex: any = computed(() => state.formDataList.findIndex((item: any) => item.codePackageId === state.selectedKey))
 
 onMounted(() => {
-    getCodeLangueList()
-    if (state.queryId) {
-        state.selectedKey = state.queryId
-        state.formDataList = [
-            {
-                codePackageId: state.queryId,
-                formLoading: false
-            }
-        ]
+    if (state.courseId) {
+        state.formData.id = state.courseId
         getDistinfo()
     }
 })
 
 const getDistinfo = async () => {
-    const index = currentIndex.value
-    state.formDataList[index].formLoading = true
-    const res = await componentPublishApi.requestDistInfo({ codePackageId: state.formDataList[index].codePackageId })
-    state.formDataList[index].formLoading = false
-    const publishRangeList = res.result.codePackage.publishRange ? res.result.codePackage.publishRange.split(',') : []
-    const publishRangeNameList = res.result.codePackage.publishRangeName ? res.result.codePackage.publishRangeName.split(',') : []
-    const publishRange = publishRangeList.map((item: string, index: number) => ({ value: item, label: publishRangeNameList[index] }))
+    state.formData.formLoading = true
+    const res = await useCourseApi.requestGetCourseDetail({ courseId: state.courseId })
+    state.formData.formLoading = false
     if (res.success) {
-        state.formDataList[index] = {
-            ...state.formDataList[index],
+        const publishRangeList = res.result.courseInfo.publishRange ? res.result.courseInfo.publishRange.split(',') : []
+        const publishRangeNameList = res.result.courseInfo.publishRangeName ? res.result.courseInfo.publishRangeName.split(',') : []
+        const publishRange = publishRangeList.map((item: string, index: number) => ({ value: item, label: publishRangeNameList[index] }))
+        const relationComponentIds = res.result.componentInfoList.map((item: any) => ({ key: item.id, value: item.id, label: item.comTitle }))
+        state.formData = {
+            ...state.formData,
             ...res.result,
-            ...res.result.codePackage,
-            tags: res.result.codePackage.tags ? res.result.codePackage.tags.split(',') : [],
+            ...res.result.courseInfo,
+            tags: res.result.courseInfo.tags ? res.result.courseInfo.tags.split(',') : [],
+            relationComponentIds,
             publishRange,
-            cooperationUserIds: res.result.cooperationUserList?.map((item: any) => ({ value: item.id, label: item.nickname })) || [],
-            historyHidden: false,
-            currentVersionIndex: res.result.codePackageVersionList?.findIndex((item: any) => item.version === res.result.codePackage.currentVersion),
-            codePackageVersionList: res.result.codePackageVersionList?.map((item: any) => ({
-                ...item,
-                runPath: item.runPath ? [{ name: item.runFilename, url: item.runPath }] : [],
-                zipPath: item.zipPath ? [{ name: item.zipFilename, url: item.zipPath }] : [],
-                hidden: true
-            }))
-        }
-        // 展开第一个历史版本
-        const LastHistory = state.formDataList[index].codePackageVersionList.find((item: any) => item.version !== state.formDataList[index].currentVersion)
-        if (LastHistory) {
-            LastHistory.hidden = false
+            coverUrl: res.result.courseInfo.coverUrl ? [{ src: res.result.courseInfo.coverUrl }] : [],
+            attachment: res.result.courseInfo.attachment ? JSON.parse(res.result.courseInfo.attachment) : []
         }
     } else {
-        message.error('获取组件包信息失败！')
+        message.error('获取教程信息失败！')
     }
 }
 const handlePublishCancel = async () => {
-    const index = currentIndex.value
-    const title = '确定要取消发布当前教程吗？'
-    // const content = '该组件包下的所有已创建组件也将同时取消发布！'
-    const confirmRes = await showConfirm(title, '', ExclamationCircleOutlined)
-    if (confirmRes) {
-        state.formDataList[index].formLoading = true
-        const res = await componentPublishApi.requestChangeStatus({ codepackageId: state.formDataList[index].id, status: 0, comStatus: 1 })
-        state.formDataList[index].formLoading = false
-        if (res.success) {
-            message.success('取消发布成功！')
-        } else {
-            message.error('取消发布失败！')
+    if (state.courseId) {
+        const title = '确定要取消发布当前教程吗？'
+        const confirmRes = await showConfirm(title, '', ExclamationCircleOutlined)
+        if (confirmRes) {
+            useCourseApi
+                .requestCourseDeleteBatch({ ids: state.courseId })
+                .then((res) => {
+                    if (res.success) {
+                        message.success('取消发布成功')
+                        router.push('/')
+                    } else {
+                        message.success('取消发布失败')
+                    }
+                })
+                .catch(() => {
+                    message.error('请求失败！')
+                })
         }
+    } else {
+        router.push('/')
     }
 }
-const router = useRouter()
-const onFinish = async (data: any, i?: any) => {
-    console.log(data, i)
-    router.push({
-        name: 'imageTextMdEdit'
-    })
 
-    // const index = i || currentIndex.value
-    // const params = {
-    //     ...data,
-    //     tags: data.tags.join(','),
-    //     cooperationUserIds: data.cooperationUserIds.map((item: any) => item.value).join(','),
-    //     publishRange: data.publishOpen === 0 ? data.publishRange.map((item: any) => item.value).join(',') : undefined,
-    //     publishRangeName: data.publishOpen === 0 ? data.publishRange.map((item: any) => item.label).join(',') : undefined,
-    //     codePackageVersionModel: data.codePackageVersionList.map((item: any) => ({
-    //         ...item,
-    //         runPath: item.runPath[0]?.url || '',
-    //         runFilename: item.runPath[0]?.name || '',
-    //         zipPath: item.zipPath[0]?.url || '',
-    //         zipFilename: item.zipPath[0]?.name || ''
-    //     }))
-    // }
-    // state.formDataList[index].formLoading = true
-    // const res = await componentPublishApi.requestSaveCodepackage(params)
-    // state.formDataList[index].formLoading = false
-    // if (data.closeMessage) {
-    //     return res
-    // }
-    // if (res.success) {
-    //     if (data.status) {
-    //         const answer = await showConfirm('保存并发布成功！', '是否同时发布该组件包下的所有已创建组件？', CheckCircleOutlined, '#52c41a')
-    //         if (answer) {
-    //             publishAllCom()
-    //         }
-    //     } else {
-    //         message.success('保存成功！')
-    //     }
-    // } else {
-    //     if (data.status) {
-    //         message.error('保存并发布失败！')
-    //     } else {
-    //         message.error('保存失败！')
-    //     }
-    // }
+const onFinish = async (data: any) => {
+    console.log(data)
+    const params = {
+        ...data,
+        type: 1,
+        coverUrl: data.coverUrl && data.coverUrl[0] ? data.coverUrl[0].src : '',
+        tags: data.tags.join(','),
+        relationComponentIds: data.relationComponentIds.map((item: any) => item.key).join(','),
+        publishRange: data.publishOpen === 0 ? data.publishRange.map((item: any) => item.value).join(',') : undefined,
+        publishRangeName: data.publishOpen === 0 ? data.publishRange.map((item: any) => item.label).join(',') : undefined,
+        attachment: JSON.stringify(data.attachment)
+    }
+    state.formData.formLoading = true
+    const res = await useCourseApi.requestCourseSave(params)
+    state.formData.formLoading = false
+    if (res.success) {
+        message.success('发布成功，正在打开图文编辑页面！')
+        router.push({
+            name: 'imageTextMdEdit',
+            query: { courseId: res.result.id }
+        })
+    } else {
+        message.error('发布失败')
+    }
 }
 const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo)
     message.error('表单校验失败，请检查！')
 }
-// const publishAllCom = async (id?: any, i?: any) => {
-//     const index = i || currentIndex.value
-//     const codepackageId = id || state.formDataList[index].id
-
-//     state.formDataList[index].formLoading = true
-//     const res = await componentPublishApi.requestChangeStatus({ codepackageId, status: 1, comStatus: 1 })
-//     state.formDataList[index].formLoading = false
-//     if (res.success) {
-//         message.success('操作成功！')
-//     } else {
-//         message.error('操作失败！')
-//     }
-// }
-// const handleAutoCreateCom = async () => {
-//     const index = currentIndex.value
-//     state.formDataList[index].formLoading = true
-//     const res = await componentPublishApi.requestAutocreate({ codePackageId: state.selectedKey })
-//     state.formDataList[index].formLoading = false
-//     if (res.success) {
-//         const title = `已成功创建 ${state.formDataList[index].noExistsComponentCount} 个组件， 是否继续完善组件信息？`
-//         const content = ''
-//         state.formDataList[index].noExistsComponentCount = 0
-//         const confirmRes = await showConfirm(title, content, CheckCircleOutlined, '#52c41a')
-//         if (confirmRes && res.result) {
-//             window.open(`/componentPublish?componentIds=${res.result}`)
-//         }
-//     } else {
-//         message.error('自动创建失败！')
-//     }
-// }
-// const handleAllVersionView = (data: any) => {
-//     // router.push({
-//     //     name: 'index-componentPackage-detail',
-//     //     query: {
-//     //         codepackageId: data.id,
-//     //         version: data.currentVersion
-//     //     }
-//     // })
-//     window.open(`/componentPackageDetail?codepackageId=${data.id}&version=${data.currentVersion}`)
-// }
-// const handleVersionHidden = (versionData: any, currentVersionIndex: any) => {
-//     versionData.hidden = !versionData.hidden
-//     const index = state.formDataList[currentIndex.value].codePackageVersionList.findIndex((item: any) => !item.hidden)
-//     if (index !== -1 && index !== currentVersionIndex) {
-//         state.formDataList[currentIndex.value].historyHidden = false
-//     } else {
-//         state.formDataList[currentIndex.value].historyHidden = true
-//     }
-// }
-// const handleHistoryHidden = (formData: any) => {
-//     formData.historyHidden = !formData.historyHidden
-//     state.formDataList[currentIndex.value].codePackageVersionList.forEach((item: any) => {
-//         item.hidden = formData.historyHidden
-//     })
-// }
-const getCodeLangueList = async () => {
-    const res = await coreApi.requestWebInfoListByGroup({ groupCd: 'langue' })
-    if (res.success) {
-        state.codeLangueList = res.result.map((item: any) => ({
-            ...item,
-            label: item.itemValue,
-            value: item.itemValue
-        }))
-    }
-}
 const getTagsList = async () => {
-    return await coreApi.requestWebInfoListByGroup({ groupCd: 'codepackageTags' }) // todo 教程标签id
+    return await coreApi.requestWebInfoListByGroup({ groupCd: 'course' }) // todo 教程标签id
 }
-const getCooperationUserList = async (text: string) => {
-    return await useHomeCoreApi.requestSearchUser({ searchTxt: text }) // todo 协作组件接口
+const getComponentList = async (text: string) => {
+    return await coreApi.requestSearchComponent({ searchTxt: text })
 }
 const getPublishRangeList = async () => {
     return await useHomeCoreApi.requestCoreMyOrgList()
