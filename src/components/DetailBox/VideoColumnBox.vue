@@ -21,7 +21,7 @@
             </a-tab-pane>
             <a-tab-pane key="2" tab="简介">
                 <div class="introduc-item">
-                    <div class="introduc-item-title">适合人群</div>
+                    <div class="introduc-item-title">适用人群</div>
                     <div class="introduc-item-desc" v-text="props.courseInfo.personRange"></div>
                 </div>
                 <div class="introduc-item">
@@ -38,7 +38,7 @@
                     <img class="course-item-img" :src="getImagePath(item.coverUrl) || componentMarketDetault" />
                     <div class="course-item-right">
                         <div class="course-item-title">{{ item.title }}</div>
-                        <div class="course-item-desc">{{ item.vedioNumber }}节课 · {{ item.readNumber }}人学习</div>
+                        <div class="course-item-desc">{{ item.vedioNumber }}节课&nbsp;&nbsp;●&nbsp;&nbsp;{{ item.readNumber }}人学习</div>
                     </div>
                 </div>
             </a-tab-pane>
@@ -141,7 +141,7 @@ onMounted(() => {})
 .video-column-box {
     position: relative;
     background-color: rgb(44, 44, 44);
-    height: 490px;
+    height: 100%;
     ::v-deep .ant-tabs {
         color: #605f5f;
         height: 100%;
@@ -149,17 +149,18 @@ onMounted(() => {})
             padding: 0 14px;
         }
         .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
-            color: #d60303;
+            color: #FC5531;
         }
         .ant-tabs-ink-bar {
-            background-color: #d60303;
+            background-color: #FC5531;
+            bottom: 5px;
         }
         &.ant-tabs-top > .ant-tabs-nav::before {
-            border-bottom: 1px solid #444;
+            border-bottom: 1px solid rgb(34, 34, 34);
         }
         .ant-tabs-content-holder {
             height: calc(100% - 62px);
-            padding: 0 20px 20px 30px;
+            padding: 0 15px 15px 15px;
             .ant-tabs-content {
                 height: 100%;
                 overflow: auto;
@@ -178,8 +179,11 @@ onMounted(() => {})
                 }
             }
         }
+        .ant-tabs-tab {
+            font-size: 16px;
+        }
         .ant-tabs-tab:hover {
-            color: #d60303;
+            color: #FC5531;
         }
     }
 
@@ -207,6 +211,10 @@ onMounted(() => {})
                 bottom: 0;
                 margin: auto 0;
             }
+        }
+        .introduc-item-desc{
+            padding: 0 10px;
+            font-size: 12px;
         }
     }
     .course-item {
@@ -243,7 +251,7 @@ onMounted(() => {})
         background: transparent;
         border: none;
         .ant-collapse-header {
-            background-color: rgb(77, 77, 77);
+            background-color: rgb(55 55 55);
             color: #fff;
         }
         .ant-collapse-content {
@@ -258,28 +266,27 @@ onMounted(() => {})
             }
         }
         .ant-collapse-content-box {
-            padding: 10px 0;
-            border: 1px solid rgb(77, 77, 77);
+            padding: 10px 0 0;
+            border: none;
             border-top: none;
         }
     }
     .colunm-item {
         display: flex;
         color: #b9b8b8;
-        line-height: 24px;
         margin-bottom: 6px;
-        padding: 4px 6px;
+        padding: 2px 6px;
         cursor: pointer;
+        font-size: 12px;
         &:last-child {
             margin-bottom: 0;
         }
         .colunm-item-icon {
-            font-size: 24px;
+            font-size: 12px;
             margin: 0 6px;
         }
         &.active {
-            background-color: rgb(77, 77, 77);
-            color: #fff;
+            color: #FC5531;
         }
     }
 }

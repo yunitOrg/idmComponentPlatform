@@ -12,6 +12,7 @@
             <span class="text-o-e-2">
                 {{ componentProps.title }}
             </span>
+            <i></i>
         </div>
         <div class="school-box-team">
             <svg-icon iconClass="renqun" class="school-box-icon"></svg-icon>{{ componentProps.publishRangeName || defaultSettings.yunitName }}
@@ -21,7 +22,7 @@
                 <a-avatar :size="15" :src="getImagePath(componentProps.userPhoto)" />
                 <span class="ml-6 nowrap">{{ componentProps.userNickname }}</span>
             </div>
-            <span class="text-o-e school-box-count" style="width: auto">{{ componentProps.readNumber }}</span>
+            <span class="text-o-e school-box-count" style="width: auto">{{ componentProps.type==0?componentProps.vedioNumber+'节':componentProps.readNumber+'阅读' }}</span>
         </div>
     </a-card>
 </template>
@@ -122,10 +123,19 @@ const handleItemClick = () => {
     }
 
     .school-box-title {
-        min-height: 48px;
-        color: #000;
-        padding: 5px 10px;
-        font-size: 12px;
+        min-height: 64px;
+        color: #333;
+        padding: 10px 10px;
+        font-size: 14px;
+        position: relative;
+        &>i{
+            position: absolute;
+            left: 0;
+            top: 10px;
+            width: 3px;
+            height: 18px;
+            background-color: #1890FF;
+        }
     }
 
     .ml-6 {

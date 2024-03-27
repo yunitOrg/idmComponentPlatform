@@ -1,9 +1,12 @@
 <template>
-    <div class="idm-button-list-container" :class="{'horizontal':alignType === 'horizontal'}">
+    <div class="idm-button-list-container" :class="{'horizontal':alignType === 'horizontal','black-button':themeType === 'black'}">
         <div class="idm-button-list-box">
             <div :class="['idm-button-list-icon', 'cursor-pointer', 'flex', 'justify-center', 'align-center', isPraise && 'btn-active']" @click="handlePraise">
                 <svg-icon iconClass="dianzan" style="font-size: 19px"></svg-icon>
                 <span v-if="componentProp.praiseNumber" class="idm-button-list-num">{{ componentProp.praiseNumber }}</span>
+            </div>
+            <div v-if="showLabel" class="button-label">
+                点赞
             </div>
         </div>
         <div class="idm-button-list-box">
@@ -11,11 +14,17 @@
                 <svg-icon iconClass="dashang" style="font-size: 21px"></svg-icon>
                 <span v-if="componentProp.playtourNumber" class="idm-button-list-num">{{ componentProp.playtourNumber }}</span>
             </div>
+            <div v-if="showLabel" class="button-label">
+                打赏
+            </div>
         </div>
         <div class="idm-button-list-box">
             <div class="idm-button-list-icon cursor-pointer flex justify-center align-center" @click="handleClickComment">
                 <svg-icon iconClass="pinglun2" style="font-size: 19px"></svg-icon>
                 <span v-if="componentProp.commentNumber" class="idm-button-list-num">{{ componentProp.commentNumber }}</span>
+            </div>
+            <div v-if="showLabel" class="button-label">
+                评论
             </div>
         </div>
         <div class="idm-button-list-box">
@@ -26,11 +35,17 @@
                 <svg-icon iconClass="shoucang" style="font-size: 21px"></svg-icon>
                 <span v-if="componentProp.collectNumber" class="idm-button-list-num">{{ componentProp.collectNumber }}</span>
             </div>
+            <div v-if="showLabel" class="button-label">
+                收藏
+            </div>
         </div>
         <div class="idm-button-list-box">
             <div class="idm-button-list-icon cursor-pointer flex justify-center align-center" @click="emits('handleClickButtonList', 5)">
                 <svg-icon iconClass="fenxiang" style="font-size: 18px"></svg-icon>
                 <span v-if="componentProp.shareNumber" class="idm-button-list-num">{{ componentProp.shareNumber }}</span>
+            </div>
+            <div v-if="showLabel" class="button-label">
+                分享
             </div>
         </div>
         <ChooseCollectionModal
@@ -70,6 +85,15 @@ const propData = defineProps({
     alignType: {
         type: String,
         default: 'vertical'
+    },
+    themeType: {
+        type: String,
+        /** white or black */
+        default: 'white'
+    },
+    showLabel: {
+        type: Boolean,
+        default: false
     }
 })
 const emits = defineEmits(['handleClickButtonList', 'cancelCollect', 'collectSuccess'])
@@ -123,10 +147,17 @@ const handleClickComment = () => {
             margin: 0;
         }
     }
+    .button-label{
+        text-align: center;
+        font-size: 14px;
+        color: #333333;
+        margin-top: 10px;
+    }
     .idm-button-list-box {
         margin: 0 0 20px 0;
     }
     .idm-button-list-icon {
+        transition: all linear 0.2s;
         position: relative;
         width: 48px;
         height: 48px;
@@ -160,6 +191,19 @@ const handleClickComment = () => {
         color: #999999;
         margin: 5px 0 0 0;
         transform: scale(0.9);
+    }
+    &.black-button{
+        .idm-button-list-icon {
+            background-color: transparent;
+            color: #8a919f;
+            box-shadow: 0 2px 10px rgba(255,255,255,1);
+            &:hover {
+                color: #b3b9c4;
+            }
+        }
+        .button-label{
+            color: #797979;
+        }
     }
 }
 </style>

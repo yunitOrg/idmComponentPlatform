@@ -1,4 +1,3 @@
-
 import { createVNode } from 'vue-demi'
 import { HomeOutlined, BookOutlined } from '@ant-design/icons-vue'
 export default {
@@ -46,7 +45,7 @@ export default {
                     routeName: 'index-creativeCenter-courseManageList'
                 },
                 {
-                    title: '文章教程模板管理',
+                    title: '文章教程模板',
                     routeName: 'index-creativeCenter-templateManageList'
                 }
             ]

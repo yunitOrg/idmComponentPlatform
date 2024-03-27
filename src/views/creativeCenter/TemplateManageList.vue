@@ -1,6 +1,6 @@
 <template>
     <div class="component-package-manage-list">
-        <ManageListHeader title="文章教程模板管理" btn-text="新增模板" :on-btn-click="handleHeaderBtnClick" />
+        <ManageListHeader title="文章教程模板" btn-text="新增模板" :on-btn-click="handleHeaderBtnClick" />
         <div class="content">
             <div class="search-bar">
                 <ManageListSearch :showRange="false" :on-search="handleSearchBarSearch" :on-reset="handleSearchBarReset" />

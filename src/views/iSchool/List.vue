@@ -57,8 +57,8 @@ Promise.all([
 ]).then((res) => {
     const list = fileterMap.map((el, index) => ({
         defaultOptionNumber: index === 0 ? 15 : 18,
-        conditionName: index === 0 ? '语言' : '标签',
-        conditionKey: index === 0 ? 'language' : 'tag',
+        conditionName: '标签',
+        conditionKey: 'tag',
         showAllOption: true,
         allOptionName: '全部',
         resData: res[index].result.map((el: any) => ({

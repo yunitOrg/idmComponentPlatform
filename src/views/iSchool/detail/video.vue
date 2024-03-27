@@ -7,7 +7,7 @@
                     <ARow class="flex-1">
                         <ACol :span="24 - leftSpan">
                             <VideoPlayer :videoInfo="pageData.videoInfo"></VideoPlayer>
-                            <div class="handler" :class="{ expend: pageData.isExpend }" @click="toggleExpend">
+                            <div class="handler" :class="{ expend: pageData.isExpend }" :title="pageData.isExpend?'折叠':'展开'" @click="toggleExpend">
                                 <svg-icon iconClass="expend"></svg-icon>
                             </div>
                         </ACol>
@@ -21,12 +21,14 @@
                     </ARow>
                 </div>
                 <ButtonList
-                    style="margin: 20px 0 0 0"
+                    style="margin: 40px 0 20px 0"
                     alignType="horizontal"
                     :componentProp="pageData.docDetail.courseInfo"
                     :isPraise="pageData.docDetail.isPraise"
                     :isCollect="pageData.docDetail.isCollect"
                     sourceType="3"
+                    themeType="black"
+                    :showLabel="true"
                     :sourceId="pageData.docDetail.courseInfo.id"
                     @handleClickButtonList="handleClickButtonList"
                     @collectSuccess="collectSuccess"
@@ -88,14 +90,14 @@ const pageData = reactive({
         }
     ],
     isExpend: true,
-    leftSpan: 7, // 是否展开
+    leftSpan: 6, // 是否展开
     videoInfo: {}, // 视频栏目信息
     hasPermission: true,
     errText: '',
     isFirst: true
 })
 const leftSpan = computed(() => {
-    return pageData.isExpend ? 7 : 0
+    return pageData.isExpend ? 6 : 0
 })
 
 const handleFetchPageData = () => {
@@ -185,7 +187,7 @@ const columnChange = (videoInfo: any) => {
 </script>
 <style lang="scss">
 .video-outer {
-    margin-top: -17px;
+    margin-top: -20px;
     .video-wrapper {
         padding: 20px 0;
         background-color: rgb(34, 34, 34);
@@ -199,18 +201,20 @@ const columnChange = (videoInfo: any) => {
         top: 0;
         bottom: 0;
         margin: auto 0;
-        height: 40px;
-        width: 18px;
+        height: 28px;
+        width: 10px;
         color: #fff;
-        font-size: 20px;
-        line-height: 40px;
+        font-size: 10px;
+        line-height: 28px;
         background-color: rgba($color: #fff, $alpha: 0.2);
         z-index: 1;
         cursor: pointer;
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
 
         &.expend {
             transform: rotate(180deg);
-            right: -18px;
+            right: -10px;
         }
     }
 }
