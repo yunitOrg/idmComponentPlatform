@@ -26,6 +26,7 @@
                                 :title="item.title"
                                 :open="item.publishOpen"
                                 :range="item.publishRangeName"
+                                :status="item.status"
                                 :content="item.introduction"
                                 :time="item.updateTime || item.createTime"
                                 :readNumber="item.readNumber"

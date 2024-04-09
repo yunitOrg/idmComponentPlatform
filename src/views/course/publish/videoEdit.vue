@@ -19,7 +19,7 @@
                             <a-input v-model:value="video.title" placeholder="请输入视频名称" />
                             <div class="video-upload">
                                 <IFileUpload v-model:value="video.filePath" accept=".mp4,.avi,.wmv,.rm,.ram,.mov,.flv" :paramsData="{ upFileType: 'other' }">
-                                    <div class="upload-container"><PlusOutlined style="font-size: 20px; margin-right: 20px" /> 点击<a>上传资源</a> 、文件小于1000.00MB</div>
+                                    <div class="upload-container"><PlusOutlined style="font-size: 20px; margin-right: 20px" /> 点击<a>上传资源</a> 、文件小于600.00MB</div>
                                 </IFileUpload>
                             </div>
                             <PlusCircleOutlined @click="addVideo(index, i)" />
@@ -29,9 +29,11 @@
                 </section>
             </div>
             <div class="btn-outer">
-                <a-button type="primary" shape="round" @click="publishVideo">发布</a-button>
+                <a-button type="primary" shape="round" @click="publishVideo(1)">发布</a-button>
+                <a-button :style="{ marginLeft: '20px' }" shape="round" @click="publishVideo(0)">暂存</a-button>
                 <a-button :style="{ marginLeft: '20px' }" shape="round" @click="cancelVideo">取消</a-button>
             </div>
+            <div style="color:coral;text-align:center">温馨提示：上传视频后会在后端静默转换压缩，需要等待转换完成才能浏览播放视频</div>
         </div>
     </div>
 </template>
@@ -153,7 +155,7 @@ const delVideo = async (index: number, i: number) => {
     if (state.sectionServiceList[index].vedioModelList.length === 1) {
         return message.warning('每个章节至少保留一个视频')
     }
-    if (state.courseId) {
+    if (state.courseId && state.sectionServiceList[index].vedioModelList[i].id) {
         const res = await useCourseApi.requestdeleteCourseVedio({
             id: state.sectionServiceList[index].vedioModelList[i].id
         })
@@ -167,15 +169,18 @@ const delVideo = async (index: number, i: number) => {
         state.sectionServiceList[index].vedioModelList.splice(i, 1)
     }
 }
-const publishVideo = async () => {
+const publishVideo = async (status: number) => {
     let flag = true
-    state.sectionServiceList.forEach((item: any) => {
-        if (!item.title) flag = false
-        item.vedioModelList.forEach((child: any) => {
-            if (!child.title || child.filePath.length === 0) flag = false
+    if (status === 1) {
+        state.sectionServiceList.forEach((item: any) => {
+            if (!item.title) flag = false
+            item.vedioModelList.forEach((child: any) => {
+                if (!child.title || child.filePath.length === 0) flag = false
+            })
         })
-    })
+    }
     if (flag) {
+        state.formData.status = status
         const params = JSON.parse(JSON.stringify(state.sectionServiceList))
         let vedioNumber = 0
         params.forEach((item: any, index: number) => {
@@ -184,9 +189,15 @@ const publishVideo = async () => {
             item.courseId = state.formData.id
             item.vedioModelList.forEach((video: any, i: number) => {
                 video.sort = i
-                video.fileName = video.filePath[0].name
-                video.fileSize = video.filePath[0].size
-                video.filePath = video.filePath[0].url
+                if (video.filePath.length) {
+                    video.fileName = video.filePath[0].name
+                    video.fileSize = video.filePath[0].size
+                    video.filePath = video.filePath[0].url
+                } else {
+                    video.fileName = ''
+                    video.fileSize = ''
+                    video.filePath = ''
+                }
                 video.courseId = state.formData.id
                 vedioNumber++
             })
@@ -202,13 +213,15 @@ const publishVideo = async () => {
                 vedioNumber
             })
             if (saveRes.success) {
-                message.success('视频教程发布成功')
-                router.push('/creativeCenter/courseManageList?type=0')
+                message.success('视频教程' + (status === 1 ? '发布' : '暂存') + '成功')
+                if (status === 1) {
+                    router.push('/creativeCenter/courseManageList?type=0')
+                }
             } else {
-                message.error('发布失败')
+                message.error((status === 1 ? '发布' : '暂存') + '失败')
             }
         } else {
-            message.error('发布失败')
+            message.error((status === 1 ? '发布' : '暂存') + '失败')
         }
     } else {
         message.warning('请检查章节名称、视频名称、视频资源是否完整')

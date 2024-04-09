@@ -43,6 +43,9 @@
                 </a-popover>
                 <div v-if="props.type" class="type">{{ props.type }}</div>
                 <div class="tags">
+                    <template v-if="props.status !== -1">
+                        <div class="tag" :class="props.status !== 1 ? 'redColor' : 'grayColor'">{{ props.status === 1 ? '已发布' : '未发布' }}</div>
+                    </template>
                     <template v-if="props.tags">
                         <div v-for="(item, index) in props.tags.split(',')" :key="index" class="tag">{{ item }}</div>
                     </template>
@@ -103,6 +106,10 @@ const colorMap: any = {
     }
 }
 const props = defineProps({
+    status: {
+        type: Number,
+        default: -1
+    },
     showCoverImg: {
         type: Boolean,
         default: true
@@ -432,6 +439,12 @@ const handleVersionCountClick = async (visible: boolean) => {
                     border-radius: 3px;
                     border: 1px solid #ddd;
                     color: #40a9ff;
+                    &.redColor{
+                        color: red;
+                    }
+                    &.grayColor{
+                        color: gray;
+                    }
                 }
             }
             .actions {

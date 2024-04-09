@@ -48,6 +48,12 @@
                                 :request="getTagsList"
                                 placeholder="请选择或输入" />
                         </a-form-item>
+                        <a-form-item name="status" label="发布状态" :rules="[{ required: true, message: '必填!' }]">
+                            <a-radio-group v-model:value="state.formData.status">
+                                <a-radio :value="1">发布</a-radio>
+                                <a-radio :value="0">未发布</a-radio>
+                            </a-radio-group>
+                        </a-form-item>
                         <a-form-item name="publishOpen" label="发布范围" :rules="[{ required: true, message: '必填!' }]">
                             <a-radio-group v-model:value="state.formData.publishOpen">
                                 <a-radio :value="1">公开</a-radio>
@@ -81,10 +87,10 @@
                             <IFileUpload v-model:value="state.formData.attachment" accept="" multiple :paramsData="{ upFileType: 'other' }" />
                         </a-form-item>
                         <a-form-item :wrapper-col="{ span: 24, offset: 8 }" :style="{ padding: '20px 0' }">
-                            <a-button type="primary" html-type="submit" shape="round" @click="() => (state.formData.status = 1)">
-                                {{ !state.courseId ? '发布教程，去上传视频' : '重新发布教程，去上传视频' }}
+                            <a-button type="primary" html-type="submit" shape="round">
+                                {{ !state.courseId ? '保存教程，去上传视频' : '重新保存教程，去上传视频' }}
                             </a-button>
-                            <a-button :style="{ marginLeft: '20px' }" shape="round" @click="handlePublishCancel()">取消</a-button>
+                            <a-button :style="{ marginLeft: '20px' }" shape="round" @click="handlePublishCancel()">删除</a-button>
                         </a-form-item>
                         <a-alert type="warning" closable :style="{ marginBottom: '20px' }">
                             <template #description> 声明：请确保您上传的内容合法合规，涉及侵权内容将会被移除，详见 <a href="">《云IT资源共享规范》</a> </template>
@@ -159,17 +165,17 @@ const getDistinfo = async () => {
 
 const handlePublishCancel = async () => {
     if (state.courseId) {
-        const title = '确定要取消发布当前教程吗？'
+        const title = '确定要删除当前教程吗？'
         const confirmRes = await showConfirm(title, '', ExclamationCircleOutlined)
         if (confirmRes) {
             useCourseApi
                 .requestCourseDeleteBatch({ ids: state.courseId })
                 .then((res) => {
                     if (res.success) {
-                        message.success('取消发布成功')
+                        message.success('删除成功')
                         router.push('/')
                     } else {
-                        message.success('取消发布失败')
+                        message.success('删除失败')
                     }
                 })
                 .catch(() => {
@@ -197,9 +203,9 @@ const onFinish = async (data: any) => {
     state.formData.formLoading = false
     if (res.success) {
         router.push({ name: 'index-coursePublish-video-edit', query: { courseId: res.result.id } })
-        message.success('发布成功，正在打开教程章节维护！')
+        message.success('保存成功，正在打开教程章节维护！')
     } else {
-        message.error('发布失败')
+        message.error('保存失败')
     }
 }
 const onFinishFailed = (errorInfo: any) => {
