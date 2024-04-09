@@ -62,6 +62,7 @@ const handleItemClick = () => {
     .school-box-top {
         position: relative;
         overflow: hidden;
+        height: 118px;
 
         .school-box-top-number {
             position: absolute;
