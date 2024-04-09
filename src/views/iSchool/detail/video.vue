@@ -16,6 +16,7 @@
                                 :courseInfo="pageData.docDetail.courseInfo"
                                 :courseVedioList="pageData.docDetail.courseVedioList"
                                 :courseUserInfo="pageData.docDetail.courseUserInfo"
+                                maxHeight="519px"
                                 @columnChange="columnChange"></VideoColumnBox>
                         </ACol>
                     </ARow>

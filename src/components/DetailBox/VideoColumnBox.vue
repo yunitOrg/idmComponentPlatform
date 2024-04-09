@@ -1,5 +1,5 @@
 <template>
-    <div class="idm-component-common-box video-column-box">
+    <div class="idm-component-common-box video-column-box" :style="`max-height:${maxHeight}`">
         <a-tabs v-model:activeKey="pageData.activeKey">
             <a-tab-pane key="1" tab="目录">
                 <a-collapse v-model:activeKey="pageData.collapseActiveKey" expandIconPosition="right">
@@ -62,6 +62,10 @@ const props = defineProps({
     courseUserInfo: {
         type: Object,
         default: () => {}
+    },
+    maxHeight: {
+        type: String,
+        default: ''
     }
 })
 watch(
