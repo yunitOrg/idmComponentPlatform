@@ -14,7 +14,7 @@
             <v-md-editor v-model:model-value="state.value" height="700px" left-toolbar="undo redo clear | h bold italic strikethrough quote | ul ol table hr | link image code" />
         </ASpin>
         <template #footer>
-            <span style="float: left;color: red">如果上传组件包为同一版本号将以组件包内的文档为准，如需要请及时复制粘贴至源码中进行同步最新</span>
+            <span style="float: left;color: red">{{ tip }}</span>
             <a-button key="back" @click="handleCancel">取消</a-button>
             <a-button key="submit" type="primary" @click="handleOk">保存</a-button>
         </template>
@@ -30,7 +30,12 @@ const props = defineProps({
     path: {
         type: String,
         default: ''
+    },
+    tip: {
+        type: String,
+        default: '如果上传组件包为同一版本号将以组件包内的文档为准，如需要请及时复制粘贴至源码中进行同步最新'
     }
+
 })
 const state = reactive({
     value: '',

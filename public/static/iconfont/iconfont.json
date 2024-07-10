@@ -6,6 +6,48 @@
   "description": "云IT官方用的图标",
   "glyphs": [
     {
+      "icon_id": "13028662",
+      "name": "密钥",
+      "font_class": "miyue",
+      "unicode": "e61d",
+      "unicode_decimal": 58909
+    },
+    {
+      "icon_id": "7128787",
+      "name": "页面",
+      "font_class": "yemian",
+      "unicode": "e637",
+      "unicode_decimal": 58935
+    },
+    {
+      "icon_id": "8682597",
+      "name": "公告",
+      "font_class": "gonggao",
+      "unicode": "e626",
+      "unicode_decimal": 58918
+    },
+    {
+      "icon_id": "11874505",
+      "name": "图片",
+      "font_class": "tupian",
+      "unicode": "e61b",
+      "unicode_decimal": 58907
+    },
+    {
+      "icon_id": "14067331",
+      "name": "业务组件",
+      "font_class": "yewuzujian1-01",
+      "unicode": "e639",
+      "unicode_decimal": 58937
+    },
+    {
+      "icon_id": "26503287",
+      "name": "模板",
+      "font_class": "moban",
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    },
+    {
       "icon_id": "4766906",
       "name": "notification",
       "font_class": "notification",

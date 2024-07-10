@@ -44,8 +44,38 @@ export default {
             routeName: 'index-iSchool'
         },
         {
+            title: '资源',
+            routeName: 'index-page',
+            children: [
+                {
+                    title: '页面',
+                    routeName: 'index-page'
+                },
+                {
+                    title: '模板',
+                    routeName: 'index-template'
+                },
+                {
+                    title: '业务组件',
+                    routeName: 'index-bcomponent'
+                },
+                {
+                    title: '图片',
+                    routeName: 'index-image'
+                },
+                {
+                    title: '专题广场',
+                    routeName: 'index-resourceFeatures'
+                }
+            ]
+        },
+        {
             title: '云圈',
             routeName: 'index-yunquan'
+        },
+        {
+            title: '公告',
+            routeName: 'index-notice'
         },
         {
             title: '组织',
@@ -53,7 +83,7 @@ export default {
         },
         {
             title: 'IDM',
-            routeName: settings.url
+            routeName: 'index-idmcore'
         },
         {
             title: '创作中心',

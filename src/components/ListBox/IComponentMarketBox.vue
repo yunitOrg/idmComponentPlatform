@@ -70,6 +70,12 @@ const handleItemClick = () => {
     overflow: hidden;
     background: rgb(245, 250, 255);
     padding: 10px;
+    border: 1px solid #eee;
+    transition: all 0.3s;
+    &:hover{
+        box-shadow: 0 0 20px rgba($color: #C6C6C6, $alpha: 0.5);
+        transform: translateY(-5px);
+    }
     ::v-deep(.ant-card-body) {
         padding: 0;
     }

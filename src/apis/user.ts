@@ -38,7 +38,9 @@ enum Apis {
     // 编辑个人资料
     editUserInfo = '/core/user/editUserInfo',
     // 上传背景图
-    uploadFileUrl = '/publish/component/upload'
+    uploadFileUrl = '/publish/component/upload',
+    // 重新生成accessKey和修改范围
+    resetAccessKey = '/core/user/resetAccessKey'
 }
 export interface SmsData {
     mobile?: string
@@ -90,6 +92,7 @@ export default {
     resetAccountInfoApi: (data: any) => http.postForm({ url: Apis.resetAccountInfo, data }),
     getbusinessListApi: (key: string) => http.get({ url: Apis.getbusinessList + key }),
     editUserInfoApi: (data: any) => http.post({ url: Apis.editUserInfo, data }),
+    resetAccessKeyApi: (data: any) => http.postForm({ url: Apis.resetAccessKey, data }),
     uploadFileApi(data: any, onProgress?: (progressEvent: AxiosProgressEvent) => void, signal?: any) {
         return http.uploadFile({ url: Apis.uploadFileUrl, onUploadProgress: onProgress, signal }, data, { isReturnResponse: true })
     }

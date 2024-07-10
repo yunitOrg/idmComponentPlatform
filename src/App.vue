@@ -32,6 +32,9 @@ provide('reload', reload)
 body {
     background: rgb(247, 248, 250) !important;
 }
+body,html{
+    height: auto !important;
+}
 .page-min-height {
     min-height: calc(100vh - 280px);
 }

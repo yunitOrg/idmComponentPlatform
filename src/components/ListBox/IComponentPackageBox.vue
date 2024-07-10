@@ -57,7 +57,9 @@ const handleItemClick = () => {
 
 <style lang="scss" scoped>
 .idm-component-package-box {
+    border-radius: 5px;
     background: rgb(249, 250, 250);
+    transition: all 0.2s;
     padding: 10px;
 
     .package-name,

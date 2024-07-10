@@ -90,7 +90,7 @@ const handleUpload = async (data: any) => {
         file.time = timestampToTime(res.timestamp)
         emit('update:value', state.fileList)
     } else {
-        message.error('上传失败！')
+        message.error(res.message || '上传失败！')
     }
     return false
 }

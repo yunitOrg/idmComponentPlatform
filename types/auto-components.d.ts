@@ -22,6 +22,7 @@ declare module '@vue/runtime-core' {
     AFormItem: typeof import('ant-design-vue/es')['FormItem']
     AImage: typeof import('ant-design-vue/es')['Image']
     AInput: typeof import('ant-design-vue/es')['Input']
+    AAutoComplete: typeof import('ant-design-vue/es')['AutoComplete']
     AInputSearch: typeof import('ant-design-vue/es')['InputSearch']
     AMenu: typeof import('ant-design-vue/es')['Menu']
     AMenuItem: typeof import('ant-design-vue/es')['MenuItem']
@@ -84,5 +85,7 @@ declare module '@vue/runtime-core' {
     TitleInfoBox: typeof import('./../src/components/DetailBox/TitleInfoBox.vue')['default']
     UserInfoBox: typeof import('./../src/components/DetailBox/UserInfoBox.vue')['default']
     VersionList: typeof import('./../src/components/DetailBox/VersionList.vue')['default']
+    IPageBox: typeof import('./../src/components/ListBox/IPageBox.vue')['default']
+    INoticeBox: typeof import('./../src/components/ListBox/INoticeBox.vue')['default']
   }
 }

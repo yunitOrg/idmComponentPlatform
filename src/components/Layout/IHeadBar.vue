@@ -14,7 +14,14 @@
                         class="flex-1"
                         mode="horizontal"
                         @click="handleMenuClick">
-                        <a-menu-item v-for="item in menuNavList" :key="item.routeName">{{ item.title }}</a-menu-item>
+                        <template v-for="item in menuNavList">
+                            <a-sub-menu v-if="item.children" :key="item.routeName" @titleClick="handleMenuClick({ key:item.routeName })" :title="item.title">
+                                <a-menu-item v-for="subitem in item.children" :key="subitem.routeName">{{ subitem.title }}</a-menu-item>
+                            </a-sub-menu>
+                            <a-menu-item v-else :key="item.routeName">
+                                {{ item.title }}
+                            </a-menu-item>
+                        </template>
                     </a-menu>
                 </template>
             </div>
@@ -134,7 +141,7 @@
                     </a-popover>
                     <a-popover placement="bottomRight">
                         <template #content>
-                            <div class="want-send-top flex justify-between align-center">
+                            <div class="want-send-top flex justify-between align-center" style="flex-wrap: wrap;">
                                 <div
                                     v-for="(item, index) in sendListMap"
                                     :key="index"
@@ -146,7 +153,7 @@
                                     <div>{{ item.text }}</div>
                                 </div>
                             </div>
-                            <div class="want-send-bottom">
+                            <div class="want-send-bottom" style="display:none">
                                 <span class="font-weight-600">最新活动</span>
                                 <div class="want-send-bottom-activity-list">
                                     <span v-for="(item, index) in activityList" :key="index" class="cursor-pointer">{{ '#' + item.title }}</span>
@@ -157,7 +164,7 @@
                         <AButton type="primary" style="margin: 0 0 0 20px">
                             <div class="flex align-center">
                                 <svg-icon iconClass="edit"></svg-icon>
-                                <span style="margin: 0 0 0 5px">我要发</span>
+                                <span style="margin: 0 0 0 5px">创作</span>
                             </div>
                         </AButton>
                     </a-popover>
@@ -255,7 +262,7 @@ const pageData = reactive<{ [x: string]: any }>({
     isShadow: false,
     menuOpacity: 0,
     isShowMenuLine: true,
-    currentMessageActive: 1,
+    currentMessageActive: 2,
     messageList: [],
     messageLoading: false
 })
@@ -415,7 +422,19 @@ const handleJump = (menuItem?: MenuItem) => {
 }
 // 菜单点击
 const handleMenuClick: MenuProps['onClick'] = (e) => {
-    const menuItem = menuNavList.value.find((el: MenuItem) => el.routeName === e.key)
+    debugger
+    let menuItem = menuNavList.value.find((el: MenuItem) => el.routeName === e.key)
+    if (!menuItem) {
+        menuNavList.value.forEach((item: MenuItem) => {
+            if (item.children && item.children.length > 0) {
+                item.children.forEach((child: MenuItem) => {
+                    if (child.routeName === e.key) {
+                        menuItem = child
+                    }
+                })
+            }
+        })
+    }
     handleJump(menuItem)
 }
 // 搜索
@@ -477,6 +496,11 @@ const handleClickActionBtn = (action: string) => {
                 name: 'PersonInfo'
             })
             break
+        case 'AccessKeyManage':
+            router.push({
+                name: 'AccessKeyManage'
+            })
+            break
     }
 }
 </script>
@@ -509,7 +533,7 @@ const handleClickActionBtn = (action: string) => {
     ::v-deep(.ant-menu-item) {
         padding: 0 15px !important;
     }
-    ::v-deep(.ant-menu-item::after) {
+    ::v-deep(.ant-menu-item::after),::v-deep(.ant-menu-submenu::after),::v-deep(.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu-selected::after) {
         bottom: 35px !important;
     }
     .input-bgcolor {
@@ -562,16 +586,28 @@ const handleClickActionBtn = (action: string) => {
     box-shadow: 0 2px 6px 0 rgba($color: #000000, $alpha: 0.06);
 }
 .want-send-top {
-    min-width: 300px;
-    border-bottom: 1px solid #ccc;
-    padding: 10px 5px 15px;
+    width: 400px;
+    // border-bottom: 1px solid #ccc;
+    padding: 5px;
     margin: 0 0 10px 0;
     font-size: 14px;
     color: #333;
+    .flex-direction-column{
+        width: 20%;
+        margin-bottom: 10px;
+        margin-top:10px;
+        &:hover{
+            .want-send-top-icon{
+                background-color: #ebecee;
+                box-shadow: 0 2px 6px 0 rgba($color: #000000, $alpha: 0.1);
+            }
+        }
+    }
     .want-send-top-icon {
-        width: 35px;
-        height: 35px;
-        background-color: rgb(247, 248, 250);
+        transition: all 0.3s;
+        width: 55px;
+        height: 55px;
+        background-color: #F7F8FA;
         border-radius: 50%;
         margin: 0 0 5px 0;
         color: #888;
@@ -611,7 +647,7 @@ const handleClickActionBtn = (action: string) => {
     font-size: 14px;
     margin: 20px auto 10px;
     ::v-deep(.ant-image) {
-        transition: all 0.1s;
+        transition: all 0.3s;
     }
     > div:hover {
         ::v-deep(.ant-image) {
@@ -677,6 +713,9 @@ const handleClickActionBtn = (action: string) => {
 </style>
 
 <style lang="scss">
+.ant-menu{
+    font-size: 16px;
+}
 .navbar-avatar-popover {
     width: 290px;
     .ant-popover-inner-content {

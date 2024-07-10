@@ -3,7 +3,7 @@
         <div v-if="props.showCoverImg" class="image-wapper">
             <div v-if="props.onPreviewComponentClick" class="preview-tag cursor-pointer" @click.stop="props.onPreviewComponentClick">预览</div>
             <img object-fit alt="图片加载失败" class="image" :src="getImagePath(props.image) || componentMarketDetault" />
-            <div v-if="props.imageName" class="package-bar">组件包：{{ props.imageName }}</div>
+            <div v-if="props.imageName" class="package-bar">{{ componentName }}包：{{ props.imageName }}</div>
             <div v-if="props.typeText" class="type-text">{{ props.typeText }}</div>
         </div>
         <div class="items">
@@ -16,8 +16,9 @@
                 <div v-if="!props.open" v-show="props.range" class="org-tag range"><team-outlined />{{ props.range }}</div>
                 <div v-else class="org-tag open"><cloud-outlined />公开</div>
             </div>
-            <div class="content text-o-e-2">{{ props.content }}</div>
+            <div v-if="props.showContent" class="content text-o-e-2">{{ props.content }}</div>
             <div class="info-wapper">
+                <div class="time" v-if="props.objectId">{{ componentName }}{{ objectIdName }}：{{ props.objectId }}</div>
                 <div class="time">{{ props.time }}</div>
                 <div v-if="props.showStatistics" class="statistics">
                     浏览 {{ props.readNumber }} · 赞 {{ props.praiseNumber }} · 评论 {{ props.commentNumber }} · 收藏 {{ props.collectNumber }}
@@ -41,7 +42,7 @@
                     </template>
                     <a v-if="props.versionCount" class="versionCount">共有 {{ props.versionCount }} 个版本</a>
                 </a-popover>
-                <div v-if="props.type" class="type">{{ props.type }}</div>
+                <div v-if="props.type" class="type" :class="props.typeClass">{{ props.type }}</div>
                 <div class="tags">
                     <template v-if="props.status !== -1">
                         <div class="tag" :class="props.status !== 1 ? 'redColor' : 'grayColor'">{{ props.status === 1 ? '已发布' : '未发布' }}</div>
@@ -53,7 +54,7 @@
                 <div class="actions">
                     <div class="item" @click.stop="props.onEditClick">编辑</div>
                     <div class="item" @click.stop="props.onViewClick">浏览</div>
-                    <div v-if="props.onPreviewComponentClick" class="item" @click.stop="props.onPreviewComponentClick">预览组件</div>
+                    <div v-if="props.onPreviewComponentClick" class="item" @click.stop="props.onPreviewComponentClick">预览{{ componentName }}</div>
                     <div v-if="props.onUploadVideoClick" class="item" @click.stop="props.onUploadVideoClick">上传视频</div>
                     <div v-if="props.onEditMarkdownClick" class="item" @click.stop="props.onEditMarkdownClick">编辑图文</div>
                     <template v-if="!(props.onCopyClick && props.onDeleteClick)">
@@ -106,11 +107,31 @@ const colorMap: any = {
     }
 }
 const props = defineProps({
+    componentName: {
+        type: String,
+        default: '组件'
+    },
+    objectIdName: {
+        type: String,
+        default: 'ID'
+    },
+    typeClass: {
+        type: String,
+        default: ''
+    },
+    objectId: {
+        type: String,
+        default: ''
+    },
     status: {
         type: Number,
         default: -1
     },
     showCoverImg: {
+        type: Boolean,
+        default: true
+    },
+    showContent: {
         type: Boolean,
         default: true
     },
@@ -427,6 +448,15 @@ const handleVersionCountClick = async (visible: boolean) => {
                 border: 1px solid #40a9ff;
                 color: #40a9ff;
                 font-family: Arial, Helvetica, sans-serif;
+                &.red{
+                    border-color: red;
+                    color: red;
+                }
+                &.yellow{
+                    border-color: #ffc53d;
+                    color: #ffc53d;
+                }
+
             }
             .tags {
                 flex: 1;

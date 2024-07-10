@@ -7,5 +7,6 @@ import useOrgAboutApi from './orgAbout'
 import useHomeActionApi from './homeAction'
 import useCommentApi from './comment'
 import useCourseApi from './course'
+import resourcePublish from './resourcePublish'
 
-export { useUserApi, useHomePageApi, useHomeCoreApi, useOrgAboutApi, useHomeActionApi, useCommentApi, coreApi, componentPublishApi, useCourseApi }
+export { useUserApi, useHomePageApi, useHomeCoreApi, useOrgAboutApi, useHomeActionApi, useCommentApi, coreApi, componentPublishApi, useCourseApi, resourcePublish }

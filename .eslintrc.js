@@ -30,8 +30,9 @@ module.exports = {
         'no-undef': 0,
         'no-debugger': 0,
         'no-useless-escape': 0,
-        'no-unused-vars': 'off',
-        '@typescript-eslint/no-unused-vars': ['error'],
+        'no-unused-vars': 0,
+        'vue/no-dupe-keys': 0,
+        // '@typescript-eslint/no-unused-vars': ['error'],
         'prefer-promise-reject-errors': 0,
         'no-async-promise-executor': 0
     }

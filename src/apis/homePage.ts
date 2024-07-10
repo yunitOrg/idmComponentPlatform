@@ -13,7 +13,13 @@ enum Apis {
     // 创作中心-组件包管理列表
     requestMyCodePackageListUrl = '/core/home/getMyCodePackageList',
     // 创作中心-组件管理列表
-    requestMyComponentListUrl = '/core/home/getMyComponentList'
+    requestMyComponentListUrl = '/core/home/getMyComponentList',
+    // 页面-分页列表查询
+    homeGetPageList = '/core/home/getPageList',
+    // 模板/业务组件-分页列表查询
+    homeGetCustomComponentList = '/core/home/getCustomComponentList',
+    // 公告-分页列表查询
+    homeGetNoticeList = '/core/home/getNoticeList',
 }
 
 export default {
@@ -24,5 +30,8 @@ export default {
     requestHomeGetComponentDetail: (params: Object) => http.get({ url: Apis.homeGetComponentDetail, params }),
     handlePreviewComponent: (url: string) => window.open(baseURL + url, '_blank'),
     requestMyCodePackageList: (params: Object) => http.get({ url: Apis.requestMyCodePackageListUrl, params }),
-    requestMyComponentList: (params: Object) => http.get({ url: Apis.requestMyComponentListUrl, params })
+    requestMyComponentList: (params: Object) => http.get({ url: Apis.requestMyComponentListUrl, params }),
+    requestHomeGetPageList: (params: CodePackage | Pagitation) => http.get({ url: Apis.homeGetPageList, params }),
+    requestHomeGetCustomComponentList: (params: CodePackage | Pagitation) => http.get({ url: Apis.homeGetCustomComponentList, params }),
+    requestHomeGetNoticeList: (params: CodePackage | Pagitation) => http.get({ url: Apis.homeGetNoticeList, params })
 }

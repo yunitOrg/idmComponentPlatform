@@ -53,8 +53,12 @@ const handleItemClick = () => {
 .school-box {
     border-radius: 8px;
     overflow: hidden;
-    border: 1px solid #f1f1f1;
-
+    border: 1px solid #eee;
+    transition: all 0.3s;
+    &:hover{
+        box-shadow: 0 0 20px rgba($color: #C6C6C6, $alpha: 0.5);
+        transform: translateY(-5px);
+    }
     ::v-deep(.ant-card-body) {
         padding: 0;
     }

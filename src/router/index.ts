@@ -185,6 +185,109 @@ const routes: Array<RouteRecordRaw> = [
                 component: () => import('@/views/my/PersonInfo.vue')
             },
             {
+                path: 'AccessKeyManage',
+                meta: {
+                    title: 'AccessKey管理',
+                    needLogin: true
+                },
+                name: 'AccessKeyManage',
+                component: () => import('@/views/my/AccessKeyManage.vue')
+            },
+            {
+                path: 'resourcePublish',
+                name: 'resourcePublish',
+                meta: {
+                    title: '资源上传',
+                    needLogin: true
+                },
+                component: () => import('@/views/resource/upload.vue')
+            },
+            {
+                path: 'pagePublish',
+                name: 'pagePublish',
+                meta: {
+                    title: '页面发布',
+                    needLogin: true
+                },
+                component: () => import('@/views/resource/publish/page.vue')
+            },
+            {
+                path: 'templatePublish',
+                name: 'templatePublish',
+                meta: {
+                    title: '模板发布',
+                    needLogin: true
+                },
+                component: () => import('@/views/resource/publish/template.vue')
+            },
+            {
+                path: 'bcomponentPublish',
+                name: 'bcomponentPublish',
+                meta: {
+                    title: '业务组件发布',
+                    needLogin: true
+                },
+                component: () => import('@/views/resource/publish/bcomponent.vue')
+            },
+            {
+                path: 'imagePublish',
+                name: 'imagePublish',
+                meta: {
+                    title: '图片发布',
+                    needLogin: true
+                },
+                component: () => import('@/views/resource/publish/image.vue')
+            },
+            {
+                path: 'noticePublish',
+                name: 'noticePublish',
+                meta: {
+                    title: '公告发布',
+                    needLogin: true
+                },
+                component: () => import('@/views/resource/publish/notice.vue')
+            },
+            {
+                path: 'page',
+                meta: {
+                    title: '页面资源'
+                },
+                name: 'index-page',
+                component: () => import('@/views/resource/pageList.vue')
+            },
+            {
+                path: 'template',
+                meta: {
+                    title: '模板资源'
+                },
+                name: 'index-template',
+                component: () => import('@/views/resource/templateList.vue')
+            },
+            {
+                path: 'bcomponent',
+                meta: {
+                    title: '业务组件资源'
+                },
+                name: 'index-bcomponent',
+                component: () => import('@/views/resource/bcomponentList.vue')
+            },
+            {
+                path: 'notice',
+                meta: {
+                    title: '公告'
+                },
+                name: 'index-notice',
+                component: () => import('@/views/resource/noticeList.vue')
+            },
+            {
+                path: 'idmcore',
+                meta: {
+                    title: 'IDM-Core'
+                },
+                name: 'index-idmcore',
+                component: () => import('@/views/resource/idmCore.vue')
+            },
+            {
                 path: 'creativeCenter',
                 component: () => import('@/views/creativeCenter/index.vue'),
                 children: [
@@ -232,6 +335,51 @@ const routes: Array<RouteRecordRaw> = [
                             needLogin: true
                         },
                         component: () => import('@/views/creativeCenter/TemplateManageList.vue')
+                    },
+                    {
+                        path: 'pageManageList',
+                        name: 'index-creativeCenter-pageManageList',
+                        meta: {
+                            title: '页面管理',
+                            needLogin: true
+                        },
+                        component: () => import('@/views/creativeCenter/pageManageList.vue')
+                    },
+                    {
+                        path: 'templateComponentManageList',
+                        name: 'index-creativeCenter-templateComponentManageList',
+                        meta: {
+                            title: '模板管理',
+                            needLogin: true
+                        },
+                        component: () => import('@/views/creativeCenter/templateComponentManageList.vue')
+                    },
+                    {
+                        path: 'bComponentManageList',
+                        name: 'index-creativeCenter-bComponentManageList',
+                        meta: {
+                            title: '业务组件管理',
+                            needLogin: true
+                        },
+                        component: () => import('@/views/creativeCenter/bComponentManageList.vue')
+                    },
+                    {
+                        path: 'noticeManageList',
+                        name: 'index-creativeCenter-noticeManageList',
+                        meta: {
+                            title: '公告管理',
+                            needLogin: true
+                        },
+                        component: () => import('@/views/creativeCenter/noticeManageList.vue')
+                    },
+                    {
+                        path: 'imageManageList',
+                        name: 'index-creativeCenter-imageManageList',
+                        meta: {
+                            title: '公告管理',
+                            needLogin: true
+                        },
+                        component: () => import('@/views/creativeCenter/imageManageList.vue')
                     }
                 ]
             },

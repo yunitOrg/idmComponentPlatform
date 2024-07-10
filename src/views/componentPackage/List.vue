@@ -18,7 +18,7 @@ import { defaultSettings } from '@/settings/defaultSetting'
 const fileterMap = ['langue', 'codepackageTags']
 const conditionTitle = {
     image: codeImage,
-    title: '全部组件包',
+    title: '组件包',
     subTitle: '海量组件包拿走不谢',
     placeholder: '搜索感兴趣的组件代码包'
 }

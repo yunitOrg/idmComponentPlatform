@@ -6,63 +6,79 @@
             </div>
             <div class="title_right flex_end">
                 <div class="pointer" @click="backHome()">
-                    <span>返回首页</span>
+                    <span>返回我的主页 > </span>
                 </div>
             </div>
         </div>
         <div class="form">
             <div class="row flex_between">
                 <div class="row_left">密码</div>
-                <div class="row_right">
+                <div class="row_right flex_between">
                     <span>存在风险请修改密码</span>
-                    <span class="action_button pointer" @click="changePassword">修改密码</span>
+                    <div class="action_button">
+                        <span class="pointer" @click="changePassword">修改密码</span>
+                    </div>
                 </div>
             </div>
             <div class="row flex_between">
                 <div class="row_left">手机</div>
-                <div class="row_right">
+                <div class="row_right flex_between">
                     <span>{{ encipher(userInfo ? userInfo.mobile : '') }}</span>
-                    <span class="action_button pointer" @click="changeEmail(2)">修改手机</span>
+                    <div class="action_button">
+                        <span class="pointer" @click="changeEmail(2)">修改手机</span>
+                    </div>
                 </div>
             </div>
             <div class="row flex_between">
                 <div class="row_left">邮箱</div>
-                <div class="row_right">
+                <div class="row_right flex_between">
                     <span>{{ encipher(userInfo ? userInfo.email : '') }}</span>
-                    <span class="action_button pointer" @click="changeEmail(1)">修改邮箱</span>
+                    <div class="action_button">
+                        <span class="pointer" @click="changeEmail(1)">修改邮箱</span>
+                    </div>
                 </div>
             </div>
             <div class="row flex_between">
                 <div class="row_left">登录记录</div>
-                <div class="row_right">
-                    <span class="action_button">查看记录</span>
+                <div class="row_right flex_between">
+                    <div class="action_button">
+                        <span>查看记录</span>
+                    </div>
                 </div>
             </div>
             <div class="row flex_between">
                 <div class="row_left">账号注销</div>
-                <div class="row_right">
-                    <span class="action_button">立即注销</span>
+                <div class="row_right flex_between">
+                    <div class="action_button">
+                        <span>立即注销</span>
+                    </div>
                 </div>
             </div>
             <div class="row flex_between">
                 <div class="row_left">微信</div>
-                <div class="row_right">
+                <div class="row_right flex_between">
                     <span class="status_text">未绑定</span>
-                    <span class="action_button">绑定</span>
+                    <div class="action_button">
+                        <span>绑定</span>
+                    </div>
                 </div>
             </div>
             <div class="row flex_between">
                 <div class="row_left">钉钉</div>
-                <div class="row_right">
+                <div class="row_right flex_between">
                     <span class="status_text">未绑定</span>
-                    <span class="action_button">绑定</span>
+                    <div class="action_button">
+                        <span>绑定</span>
+                    </div>
                 </div>
             </div>
             <div class="row flex_between">
                 <div class="row_left">GitHub</div>
-                <div class="row_right">
+                <div class="row_right flex_between">
                     <span class="status_text">未绑定</span>
-                    <span class="action_button">绑定</span>
+                    <div class="action_button">
+                        <span>绑定</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -386,9 +402,11 @@ const backHome = () => {
 </script>
 <style lang="scss" scoped>
 .AccountPassword_app{
-    height: 100%;
-    padding: 20px 15px;
+    padding: 30px 40px;
+    margin-bottom: 20px !important;
+    border-radius: 5px;
     background: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     .title{
         .title_left{
             font-size: 24px;
@@ -398,7 +416,7 @@ const backHome = () => {
         .title_right{
             text-align: right;
             font-size: 14px;
-            color: #1890ff;
+            color: #8590A6;
         }
     }
     .form{
@@ -413,9 +431,13 @@ const backHome = () => {
                     color: #999;
                 }
                 .action_button{
-                    margin-left: 40px;
+                    text-align: right;
+                    width: 150px;
                     color: #007fff;
                 }
+            }
+            &:last-child{
+                border-bottom: none;
             }
         }
     }

@@ -14,7 +14,7 @@
             </p>
             <p class="ant-upload-text">点击或将文件拖拽到这里上传</p>
             <p class="ant-upload-hint">
-                支持单个或批量上传，支持扩展名：.zip, .rar
+                支持单个上传，支持扩展名：.zip
             </p>
             <div class="ant-upload-notice">
                 注意事项：<br>

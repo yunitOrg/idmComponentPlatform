@@ -10,7 +10,7 @@
             @preview="handlePreview"
             @remove="handleRemove"
         >
-            <div>
+            <div v-if="multiple||(multiple===false&&computedFileList.length<1)">
                 <PlusOutlined />
                 <div style="margin-top: 8px">上传图片</div>
             </div>
