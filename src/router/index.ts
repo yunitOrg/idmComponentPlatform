@@ -280,6 +280,62 @@ const routes: Array<RouteRecordRaw> = [
                 component: () => import('@/views/resource/noticeList.vue')
             },
             {
+                path: 'image',
+                meta: {
+                    title: '图片'
+                },
+                name: 'index-image',
+                component: () => import('@/views/resource/imageList.vue')
+            },
+            {
+                path: 'resourcesubject',
+                meta: {
+                    title: '资源专题广场'
+                },
+                name: 'index-resourcesubject',
+                component: () => import('@/views/resource/subjectList.vue')
+            },
+            {
+                path: 'resourcesubjectdetail',
+                meta: {
+                    title: '资源专题详情'
+                },
+                name: 'index-resourcesubjectdetail',
+                component: () => import('@/views/resource/detail/subject.vue')
+            },
+            {
+                path: 'imagedetail',
+                meta: {
+                    title: '图片详情'
+                },
+                name: 'index-image-detail',
+                component: () => import('@/views/resource/detail/image.vue')
+            },
+            {
+                path: 'pagedetail',
+                meta: {
+                    title: '页面详情'
+                },
+                name: 'index-page-detail',
+                component: () => import('@/views/resource/detail/page.vue')
+            },
+            {
+                path: 'templatedetail',
+                meta: {
+                    title: '模板详情'
+                },
+                name: 'index-template-detail',
+                component: () => import('@/views/resource/detail/template.vue')
+            },
+            {
+                path: 'bcomponentdetail',
+                meta: {
+                    title: '业务组件详情'
+                },
+                name: 'index-bcomponent-detail',
+                component: () => import('@/views/resource/detail/bcomponent.vue')
+            },
+            {
                 path: 'idmcore',
                 meta: {
                     title: 'IDM-Core'

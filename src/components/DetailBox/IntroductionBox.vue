@@ -133,6 +133,8 @@ const openUrl = (url: string) => {
 <style lang="scss" scoped>
 .instroduction-box {
     margin: 16px 0 0 0;
+    background: #fff;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.05);
     .instroduction-box-title {
         padding: 10px 15px;
         border-bottom: 1px solid #f1f1f1;

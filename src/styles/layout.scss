@@ -26,7 +26,7 @@ $breakpoints: (
     }
 
     @include respond-to(xs) {
-        .page-max-width {
+        .page-max-width,.nav-box-list {
             width: 700px;
         }
         // 页头导航
@@ -45,7 +45,7 @@ $breakpoints: (
         }
     }
     @include respond-to(sm) {
-        .page-max-width {
+        .page-max-width,.nav-box-list {
             width: 768px;
         }
         .head-bar-container {
@@ -54,7 +54,7 @@ $breakpoints: (
         }
     }
     @include respond-to(md) {
-        .page-max-width {
+        .page-max-width,.nav-box-list {
             width: 992px;
         }
         .head-bar-container {
@@ -94,7 +94,7 @@ $breakpoints: (
     }
 
     @include respond-to(lg) {
-        .page-max-width {
+        .page-max-width,.nav-box-list {
             width: 1230px;
         }
         .head-bar-container {

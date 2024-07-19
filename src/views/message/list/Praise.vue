@@ -10,7 +10,7 @@
                 }}
                 <span class="message-time">{{ messageData.msgTime }}</span>
             </div>
-            <div class="message-content">{{ messageData[messageTitleFields[messageData.sourceType]] }}</div>
+            <div class="message-content" @click="gotoDetail">{{ messageData[messageTitleFields[ messageData.sourceType == 9 || messageData.sourceType == 10?9:messageData.sourceType]] }}</div>
         </div>
     </div>
 </template>
@@ -20,6 +20,37 @@ const propData = defineProps<{ messageData: MessageData }>()
 const router = useRouter()
 const jumpIndexPage = () => {
     const { href } = router.resolve({ name: 'indexPage', params: { userId: propData.messageData.sendUserId } })
+    window.open(href, '_blank')
+}
+const gotoDetail = () => {
+    let url = null
+    switch (propData.messageData.sourceType) {
+        case 1:
+            url = { name: 'index-componentPackage-detail', query: { codepackageId: propData.messageData.sourceId } }
+            break
+        case 2:
+            url = { name: 'index-componentMarket-detail', query: { componentId: propData.messageData.sourceId } }
+            break
+        case 3:
+            url = { name: 'index-iSchool-videoDetail', query: { courseId: propData.messageData.sourceId } }
+            break
+        case 8:
+            url = { name: 'index-page-detail', query: { id: propData.messageData.sourceId } }
+            break
+        case 9:
+            url = { name: 'index-template-detail', query: { id: propData.messageData.sourceId } }
+            break
+        case 10:
+            url = { name: 'index-bcomponent-detail', query: { id: propData.messageData.sourceId } }
+            break
+        case 11:
+            url = { name: 'index-image-detail', query: { id: propData.messageData.sourceId } }
+            break
+    }
+    if (!url) {
+        return
+    }
+    const { href } = router.resolve(url)
     window.open(href, '_blank')
 }
 </script>

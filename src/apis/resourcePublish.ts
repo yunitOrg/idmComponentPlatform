@@ -47,7 +47,11 @@ enum Apis {
     // 获取idmcore列表数据
     getIdmCoreListUrl = '/creative/resource/getIdmCoreList',
     // 核心框架删除
-    requestDeleteIdmCoreUrl = '/creative/resource/deleteIdmCore'
+    requestDeleteIdmCoreUrl = '/creative/resource/deleteIdmCore',
+    // 获取专题前10列表数据
+    getSubjectTop10ListUrl = '/creative/resource/getResourceSubjectTop10',
+    // 保存专题
+    requestSaveSubjectUrl = '/publish/resource/save/subject'
 }
 
 export default {
@@ -94,5 +98,7 @@ export default {
     requestSaveIdmCore: (data: object) => http.post({ url: Apis.requestSaveIdmCoreUrl, data }),
     getIdmCoreList: (params: Object) => http.get({ url: Apis.getIdmCoreListUrl, params }),
     requestDeleteIdmCore: (data: object) => http.postForm({ url: Apis.requestDeleteIdmCoreUrl, data }),
+    getSubjectTop10List: (params: Object) => http.get({ url: Apis.getSubjectTop10ListUrl, params }),
+    requestSaveSubject: (data: object) => http.post({ url: Apis.requestSaveSubjectUrl, data }),
     componentStaticUrl: baseURL + Apis.componentStaticUrl
 }

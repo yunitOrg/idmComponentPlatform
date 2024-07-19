@@ -87,5 +87,11 @@ declare module '@vue/runtime-core' {
     VersionList: typeof import('./../src/components/DetailBox/VersionList.vue')['default']
     IPageBox: typeof import('./../src/components/ListBox/IPageBox.vue')['default']
     INoticeBox: typeof import('./../src/components/ListBox/INoticeBox.vue')['default']
+    ISubjectBox: typeof import('./../src/components/ListBox/ISubjectBox.vue')['default']
+    RecommendSubjectBox: typeof import('./../src/components/DetailBox/RecommendSubjectBox.vue')['default']
+    ImageIntroductionBox: typeof import('./../src/components/DetailBox/ImageIntroductionBox.vue')['default']
+    orgInfoBox: typeof import('./../src/components/DetailBox/orgInfoBox.vue')['default']
+    PageIntroductionBox: typeof import('./../src/components/DetailBox/PageIntroductionBox.vue')['default']
+    CodepackageList: typeof import('./src/components/DetailBox/CodepackageList.vue')['default']
   }
 }

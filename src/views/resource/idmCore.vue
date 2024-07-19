@@ -105,7 +105,7 @@ import { defaultSettings } from '@/settings/defaultSetting'
 import { Modal, message } from 'ant-design-vue'
 import { baseURL } from '@/plugins/axios'
 import { ExclamationCircleOutlined } from '@ant-design/icons-vue'
-import { getImagePath } from '@/utils'
+import { getImagePath, dateFormat } from '@/utils'
 import { useUserStore } from '@/store/modules/user'
 const userStore = useUserStore()
 const formRef = ref()
@@ -161,7 +161,6 @@ const handleDeleteClick = async (data: any) => {
 const onOk = async () => {
     pageData.confirmLoading = true
     formRef.value.validateFields().then(async (values: any) => {
-        console.log('表单数据: ', values)
         const res = await resourcePublish.requestSaveIdmCore({
             ...formState,
             zipPath: formState.zipPath[0]?.url || '',
@@ -202,7 +201,7 @@ const upnew = () => {
     nextTick(() => {
         formRef.value.resetFields()
         formState.id = ''
-        formState.updateDate = ''
+        formState.updateDate = dateFormat(new Date(), 'Y-m-d')
         formState.features = ''
         formState.bugfixes = ''
         formState.zipPath = []

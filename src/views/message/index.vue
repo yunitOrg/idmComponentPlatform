@@ -112,6 +112,7 @@ const handleBtnClick = (item: any) => {
     padding: 10px 0 40px;
     position: sticky;
     top: 80px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.05);
 }
 .btn-box {
     width: 80%;
@@ -125,5 +126,6 @@ const handleBtnClick = (item: any) => {
 }
 .message-list-container {
     padding: 15px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.05);
 }
 </style>

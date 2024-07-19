@@ -643,7 +643,6 @@ const handleClickActionBtn = (action: string) => {
     }
 }
 .nav-box-list {
-    width: 960px;
     font-size: 14px;
     margin: 20px auto 10px;
     ::v-deep(.ant-image) {

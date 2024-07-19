@@ -130,6 +130,8 @@ const emits = defineEmits(['handleApplyOrg', 'handleOrgHome', 'handleOrgManage',
     border-bottom: 1px solid rgb(230, 230, 230);
 }
 .org-box {
+    background: #fff;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.05);
     .org-title {
         font-size: 18px;
     }

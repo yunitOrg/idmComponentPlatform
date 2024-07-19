@@ -429,7 +429,7 @@ const judgeShowNoExistsComponentTip = async (zipPath: any) => {
     state.formDataList[index].formLoading = false
 }
 const openPreviewPage = () => {
-    window.open(baseURL + '/p1000/idm/' + state.queryId + '.html')
+    window.open(baseURL + '/p1000/idm/' + state.queryId + '.html?timespan=' + new Date().getTime())
 }
 const getDistinfo = async () => {
     const index = currentIndex.value

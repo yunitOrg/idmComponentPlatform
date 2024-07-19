@@ -57,6 +57,7 @@
 import { useCourseApi } from '@/apis'
 import { message } from '@/plugins/globalComponents'
 const route = useRoute()
+const router = useRouter()
 const pageData = reactive({
     docDetail: {
         componentInfoList: [], // 相关组件
@@ -109,6 +110,14 @@ const handleFetchPageData = () => {
         .then((res) => {
             pageData.isFirst = false
             if (res.success) {
+                if (res.result.courseInfo.type !== 0) {
+                    router.push({
+                        name: `index-iSchool-${res.result.courseInfo.type === 1 ? 'imageText' : 'eBook'}Detail`,
+                        query: {
+                            courseId: res.result.courseInfo.id
+                        }
+                    })
+                }
                 res.result.courseInfo.attachment = res.result.courseInfo.attachment ? JSON.parse(res.result.courseInfo.attachment) : []
                 pageData.breadcrumbList[2].name = res.result.courseInfo.title
                 pageData.docDetail = res.result

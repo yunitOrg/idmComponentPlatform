@@ -28,6 +28,8 @@ defineProps({
     margin: 20px 0 0 0;
     padding: 0 20px;
     height: 160px;
+    background: #fff;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.05);
     ::v-deep(.switch-tab) {
         position: relative;
     }

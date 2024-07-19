@@ -371,7 +371,7 @@ const judgeShowNoExistsComponentTip = async (zipPath: any) => {
 }
 const openPreviewPage = () => {
     const index = currentIndex.value
-    window.open(baseURL + '/p1000/idm/custom_' + (state.formDataList[index].id || state.formDataList[index].newGuid) + '.html')
+    window.open(baseURL + '/p1000/idm/custom_' + (state.formDataList[index].id || state.formDataList[index].newGuid) + '.html?timespan=' + new Date().getTime())
 }
 const getDistinfo = async () => {
     const index = currentIndex.value

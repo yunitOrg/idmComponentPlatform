@@ -52,6 +52,8 @@ const handleFlow = () => {
 <style lang="scss" scoped>
 .user-info-box {
     padding: 15px;
+    background: #fff;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.05);
     .guanzhu-btn {
         height: 25px;
         line-height: 25px;

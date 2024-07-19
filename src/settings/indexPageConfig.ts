@@ -65,17 +65,17 @@ export default {
                 },
                 {
                     title: '专题广场',
-                    routeName: 'index-resourceFeatures'
+                    routeName: 'index-resourcesubject'
                 }
             ]
         },
         {
-            title: '云圈',
-            routeName: 'index-yunquan'
-        },
-        {
             title: '公告',
             routeName: 'index-notice'
+        },
+        {
+            title: '云圈',
+            routeName: 'index-yunquan'
         },
         {
             title: '组织',

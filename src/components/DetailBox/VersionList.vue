@@ -75,6 +75,14 @@ const handleLookVersion = async (item: any) => {
                 version: item.version
             }
         }
+    } else if (propData.type === 'page') {
+        paramsObj = {
+            name: 'index-page-detail',
+            query: {
+                id: propData.codePackageProp.id,
+                version: item.version
+            }
+        }
     }
     await router.push(paramsObj)
     reload()
@@ -87,6 +95,8 @@ const handleLookMore = () => {
 <style lang="scss" scoped>
 .version-list {
     margin: 16px 0 0 0;
+    background: #fff;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.05);
     .version-list-title {
         padding: 10px 15px;
         border-bottom: 1px solid #f1f1f1;

@@ -93,7 +93,7 @@ const propData = defineProps({
     },
     showLabel: {
         type: Boolean,
-        default: false
+        default: true
     }
 })
 const emits = defineEmits(['handleClickButtonList', 'cancelCollect', 'collectSuccess'])
@@ -150,7 +150,7 @@ const handleClickComment = () => {
     .button-label{
         text-align: center;
         font-size: 14px;
-        color: #333333;
+        color: #999999;
         margin-top: 10px;
     }
     .idm-button-list-box {
@@ -165,6 +165,7 @@ const handleClickComment = () => {
         border-radius: 50%;
         font-size: 16px;
         color: #8a919f;
+        box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.05);
         &:hover {
             color: #515767;
         }
@@ -196,13 +197,13 @@ const handleClickComment = () => {
         .idm-button-list-icon {
             background-color: transparent;
             color: #8a919f;
-            box-shadow: 0 2px 10px rgba(255,255,255,1);
+            box-shadow: 0 2px 20px rgba(255,255,255,0.4);
             &:hover {
                 color: #b3b9c4;
             }
         }
         .button-label{
-            color: #797979;
+            color: #666;
         }
     }
 }

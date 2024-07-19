@@ -31,6 +31,7 @@ const handleJump = (item: { url: string }) => {
 .about-us-box-container {
     margin: 16px 0 0 0;
     padding: 10px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.05);
     .about-us-box-top {
         font-size: 12px;
         border-bottom: 1px solid #eee;

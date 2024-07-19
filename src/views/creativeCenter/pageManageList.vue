@@ -178,7 +178,7 @@ const handleDeleteClick = async (data: any) => {
 }
 const handlePreviewComponent = (data: any) => {
     if (data.id) {
-        window.open(baseURL + '/p1000/idm/' + data.id + '.html', '_blank')
+        window.open(baseURL + '/p1000/idm/' + data.id + '.html?timespan=' + new Date().getTime(), '_blank')
     }
 }
 const showConfirm = (title: string, content: string) => {

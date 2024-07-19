@@ -261,6 +261,7 @@ getbusinessList()
 <style lang="scss" scoped>
 .PersonInfo_app{
     background: white;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.05);
     .header{
         height: 260px;
         position: relative;
@@ -323,6 +324,7 @@ getbusinessList()
         width: 785px;
         margin: 0 auto;
         padding: 20px 0 40px 0;
+        margin-bottom: 20px;
         .form{
             .row{
                 align-items: flex-start;

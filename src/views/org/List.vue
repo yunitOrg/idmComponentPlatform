@@ -16,7 +16,7 @@
             <ACol :span="18">
                 <IOrgBox2 v-for="(item, index) in pageData.leftData.records" :key="index" :componentProps="item" @handleApplyOrg="handleApplyOrg"></IOrgBox2>
                 <a-empty v-if="!pageData.isFirst && pageData.leftData.records && pageData.leftData.records.length === 0" description="暂无组织" />
-                <div class="text-center padding-20 bg-white">
+                <div class="text-center padding-20 bg-white page-box">
                     <a-pagination
                         v-model:current="pageData.leftPageConfig.pageNo"
                         :defaultPageSize="pageData.leftPageConfig.pageSize"
@@ -190,6 +190,10 @@ handleGetRightOrgList()
 .bg-white {
     background-color: #fff;
 }
+.page-box{
+    background: #fff;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+}
 .padding-20 {
     padding: 10px 0;
     margin: 0 0 10px;
@@ -199,6 +203,8 @@ handleGetRightOrgList()
 }
 .userinfo-box {
     margin-bottom: 16px;
+    background: #fff;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.05);
     .box-top {
         padding: 20px;
         border-bottom: 1px solid #f1f1f1;
@@ -215,6 +221,8 @@ handleGetRightOrgList()
 }
 .org-right-list {
     border-radius: 3px;
+    background: #fff;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.05);
     .org-right-list-title {
         padding: 12px;
         border-bottom: 1px solid #f1f1f1;

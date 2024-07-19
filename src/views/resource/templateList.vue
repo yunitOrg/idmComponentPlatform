@@ -5,7 +5,7 @@
         <template #list>
             <ARow :gutter="[20, 20]">
                 <ACol v-for="(item, index) in pageData.records" :key="index" :span="12">
-                    <IPageBox :componentProps="item" :bottomShowTime="true" :cardList="tipShowList" :on-preview-component-click="() => handlePreviewComponent(item) " />
+                    <IPageBox :componentProps="item" :bottomShowTime="true" :cardList="tipShowList" :on-preview-component-click="() => handlePreviewComponent(item) " :on-download-click="() => handleDownloadClick(item)" :on-open-detail-click="() => handleOpenComponentDetail(item) "/>
                 </ACol>
             </ARow>
         </template>
@@ -14,9 +14,10 @@
 
 <script lang="ts" setup>
 import { templateImage } from '@/assets/images'
-import { useHomePageApi, coreApi, useHomeCoreApi } from '@/apis'
+import { useHomePageApi, coreApi, useHomeCoreApi, componentPublishApi } from '@/apis'
 import { defaultSettings } from '@/settings/defaultSetting'
 import { baseURL } from '@/plugins/axios'
+const router = useRouter()
 const fileterMap = ['templatetype', 'ownertype']
 const tipShowList = [
     ['数据ID', 'id'],
@@ -58,8 +59,22 @@ const handleSearch = () => {
 }
 const handlePreviewComponent = (data: any) => {
     if (data.id) {
-        window.open(baseURL + '/p1000/idm/custom_' + data.id + '.html', '_blank')
+        window.open(baseURL + '/p1000/idm/custom_' + data.id + '.html?timespan=' + new Date().getTime(), '_blank')
     }
+}
+const handleOpenComponentDetail = (data: any) => {
+    router.push({
+        name: 'index-template-detail',
+        query: {
+            id: data.id
+        }
+    })
+}
+const handleDownloadClick = (data: any) => {
+    if (!data.currentZipPath) {
+        return
+    }
+    componentPublishApi.downloadStaticFile(data.currentZipPath)
 }
 handleSearch()
 Promise.all([

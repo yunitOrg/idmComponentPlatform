@@ -19,7 +19,11 @@ export const messageSourceType = {
     3: '教程',
     4: '云圈',
     5: '组织',
-    6: '评论'
+    6: '评论',
+    8: '页面',
+    9: '模板',
+    10: '业务组件',
+    11: '图片'
 }
 
 export enum messageTitleFields {
@@ -28,5 +32,10 @@ export enum messageTitleFields {
     'courseTitle',
     'circleContent',
     'orgName',
-    'codepackageTitle1' // 暂定
+    'cmtContent', // 暂定
+    'userName',
+    'pageTitle',
+    'customTitle',
+    '',
+    'imageTitle'
 }

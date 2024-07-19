@@ -1,22 +1,21 @@
 <template>
-    <div class="idm-component-common-box component-list">
+    <div class="idm-component-common-box packagelist-list">
         <div class="component-list-title">
-            {{ title }} <span class="component-number">（{{ componentList.length }}）</span>
+            {{ title }} <span class="component-number">（{{ codepackageList.length }}）</span>
         </div>
         <div class="component-list-content common-scrollbar_style">
-            <div v-for="(item, index) in componentList" :key="index" class="component-box flex align-center" :class="[index + 1 > pageData.limit && 'dis-n']">
-                <AImage :preview="false" :width="80" :height="50" style="height: 100%" :src="getImagePath(item.coverPath) || componentMarketDetault"></AImage>
-                <div class="flex-1 cursor-pointer" style="margin: 0 0 0 15px" @click="handleClickItem(item)">
-                    <div class="component-text">{{ item.comTitle || item.comName }}
-                        <span v-if="!(item.dbId||type=='component')" class="no-register-text">未注册</span></div>
+            <div v-for="(item, index) in codepackageList" :key="index" class="component-box flex align-center" :class="[index + 1 > pageData.limit && 'dis-n']">
+                <div class="flex-1 cursor-pointer" @click="handleClickItem(item,item.version)">
+                    <div class="component-text">{{ item.id?item.title+' / ':'' }}{{ item.className }} @ {{ item.version }}</div>
                     <div class="component-class">
-                        类名: <span> {{ item.comClassname || item.className }}</span>
+                        {{ item.remark }}
                     </div>
                 </div>
-                <a @click="handlePreview(item)">预览</a>
+                <a v-if="item.id" @click="handleClickItem(item,item.currentVersion)">最新版本：{{ item.currentVersion }}</a>
+                <span v-else class="no-register-text">未注册</span>
             </div>
-            <div v-if="!pageData.isFirst && componentList.length === 0" class="empty-text text-center">暂无</div>
-            <div v-if="componentList.length > pageData.limit" class="look-more text-center cursor-pointer" @click="handleLookMore">查看更多 <span>></span></div>
+            <div v-if="!pageData.isFirst && codepackageList.length === 0" class="empty-text text-center">暂无</div>
+            <div v-if="codepackageList.length > pageData.limit" class="look-more text-center cursor-pointer" @click="handleLookMore">查看更多 <span>></span></div>
         </div>
     </div>
 </template>
@@ -35,7 +34,7 @@ const propData = defineProps({
         type: String,
         default: '组件包的组件'
     },
-    componentList: {
+    codepackageList: {
         type: Array<any>,
         default: () => []
     },
@@ -49,14 +48,14 @@ const pageData = reactive({
     isFirst: true
 })
 const handlePreview = (item: any) => {
-    if (item.currentCodePath || propData.codePackageProp.currentCodePath || (propData.codePackageProp.currentUnzipPath)) {
-        const url = baseURL + (item.currentCodePath || propData.codePackageProp.currentCodePath || (propData.codePackageProp.currentUnzipPath + '/module/' + item.packageClassName + '/' + item.packageVersion)) + '/index.html?className=' + (item.comClassname || item.className)
+    if (item.currentCodePath || propData.codePackageProp.currentCodePath) {
+        const url = baseURL + propData.codePackageProp.currentCodePath + '/index.html?className=' + item.comClassname
         const { href } = router.resolve({
             name: 'previewComponent',
             query: {
                 previewSrc: url,
-                componentName: item.comTitle || item.dbTitle || item.comName,
-                adaptiveType: item.adaptiveType || item.adaptiveType === 0 ? item.adaptiveType : 1
+                componentName: item.comTitle,
+                adaptiveType: item.adaptiveType
             }
         })
         window.open(href, '_blank')
@@ -66,18 +65,18 @@ const handleLookMore = () => {
     pageData.limit = 99
 }
 watch(
-    () => propData.componentList,
+    () => propData.codepackageList,
     () => {
         pageData.isFirst = false
     }
 )
-const handleClickItem = (item: any) => {
-    if (item.dbId || propData.type === 'component') {
+const handleClickItem = (item: any, version: any) => {
+    if (item.id) {
         const { href } = router.resolve({
-            name: 'index-componentMarket-detail',
+            name: 'index-componentPackage-detail',
             query: {
-                componentId: item.dbId || item.id,
-                version: item.codepackageVersion || item.packageVersion
+                codepackageId: item.id,
+                version: version || item.codepackageVersion || item.packageVersion
             }
         })
         window.open(href, '_blank')
@@ -86,7 +85,7 @@ const handleClickItem = (item: any) => {
 </script>
 
 <style lang="scss" scoped>
-.component-list {
+.packagelist-list {
     margin: 16px 0 0 0;
     background: #fff;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.05);
@@ -103,7 +102,6 @@ const handleClickItem = (item: any) => {
     .no-register-text{
         color: #FF8C1C;
         font-size: 12px;
-        font-weight: 400;
     }
     .component-text {
         font-weight: 600;
@@ -111,12 +109,10 @@ const handleClickItem = (item: any) => {
     }
     .component-box {
         margin: 0 0 15px 0;
-        a {
-            display: none;
-        }
-        &:hover a {
-            display: inline-block;
-        }
+        background-color: #F7F7F7;
+        border-radius: 5px;
+        padding: 10px;
+        gap:10px;
     }
     .latest {
         border: 1px solid #40a9ff;
@@ -129,6 +125,7 @@ const handleClickItem = (item: any) => {
     .component-class {
         font-size: 12px;
         color: #939393;
+        margin-top: 5px;
         span {
             color: #1890ff;
         }

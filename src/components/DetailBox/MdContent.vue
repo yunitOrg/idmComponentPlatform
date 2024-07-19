@@ -116,7 +116,8 @@ const handleAnchorClick = (anchor: any) => {
 <style lang="scss" scoped>
 .md-content-container {
     margin: 16px 0 0 0;
-
+    background: #fff;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.05);
     .md-content-container-title {
         font-size: 16px;
         color: #666666;

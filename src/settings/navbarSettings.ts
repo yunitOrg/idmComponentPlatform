@@ -1,4 +1,4 @@
-import { codeImage, componentImage, schoolImage, yunQuanImage, idmImage2, orgImage, personImage, orgIcon2, logoutImage, settingImage, accesskeyImage } from '@/assets/images'
+import { codeImage, componentImage, schoolImage, yunQuanImage, idmImage2, orgImage, personImage, orgIcon2, logoutImage, settingImage, accesskeyImage, pageImage, noticeImage } from '@/assets/images'
 
 import { settings } from '@/settings/idmSettings'
 export const sendListMap = [
@@ -87,6 +87,16 @@ export const navBoxList: Array<MenuItem> = [
         title: 'i学院',
         image: schoolImage,
         routeName: 'index-iSchool'
+    },
+    {
+        title: '资源',
+        image: pageImage,
+        routeName: 'index-page'
+    },
+    {
+        title: '公告',
+        image: noticeImage,
+        routeName: 'index-notice'
     },
     {
         title: '云圈',

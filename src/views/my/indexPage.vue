@@ -345,6 +345,7 @@ onUpdated(() => {
 .userinfo-base {
     padding: 10px 20px 0 230px;
     background-color: #fff;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.05);
     border-radius: 0 0 5px 5px;
     overflow: hidden;
     min-height: 140px;
@@ -377,6 +378,7 @@ onUpdated(() => {
 .index-page-tab-container {
     margin: 16px 0 0 0;
 
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.05);
     ::v-deep(.ant-tabs-tab-btn:hover) {
         .tab-number {
             transition: all 0.3s;

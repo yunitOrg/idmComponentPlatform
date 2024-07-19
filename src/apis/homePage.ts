@@ -15,11 +15,25 @@ enum Apis {
     // 创作中心-组件管理列表
     requestMyComponentListUrl = '/core/home/getMyComponentList',
     // 页面-分页列表查询
-    homeGetPageList = '/core/home/getPageList',
+    homeGetPageListUrl = '/core/home/getPageList',
     // 模板/业务组件-分页列表查询
-    homeGetCustomComponentList = '/core/home/getCustomComponentList',
+    homeGetCustomComponentListUrl = '/core/home/getCustomComponentList',
     // 公告-分页列表查询
-    homeGetNoticeList = '/core/home/getNoticeList',
+    homeGetNoticeListUrl = '/core/home/getNoticeList',
+    // 图片-分页列表查询
+    homeGetImageListUrl = '/core/home/getImageList',
+    // 资源专题-分页列表查询
+    homeGetResourceSubjectListUrl = '/core/home/getResourceSubjectList',
+    // 获取主题的详情
+    homeGetSubjectDetail = '/core/home/getSubjectDetail',
+    // 获取图片的详情
+    homeGetImageDetail = '/core/home/getImageDetail',
+    // 获取页面的详情
+    homeGetPageDetail = '/core/home/getPageDetail',
+    // 获取对应结构的组件包、组件数据
+    homeGetSchemaComponentList = '/core/home/getSchemaComponentList',
+    // 获取业务组件/模板的详情
+    homeGetCustomDetail = '/core/home/getCustomDetail',
 }
 
 export default {
@@ -31,7 +45,14 @@ export default {
     handlePreviewComponent: (url: string) => window.open(baseURL + url, '_blank'),
     requestMyCodePackageList: (params: Object) => http.get({ url: Apis.requestMyCodePackageListUrl, params }),
     requestMyComponentList: (params: Object) => http.get({ url: Apis.requestMyComponentListUrl, params }),
-    requestHomeGetPageList: (params: CodePackage | Pagitation) => http.get({ url: Apis.homeGetPageList, params }),
-    requestHomeGetCustomComponentList: (params: CodePackage | Pagitation) => http.get({ url: Apis.homeGetCustomComponentList, params }),
-    requestHomeGetNoticeList: (params: CodePackage | Pagitation) => http.get({ url: Apis.homeGetNoticeList, params })
+    requestHomeGetPageList: (params: CodePackage | Pagitation) => http.get({ url: Apis.homeGetPageListUrl, params }),
+    requestHomeGetCustomComponentList: (params: CodePackage | Pagitation) => http.get({ url: Apis.homeGetCustomComponentListUrl, params }),
+    requestHomeGetNoticeList: (params: CodePackage | Pagitation) => http.get({ url: Apis.homeGetNoticeListUrl, params }),
+    requestHomeGetImageList: (params: CodePackage | Pagitation) => http.get({ url: Apis.homeGetImageListUrl, params }),
+    requestHomeResourceSubjectList: (params: CodePackage | Pagitation) => http.get({ url: Apis.homeGetResourceSubjectListUrl, params }),
+    requestHomeGetSubjectDetail: (params: Object) => http.get({ url: Apis.homeGetSubjectDetail, params }),
+    requestHomeGetImageDetail: (params: Object) => http.get({ url: Apis.homeGetImageDetail, params }),
+    requestHomeGetPageDetail: (params: Object) => http.get({ url: Apis.homeGetPageDetail, params }),
+    requestHomeGetSchemaComponent: (params: Object) => http.get({ url: Apis.homeGetSchemaComponentList, params }),
+    requestHomeGetCustomDetail: (params: Object) => http.get({ url: Apis.homeGetCustomDetail, params })
 }

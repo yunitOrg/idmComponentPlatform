@@ -1,5 +1,5 @@
 <template>
-    <div class="idm-page-box cursor-pointer" @click="handleItemClick">
+    <div class="idm-page-box cursor-pointer" @click="propData.onOpenDetailClick">
         <div class="page-inner-box">
             <div class="info-tip-icon">
                 <a-popover>
@@ -47,7 +47,7 @@
             <div v-if="propData.bottomShowTime" class="bottom-left"><span>更新时间：</span>{{ componentProps.updateTime || componentProps.createTime }}</div>
             <div v-else class="bottom-left"><span>最新版本：</span>{{ componentProps.currentVersion }}</div>
             <div class="bottom-button">
-                <AButton type="primary" shape="round" size="small">下载</AButton>
+                <AButton type="primary" shape="round" size="small" @click.stop="propData.onDownloadClick">下载</AButton>
                 <AButton style="margin-left:10px" shape="round" size="small" @click.stop="propData.onPreviewComponentClick">预览</AButton>
             </div>
         </div>
@@ -78,6 +78,14 @@ const propData = defineProps({
         default: () => IComponentPackageData
     },
     onPreviewComponentClick: {
+        type: Function,
+        default: undefined
+    },
+    onOpenDetailClick: {
+        type: Function,
+        default: undefined
+    },
+    onDownloadClick: {
         type: Function,
         default: undefined
     }
