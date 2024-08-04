@@ -59,7 +59,7 @@ const downloadStaticFile = async (url: any) => {
     .card-title{
         color: #666;
         font-size: 16px;
-        padding: 0 20px;
+        padding: 0 15px;
         height: 50px;
         line-height: 50px;
         border-bottom: 1px solid #EEEEEE;
@@ -69,13 +69,13 @@ const downloadStaticFile = async (url: any) => {
         margin: 0;
         padding: 10px 0;
         >div{
-            margin: 10px 20px 20px;
+            margin: 10px 15px 20px;
         }
         li{
             cursor: pointer;
             height: 40px;
             line-height: 40px;
-            padding: 0 20px;
+            padding: 0 15px;
             transition: all 0.2s;
             label{
                 font-size: 14px;

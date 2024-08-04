@@ -93,5 +93,6 @@ declare module '@vue/runtime-core' {
     orgInfoBox: typeof import('./../src/components/DetailBox/orgInfoBox.vue')['default']
     PageIntroductionBox: typeof import('./../src/components/DetailBox/PageIntroductionBox.vue')['default']
     CodepackageList: typeof import('./src/components/DetailBox/CodepackageList.vue')['default']
+    ComponentLinkCourseBox: typeof import('./../src/components/DetailBox/ComponentLinkCourseBox.vue')['default']
   }
 }

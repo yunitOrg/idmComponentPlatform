@@ -57,6 +57,8 @@ const getFileSize = (size: number) => {
 .attachment-box {
     margin-top: 16px;
 
+    background: #fff;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.05);
     .attachment-box-header {
         padding: 10px 15px;
         font-size: 16px;

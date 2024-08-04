@@ -69,7 +69,7 @@ const handlePreviewComponent = (data: any) => {
     .card-title{
         color: #666;
         font-size: 16px;
-        padding: 0 20px;
+        padding: 0 15px;
         height: 50px;
         line-height: 50px;
         border-bottom: 1px solid #EEEEEE;
@@ -82,7 +82,7 @@ const handlePreviewComponent = (data: any) => {
             cursor: pointer;
             height: 40px;
             line-height: 40px;
-            padding: 0 20px;
+            padding: 0 15px;
             transition: all 0.2s;
             .title{
                 font-size: 14px;

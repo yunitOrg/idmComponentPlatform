@@ -24,6 +24,7 @@
                 <IntroductionBox
                     :codePackageVersionListProp="pageData.packageDetail.codePackageVersionList"
                     :codePackageProp="pageData.packageDetail.codepackageInfo"></IntroductionBox>
+                <orgInfoBox v-if="pageData.packageDetail.orgInfoList.length" :list="pageData.packageDetail.orgInfoList" />
                 <VersionList
                     type="codePackage"
                     :versionList="pageData.packageDetail.codePackageVersionList"

@@ -1,23 +1,20 @@
 <template>
-    <div class="image-introduction-card">
+    <div class="course-introduction-card">
         <div class="card-title">
-            所属组织
+            相关教程
         </div>
         <ul class="card-content-list">
-            <li v-for="item in list" :key="item.id">
+            <li v-for="item in list" :key="item.id" @click="gotoVedioPage(item)">
                 <div class="flex justify-start">
                     <div>
-                        <a-avatar :size="60" shape="square" :src="getImagePath(item.orgphoto) || defaultSettings.userphoto" />
+                        <img :src="getImagePath(item.coverUrl) || componentMarketDetault" />
                     </div>
-                    <div style="margin-left:15px">
-                        <div class="title text-o-e-1">{{ item.orgname }}</div>
-                        <div class="attr text-o-e-1" :title="item.companyName">
-                            {{ item.companyName }}
+                    <div style="margin-left:10px">
+                        <div class="title text-o-e-1">{{ item.title }}</div>
+                        <div class="attr text-o-e-1" :title="item.userNickname">
+                            {{ item.userNickname }}&nbsp;&nbsp;●&nbsp;&nbsp;{{ item.readNumber }}次浏览
                         </div>
                     </div>
-                </div>
-                <div class="introduce">
-                    {{ item.introduce }}
                 </div>
             </li>
         </ul>
@@ -37,10 +34,19 @@ const propData = defineProps({
         default: () => { return [] }
     }
 })
+const gotoVedioPage = (item: any) => {
+    const { href } = router.resolve({
+        name: `index-iSchool-${item.type === 0 ? 'video' : item.type === 1 ? 'imageText' : 'eBook'}Detail`,
+        query: {
+            courseId: item.id
+        }
+    })
+    window.open(href, '_blank')
+}
 </script>
 
 <style lang="scss" scoped>
-.image-introduction-card{
+.course-introduction-card{
     border-radius: 5px;
     background: #fff;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.05);
@@ -58,20 +64,23 @@ const propData = defineProps({
         margin: 0;
         padding: 0;
         li{
+            cursor: pointer;
+            img{
+                width: 100px;
+                height: 60px;
+                border-radius: 4px;
+            }
             padding: 15px;
             &:not(:last-child){
                 border-bottom: 1px solid #EEEEEE;
             }
             .title{
-                font-size: 18px;
+                font-size: 16px;
             }
             .attr{
+                font-size: 12px;
                 padding-top: 5px;
                 color: #666;
-            }
-            .introduce{
-                color: #999;
-                margin-top: 10px;
             }
         }
     }

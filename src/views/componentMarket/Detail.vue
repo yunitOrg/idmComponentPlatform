@@ -28,6 +28,8 @@
                     :codePackageVersionInfoProp="pageData.packageDetail.codePackageVersionInfo"
                     :componentProp="pageData.packageDetail.componentInfo"
                     :codePackageProp="pageData.packageDetail.codepackageInfo"></IntroductionBox>
+                <orgInfoBox v-if="pageData.packageDetail.orgInfoList.length" :list="pageData.packageDetail.orgInfoList" />
+                <ComponentLinkCourseBox v-if="pageData.packageDetail.courseInfoList.length" :list="pageData.packageDetail.courseInfoList" />
                 <VersionList :versionList="pageData.packageDetail.componentVersionList" :codePackageProp="pageData.packageDetail.codepackageInfo"></VersionList>
                 <ComponentList
                     title="组件包内其他组件"
@@ -53,6 +55,7 @@ const pageData = reactive({
         componentUserInfo: { focusThis: 0 },
         codePackageVersionInfo: {},
         componentInfoList: [],
+        courseInfoList: [], // 教程列表
         orgInfoList: [],
         isCollect: false, // 是否收藏
         isPraise: false // 是否点赞

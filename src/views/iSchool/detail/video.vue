@@ -43,6 +43,7 @@
                 </ACol>
                 <ACol :span="7">
                     <UserInfoBox style="margin-top: 16px" :userInfoProp="pageData.docDetail.courseUserInfo" @onDoFollow="onDoFollow"></UserInfoBox>
+                    <orgInfoBox v-if="pageData.docDetail.orgInfoList.length" :list="pageData.docDetail.orgInfoList" />
                     <AttachmentBox :list="pageData.docDetail.courseInfo.attachment"></AttachmentBox>
                     <RelatedComponent :list="pageData.docDetail.componentInfoList" style="margin-bottom: 20px"></RelatedComponent>
                 </ACol>
@@ -61,6 +62,7 @@ const router = useRouter()
 const pageData = reactive({
     docDetail: {
         componentInfoList: [], // 相关组件
+        orgInfoList: [],
         courseInfo: {
             // 教程详情
             id: '',

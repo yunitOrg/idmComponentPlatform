@@ -22,6 +22,7 @@
             </ACol>
             <ACol :span="7">
                 <UserInfoBox :userInfoProp="pageData.docDetail.courseUserInfo" @onDoFollow="onDoFollow"></UserInfoBox>
+                <orgInfoBox v-if="pageData.docDetail.orgInfoList.length" :list="pageData.docDetail.orgInfoList" />
                 <AttachmentBox :list="pageData.docDetail.courseInfo.attachment"></AttachmentBox>
                 <CatalogueBox :docContentRef="preview"></CatalogueBox>
                 <RelatedComponent :list="pageData.docDetail.componentInfoList" style="margin-bottom: 20px"></RelatedComponent>
@@ -40,6 +41,7 @@ const route = useRoute()
 const pageData = reactive({
     docDetail: {
         componentInfoList: [], // 相关组件
+        orgInfoList: [],
         courseInfo: {
             // 教程详情
             id: '',
