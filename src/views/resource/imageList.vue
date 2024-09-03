@@ -95,7 +95,7 @@ const formatSize = (size: number) => {
         return (size / 1024 / 1024 / 1024 / 1024).toFixed(2) + 'TB'
     }
 }
-const handleCardFunction = (item: Array<[String, String, String]>, fitem) => {
+const handleCardFunction = (item: any, fitem: any) => {
     if (item.length > 2) {
         switch (item[2]) {
             case 'formatSize':

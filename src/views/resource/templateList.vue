@@ -27,7 +27,7 @@ const tipShowList = [
     ['类型', 'contentType', 'format01'],
     ['体积大小', 'currentZipSize', 'formatSize'],
     ['更新时间', 'updateTime']
-]
+] as any
 const conditionTitle = {
     image: templateImage,
     title: '模板',

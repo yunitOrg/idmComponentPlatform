@@ -29,7 +29,7 @@ const tipShowList = [
     ['体积大小', 'currentZipSize', 'formatSize'],
     ['版本数量', 'versionCount'],
     ['更新时间', 'updateTime']
-]
+] as any
 const conditionTitle = {
     image: pageImage,
     title: '页面',

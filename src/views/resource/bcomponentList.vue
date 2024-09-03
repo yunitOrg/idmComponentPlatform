@@ -26,7 +26,7 @@ const tipShowList = [
     ['产品/项目', 'productName'],
     ['体积大小', 'currentZipSize', 'formatSize'],
     ['更新时间', 'updateTime']
-]
+] as any
 const conditionTitle = {
     image: bcomponentImage,
     title: '业务组件',

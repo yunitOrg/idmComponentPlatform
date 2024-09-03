@@ -123,7 +123,7 @@ export function dateFormat(timestamp: string | number | Date, formats: string) {
     const minite = zero(myDate.getMinutes())
     const second = zero(myDate.getSeconds())
 
-    return formats.replace(/Y|m|d|H|i|s/ig, (matches) => {
+    return formats.replace(/Y|m|d|H|i|s/ig, (matches):any => {
         return ({
             Y: year,
             m: month,

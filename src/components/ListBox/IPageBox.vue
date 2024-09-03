@@ -61,8 +61,8 @@ import { InfoCircleOutlined } from '@ant-design/icons-vue'
 const router = useRouter()
 const propData = defineProps({
     // [['ID','id'],['阅读量','readCount'],['标题','title'],['缩略图','coverPath'],['发布时间','publishTime'],['发布人','userNickname'],['发布人头像','userPhoto'],['发布人类型','ownerType'],['发布范围','publishRange'],['发布范围名称','publishRangeName'],['所属类型','ownertype'],['所属类型名称','ownertypeName'],['所属类型名称','ownertype']]
+    // eslint-disable-next-line vue/require-prop-types
     cardList: {
-        type: Array<[String, String]>,
         default: () => { return [] }
     },
     bottomShowTime: {
@@ -113,7 +113,7 @@ const formatSize = (size: number) => {
         return (size / 1024 / 1024 / 1024 / 1024).toFixed(2) + 'TB'
     }
 }
-const handleCardFunction = (item: Array<[String, String, String]>) => {
+const handleCardFunction = (item: any) => {
     if (item.length > 2) {
         switch (item[2]) {
             case 'formatSize':

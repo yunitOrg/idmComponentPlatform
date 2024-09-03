@@ -38,7 +38,7 @@ interface MessageData {
     saying: string //	一句话简介
     sendUserId: string //	发送消息的用户主键ID
     sourceId: string //	消息源头ID
-    sourceType: 1 | 2 | 3 | 4 | 5 | 6 //	消息源头类型，1:组件包、2:组件、3:教程、4:云圈、5:组织、6:评论
+    sourceType: 1 | 2 | 3 | 4 | 5 | 6 | 8 | 9 | 10 | 11  //	消息源头类型，1:组件包、2:组件、3:教程、4:云圈、5:组织、6:评论
     sysOrgCode: string //	所属部门
     type: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 //	消息类型,0:提到我的，1:评论，2：回复，3:新增粉丝，4：赞，5：收藏，6:邀请，7：申请，:8:赞赏，9：付费，10:系统通知，11:私信	integer
     updateBy: string //	更新人	string

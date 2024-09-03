@@ -92,7 +92,7 @@ const pageState = reactive({
 })
 const onCheckAllChange = (e: any) => {
     Object.assign(pageState, {
-        checkedList: e.target.checked ? pageState.rangList.map(item => item.id) : [],
+        checkedList: e.target.checked ? pageState.rangList.map((item: any) => item.id) : [],
         indeterminate: false
     })
 }

@@ -131,7 +131,7 @@ const pageTipShowList = [
     ['体积大小', 'currentZipSize', 'formatSize'],
     ['版本数量', 'versionCount'],
     ['更新时间', 'updateTime']
-]
+] as any
 const bcomponentTipShowList = [
     ['数据ID', 'id'],
     ['组件ID', 'businessId'],
@@ -139,7 +139,7 @@ const bcomponentTipShowList = [
     ['产品/项目', 'productName'],
     ['体积大小', 'currentZipSize', 'formatSize'],
     ['更新时间', 'updateTime']
-]
+] as any
 const templateTipShowList = [
     ['数据ID', 'id'],
     ['模板ID', 'businessId'],
@@ -148,7 +148,7 @@ const templateTipShowList = [
     ['类型', 'contentType', 'format01'],
     ['体积大小', 'currentZipSize', 'formatSize'],
     ['更新时间', 'updateTime']
-]
+] as any
 const pageData = reactive<{ [x: string]: any }>({
     queryId: route.query?.id,
     subjectObject: {},
@@ -186,7 +186,7 @@ const pageData = reactive<{ [x: string]: any }>({
 const formState = reactive({
     id: route.query?.id,
     remark: '',
-    coverPath: []
+    coverPath: [] as any
 })
 
 const onOk = async () => {

@@ -15,7 +15,7 @@
                         mode="horizontal"
                         @click="handleMenuClick">
                         <template v-for="item in menuNavList">
-                            <a-sub-menu v-if="item.children" :key="item.routeName" @titleClick="handleMenuClick({ key:item.routeName })" :title="item.title">
+                            <a-sub-menu v-if="item.children" :key="item.routeName" :title="item.title" @titleClick="handleSubMenuClick(item.routeName)">
                                 <a-menu-item v-for="subitem in item.children" :key="subitem.routeName">{{ subitem.title }}</a-menu-item>
                             </a-sub-menu>
                             <a-menu-item v-else :key="item.routeName">
@@ -422,13 +422,28 @@ const handleJump = (menuItem?: MenuItem) => {
 }
 // 菜单点击
 const handleMenuClick: MenuProps['onClick'] = (e) => {
-    debugger
     let menuItem = menuNavList.value.find((el: MenuItem) => el.routeName === e.key)
     if (!menuItem) {
         menuNavList.value.forEach((item: MenuItem) => {
             if (item.children && item.children.length > 0) {
                 item.children.forEach((child: MenuItem) => {
                     if (child.routeName === e.key) {
+                        menuItem = child
+                    }
+                })
+            }
+        })
+    }
+    handleJump(menuItem)
+}
+// 菜单点击
+const handleSubMenuClick: MenuProps['onClick'] = (key: any) => {
+    let menuItem = menuNavList.value.find((el: MenuItem) => el.routeName === key)
+    if (!menuItem) {
+        menuNavList.value.forEach((item: MenuItem) => {
+            if (item.children && item.children.length > 0) {
+                item.children.forEach((child: MenuItem) => {
+                    if (child.routeName === key) {
                         menuItem = child
                     }
                 })

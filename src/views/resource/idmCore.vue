@@ -128,7 +128,7 @@ const formState = reactive({
     updateDate: '',
     features: '',
     bugfixes: '',
-    zipPath: []
+    zipPath: [] as any
 })
 
 const downloadStaticFile = async (url: any) => {

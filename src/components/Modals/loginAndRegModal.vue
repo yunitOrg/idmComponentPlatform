@@ -82,7 +82,7 @@ const boxType = {
     1: '验证码登录',
     2: '密码登录',
     3: '重置密码'
-}
+} as any
 
 const propData = defineProps({
     boxType: {

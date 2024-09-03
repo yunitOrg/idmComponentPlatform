@@ -32,7 +32,7 @@ const propData = defineProps({
 const pageData = reactive({
     limit: 5,
     isFirst: true,
-    recommendList: []
+    recommendList: [] as any
 })
 resourcePublish.getSubjectTop10List({}).then((res) => {
     if (res.success) {
